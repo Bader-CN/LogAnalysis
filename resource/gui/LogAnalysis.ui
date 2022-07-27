@@ -6,106 +6,30 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1280</width>
-    <height>720</height>
+    <width>900</width>
+    <height>600</height>
    </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>900</width>
+    <height>600</height>
+   </size>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QWidget" name="verticalLayoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>10</y>
-      <width>201</width>
-      <height>661</height>
-     </rect>
-    </property>
-    <layout class="QVBoxLayout" name="verticalLayout">
-     <item>
-      <widget class="QTabWidget" name="tabWidget">
-       <widget class="QWidget" name="tab">
-        <attribute name="title">
-         <string>Tab 1</string>
-        </attribute>
-       </widget>
-       <widget class="QWidget" name="tab_2">
-        <attribute name="title">
-         <string>Tab 2</string>
-        </attribute>
-       </widget>
-      </widget>
-     </item>
-    </layout>
-   </widget>
-   <widget class="QWidget" name="gridLayoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>220</x>
-      <y>10</y>
-      <width>1041</width>
-      <height>661</height>
-     </rect>
-    </property>
-    <layout class="QGridLayout" name="gridLayout">
-     <item row="0" column="2">
-      <widget class="QLabel" name="label_2">
-       <property name="text">
-        <string>TextLabel</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="5">
-      <widget class="QPushButton" name="pushButton_2">
-       <property name="text">
-        <string>PushButton</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="0" colspan="7">
-      <widget class="QTabWidget" name="tabWidget_2">
-       <widget class="QWidget" name="tab_3">
-        <attribute name="title">
-         <string>Tab 1</string>
-        </attribute>
-       </widget>
-       <widget class="QWidget" name="tab_4">
-        <attribute name="title">
-         <string>Tab 2</string>
-        </attribute>
-       </widget>
-      </widget>
-     </item>
-     <item row="1" column="0">
-      <widget class="QCheckBox" name="checkBox">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="text">
-        <string>CheckBox</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="0">
-      <widget class="QLabel" name="label">
-       <property name="text">
-        <string>TextLabel</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="0" colspan="7">
+   <layout class="QHBoxLayout" name="horizontalLayout">
+    <item>
+     <widget class="QSplitter" name="splitter_2">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
       <widget class="QTabWidget" name="tabWidget_3">
+       <property name="currentIndex">
+        <number>1</number>
+       </property>
        <widget class="QWidget" name="tab_5">
         <attribute name="title">
          <string>Tab 1</string>
@@ -117,50 +41,113 @@
         </attribute>
        </widget>
       </widget>
-     </item>
-     <item row="1" column="1" colspan="5">
-      <widget class="QLineEdit" name="lineEdit">
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
+      <widget class="QWidget" name="widget" native="true">
+       <layout class="QVBoxLayout" name="verticalLayout">
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_3">
+          <item>
+           <widget class="QLabel" name="label">
+            <property name="text">
+             <string>TextLabel</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QDateTimeEdit" name="dateTimeEdit"/>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_2">
+            <property name="text">
+             <string>TextLabel</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QDateTimeEdit" name="dateTimeEdit_2"/>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButton">
+            <property name="text">
+             <string>PushButton</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButton_2">
+            <property name="text">
+             <string>PushButton</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_4">
+          <item>
+           <widget class="QCheckBox" name="checkBox">
+            <property name="text">
+             <string>CheckBox</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="lineEdit"/>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButton_3">
+            <property name="text">
+             <string>PushButton</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="QSplitter" name="splitter">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <widget class="QTabWidget" name="tabWidget">
+           <widget class="QWidget" name="tab">
+            <attribute name="title">
+             <string>Tab 1</string>
+            </attribute>
+           </widget>
+           <widget class="QWidget" name="tab_2">
+            <attribute name="title">
+             <string>Tab 2</string>
+            </attribute>
+           </widget>
+          </widget>
+          <widget class="QTabWidget" name="tabWidget_2">
+           <property name="currentIndex">
+            <number>1</number>
+           </property>
+           <widget class="QWidget" name="tab_3">
+            <attribute name="title">
+             <string>Tab 1</string>
+            </attribute>
+           </widget>
+           <widget class="QWidget" name="tab_4">
+            <attribute name="title">
+             <string>Tab 2</string>
+            </attribute>
+           </widget>
+          </widget>
+         </widget>
+        </item>
+       </layout>
       </widget>
-     </item>
-     <item row="0" column="6">
-      <widget class="QPushButton" name="pushButton_3">
-       <property name="text">
-        <string>PushButton</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="1">
-      <widget class="QDateTimeEdit" name="dateTimeEdit"/>
-     </item>
-     <item row="0" column="4">
-      <widget class="QPushButton" name="pushButton">
-       <property name="text">
-        <string>PushButton</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="6">
-      <widget class="QPushButton" name="pushButton_4">
-       <property name="text">
-        <string>PushButton</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="3">
-      <widget class="QDateTimeEdit" name="dateTimeEdit_2"/>
-     </item>
-    </layout>
-   </widget>
+     </widget>
+    </item>
+   </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1280</width>
+     <width>900</width>
      <height>22</height>
     </rect>
    </property>
