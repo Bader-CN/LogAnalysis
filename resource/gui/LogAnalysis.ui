@@ -12,7 +12,7 @@
   </property>
   <property name="minimumSize">
    <size>
-    <width>920</width>
+    <width>900</width>
     <height>600</height>
    </size>
   </property>
@@ -85,10 +85,10 @@
              </sizepolicy>
             </property>
             <property name="text">
-             <string>Start Time </string>
+             <string>Start Time</string>
             </property>
             <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             <set>Qt::AlignCenter</set>
             </property>
            </widget>
           </item>
@@ -120,10 +120,10 @@
              </sizepolicy>
             </property>
             <property name="text">
-             <string>End Time </string>
+             <string>End Time</string>
             </property>
             <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             <set>Qt::AlignCenter</set>
             </property>
            </widget>
           </item>
