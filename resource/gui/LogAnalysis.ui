@@ -6,13 +6,13 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1009</width>
-    <height>633</height>
+    <width>920</width>
+    <height>600</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>900</width>
+    <width>920</width>
     <height>600</height>
    </size>
   </property>
@@ -22,11 +22,11 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QHBoxLayout" name="horizontalLayout">
     <item>
-     <widget class="QSplitter" name="splitter_2">
+     <widget class="QSplitter" name="splitter_by_vrt">
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
       </property>
-      <widget class="QWidget" name="widget_2" native="true">
+      <widget class="QWidget" name="widget_left" native="true">
        <property name="minimumSize">
         <size>
          <width>200</width>
@@ -41,16 +41,16 @@
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_2">
         <item>
-         <widget class="QTabWidget" name="tabWidget_3">
+         <widget class="QTabWidget" name="tabLeft">
           <property name="currentIndex">
-           <number>1</number>
+           <number>0</number>
           </property>
-          <widget class="QWidget" name="tab_5">
+          <widget class="QWidget" name="tab_database">
            <attribute name="title">
-            <string>DataBase</string>
+            <string>Database</string>
            </attribute>
           </widget>
-          <widget class="QWidget" name="tab_6">
+          <widget class="QWidget" name="tab_template">
            <attribute name="title">
             <string>Template</string>
            </attribute>
@@ -59,10 +59,10 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="widget" native="true">
+      <widget class="QWidget" name="widget_right" native="true">
        <layout class="QVBoxLayout" name="verticalLayout">
         <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_3">
+         <layout class="QHBoxLayout" name="layout_hor1">
           <item>
            <spacer name="horizontalSpacer">
             <property name="orientation">
@@ -201,9 +201,9 @@
          </layout>
         </item>
         <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_4">
+         <layout class="QHBoxLayout" name="layout_hor2">
           <item>
-           <widget class="QCheckBox" name="checkBox">
+           <widget class="QCheckBox" name="chk_regexp">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -216,7 +216,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QCheckBox" name="checkBox_2">
+           <widget class="QCheckBox" name="chk_component">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -229,10 +229,10 @@
            </widget>
           </item>
           <item>
-           <widget class="QLineEdit" name="lineEdit">
+           <widget class="QLineEdit" name="line_search">
             <property name="minimumSize">
              <size>
-              <width>397</width>
+              <width>0</width>
               <height>0</height>
              </size>
             </property>
@@ -257,34 +257,36 @@
          </layout>
         </item>
         <item>
-         <widget class="QSplitter" name="splitter">
+         <widget class="QSplitter" name="splitter_by_hor">
           <property name="orientation">
            <enum>Qt::Vertical</enum>
           </property>
-          <widget class="QTabWidget" name="tabWidget">
-           <widget class="QWidget" name="tab">
+          <widget class="QTabWidget" name="tabSQLQuery">
+           <property name="tabsClosable">
+            <bool>true</bool>
+           </property>
+           <property name="movable">
+            <bool>true</bool>
+           </property>
+           <widget class="QWidget" name="tabSQL1">
             <attribute name="title">
-             <string>Tab 1</string>
-            </attribute>
-           </widget>
-           <widget class="QWidget" name="tab_2">
-            <attribute name="title">
-             <string>Tab 2</string>
+             <string>Query1</string>
             </attribute>
            </widget>
           </widget>
-          <widget class="QTabWidget" name="tabWidget_2">
+          <widget class="QTabWidget" name="tabSQLResult">
            <property name="currentIndex">
-            <number>1</number>
+            <number>0</number>
            </property>
-           <widget class="QWidget" name="tab_3">
+           <property name="tabsClosable">
+            <bool>true</bool>
+           </property>
+           <property name="movable">
+            <bool>true</bool>
+           </property>
+           <widget class="QWidget" name="tabResult">
             <attribute name="title">
-             <string>Tab 1</string>
-            </attribute>
-           </widget>
-           <widget class="QWidget" name="tab_4">
-            <attribute name="title">
-             <string>Tab 2</string>
+             <string>Result1</string>
             </attribute>
            </widget>
           </widget>
@@ -301,7 +303,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1009</width>
+     <width>920</width>
      <height>22</height>
     </rect>
    </property>
