@@ -3,6 +3,7 @@
 from PySide6.QtWidgets import QMainWindow
 from module.gui.LogAnalysis_ui import Ui_MainWindow
 
+
 class LogAnalysisMain(QMainWindow):
     """
     LogAnalysis main window settings
