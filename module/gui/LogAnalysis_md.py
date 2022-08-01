@@ -9,6 +9,7 @@ class LogAnalysisMain(QMainWindow):
     """
     LogAnalysis main window settings
     """
+
     def __init__(self):
         # 继承 QMainWindow 父类
         super().__init__()
@@ -17,11 +18,11 @@ class LogAnalysisMain(QMainWindow):
         # 初始化界面
         self.ui.setupUi(self)
 
-        # 设置时间
-        self.set_start_end_time()
+        # 调整时间
+        self.setui_start_end_time()
 
     # 调整软件界面
-    def set_start_end_time(self):
+    def setui_start_end_time(self):
         """
         软件启动时, 设置 Start/End Time 的显示时间
         :return:
