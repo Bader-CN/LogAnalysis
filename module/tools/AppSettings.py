@@ -23,3 +23,20 @@ class ReadConfig():
             return locale.getdefaultlocale()[0]
         else:
             return cfg.get('App_Display', 'App_Language')
+
+    @staticmethod
+    def get_loglevel(option, *args, **kwargs):
+        """
+        获取指定部分的日志等级
+        :param logsection:
+        :param args:
+        :param kwargs:
+        :return:
+        """
+        loglevel = cfg.get("App_logging", option)
+        if loglevel in ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]:
+            return loglevel
+        else:
+            return "INFO"
+
+
