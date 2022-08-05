@@ -33,11 +33,11 @@ class LogAnalysisMain(QMainWindow):
         self.ui = Ui_MainWindow()
         # 初始化界面
         self.ui.setupUi(self)
+        AppMainLogger.debug("End initing AppGUI")
 
         # 调整软件界面
         self.setui_start_end_time()
         self.setui_language()
-        AppMainLogger.debug("End initing AppGUI")
 
     # 调整软件界面
     def setui_start_end_time(self):
