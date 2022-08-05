@@ -4,6 +4,7 @@ from PySide6.QtCore import QDateTime
 from PySide6.QtWidgets import QMainWindow
 from module.gui.LogAnalysis_ui import Ui_MainWindow
 from module.tools.AppSettings import ReadConfig
+from module.tools.AppDebug import AppMainLogger
 
 
 class LogAnalysisMain(QMainWindow):
@@ -25,6 +26,7 @@ class LogAnalysisMain(QMainWindow):
     }
 
     def __init__(self):
+        AppMainLogger.debug("Start initing AppGUI")
         # 继承 QMainWindow 父类
         super().__init__()
         # 导入自定义界面 (module.gui.LogAnalysis_ui.Ui_MainWindow)
@@ -35,6 +37,7 @@ class LogAnalysisMain(QMainWindow):
         # 调整软件界面
         self.setui_start_end_time()
         self.setui_language()
+        AppMainLogger.debug("End initing AppGUI")
 
     # 调整软件界面
     def setui_start_end_time(self):
@@ -42,8 +45,10 @@ class LogAnalysisMain(QMainWindow):
         软件启动时, 设置 Start/End Time 的显示时间
         :return:
         """
+        AppMainLogger.debug("Start setting setDateTime")
         self.ui.date_start_time.setDateTime(QDateTime.addDays(QDateTime.currentDateTime(), -30))
         self.ui.date_end_time.setDateTime(QDateTime.currentDateTime())
+        AppMainLogger.debug("End setting setDateTime")
 
     # 调整显示语言
     def setui_language(self):
@@ -52,7 +57,9 @@ class LogAnalysisMain(QMainWindow):
         :return:
         """
         if ReadConfig.get_language() == "zh_CN":
+            AppMainLogger.debug("Start setting AppGUI to Chinese(zh_CN)")
             self.setui_zh_CN()
+            AppMainLogger.debug("End setting AppGUI to Chinese(zh_CN)")
 
     def setui_zh_CN(self):
         """

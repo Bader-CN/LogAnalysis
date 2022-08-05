@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
+import logging
 from configparser import ConfigParser
 
 cfg = ConfigParser()
-# 添加 encoding = utf-8 的目的是防止解析错误
 cfg.read('config.cfg', encoding='utf-8')
 
 
@@ -27,16 +27,34 @@ class ReadConfig():
     @staticmethod
     def get_loglevel(option, *args, **kwargs):
         """
-        获取指定部分的日志等级
-        :param logsection:
+        获取指定部分的日志等级, 如果值不对, 则返回 INFO
+        :param option:
         :param args:
         :param kwargs:
-        :return:
+        :return:str("DEBUG" or "INFO" or "WARNING" or "ERROR" or "CRITICAL")
         """
-        loglevel = cfg.get("App_logging", option)
+        loglevel = cfg.get("App_Logging", option)
         if loglevel in ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]:
             return loglevel
         else:
             return "INFO"
 
-
+    @staticmethod
+    def set_loglevel(Logger, option):
+        """
+        将日志等级设定为指定值
+        :param Logger: logging 模块中的 Handler
+        :param option: [App_Logging] 部分的值
+        :return:
+        """
+        loglevel = ReadConfig.get_loglevel(option)
+        if loglevel == "DEBUG":
+            Logger.setLevel(logging.DEBUG)
+        elif loglevel == "ERROR":
+            Logger.setLevel(logging.ERROR)
+        elif loglevel == "WARNING":
+            Logger.setLevel(logging.WARNING)
+        elif loglevel == "CRITICAL":
+            Logger.setLevel(logging.CRITICAL)
+        else:
+            Logger.setLevel(logging.INFO)
