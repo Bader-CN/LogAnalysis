@@ -42,9 +42,12 @@
    </property>
    <layout class="QHBoxLayout" name="horizontalLayout">
     <item>
-     <widget class="QLabel" name="label">
+     <widget class="QLabel" name="label_abspath">
       <property name="text">
-       <string>TextLabel</string>
+       <string>Path</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
       </property>
      </widget>
     </item>
@@ -52,15 +55,15 @@
      <widget class="QLineEdit" name="lineEdit"/>
     </item>
     <item>
-     <widget class="QPushButton" name="pushButton_3">
+     <widget class="QPushButton" name="btn_select_file_or_path">
       <property name="text">
-       <string>PushButton</string>
+       <string>Select</string>
       </property>
      </widget>
     </item>
    </layout>
   </widget>
-  <widget class="QTreeWidget" name="treeWidget">
+  <widget class="QTreeWidget" name="tree_filedir">
    <property name="geometry">
     <rect>
      <x>10</x>
@@ -86,51 +89,94 @@
    </property>
    <layout class="QFormLayout" name="formLayout">
     <item row="0" column="0" colspan="2">
-     <widget class="QTextEdit" name="textEdit"/>
+     <widget class="QTextEdit" name="usernote">
+      <property name="lineWidth">
+       <number>0</number>
+      </property>
+     </widget>
     </item>
     <item row="1" column="0">
-     <widget class="QLabel" name="label_2">
+     <widget class="QLabel" name="label_type">
+      <property name="minimumSize">
+       <size>
+        <width>100</width>
+        <height>0</height>
+       </size>
+      </property>
+      <property name="lineWidth">
+       <number>2</number>
+      </property>
       <property name="text">
-       <string>TextLabel</string>
+       <string>Path Type</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
       </property>
      </widget>
     </item>
     <item row="1" column="1">
-     <widget class="QComboBox" name="comboBox"/>
+     <widget class="QComboBox" name="combox_type"/>
     </item>
     <item row="2" column="0">
-     <widget class="QLabel" name="label_3">
+     <widget class="QLabel" name="label_company">
+      <property name="minimumSize">
+       <size>
+        <width>100</width>
+        <height>0</height>
+       </size>
+      </property>
       <property name="text">
-       <string>TextLabel</string>
+       <string>Company</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
       </property>
      </widget>
     </item>
     <item row="2" column="1">
-     <widget class="QComboBox" name="comboBox_2"/>
+     <widget class="QComboBox" name="combox_company"/>
     </item>
     <item row="3" column="0">
-     <widget class="QLabel" name="label_4">
+     <widget class="QLabel" name="label_product_line">
+      <property name="minimumSize">
+       <size>
+        <width>100</width>
+        <height>0</height>
+       </size>
+      </property>
       <property name="text">
-       <string>TextLabel</string>
+       <string>Product Line</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
       </property>
      </widget>
     </item>
     <item row="3" column="1">
-     <widget class="QComboBox" name="comboBox_3"/>
+     <widget class="QComboBox" name="combox_product_line"/>
     </item>
     <item row="4" column="0">
-     <widget class="QLabel" name="label_5">
+     <widget class="QLabel" name="label_product">
+      <property name="minimumSize">
+       <size>
+        <width>100</width>
+        <height>0</height>
+       </size>
+      </property>
       <property name="text">
-       <string>TextLabel</string>
+       <string>Product Name</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
       </property>
      </widget>
     </item>
     <item row="4" column="1">
-     <widget class="QComboBox" name="comboBox_4"/>
+     <widget class="QComboBox" name="combox_product"/>
     </item>
    </layout>
   </widget>
-  <widget class="QPushButton" name="pushButton">
+  <widget class="QPushButton" name="btn_cancel">
    <property name="geometry">
     <rect>
      <x>240</x>
@@ -140,10 +186,10 @@
     </rect>
    </property>
    <property name="text">
-    <string>PushButton</string>
+    <string>Cancel</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton_2">
+  <widget class="QPushButton" name="btn_import">
    <property name="geometry">
     <rect>
      <x>420</x>
@@ -153,7 +199,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>PushButton</string>
+    <string>Import</string>
    </property>
   </widget>
  </widget>
