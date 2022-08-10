@@ -15,8 +15,14 @@ if __name__ == '__main__':
 
     # 实例化并显示 LogAnalysis 主界面
     logMain = LogAnalysisMain()
-    logMain.show()
     # 实例化 LogAnalysis Import 界面
     logImport = LogAnalysisImport()
+
+    def showlogImportUI():
+        logImport.show()
+    logMain.ui.btn_import.clicked.connect(showlogImportUI)
+
+    # 显示主界面
+    logMain.show()
 
     app.exec()
