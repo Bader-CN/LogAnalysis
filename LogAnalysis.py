@@ -3,6 +3,7 @@
 import os
 from PySide6.QtWidgets import QApplication
 from module.gui.LogAnalysis_md import LogAnalysisMain
+from module.gui.LogImport_md import LogAnalysisImport
 
 if __name__ == '__main__':
     # 检查相关目录及文件是否存在
@@ -15,5 +16,7 @@ if __name__ == '__main__':
     # 实例化并显示 LogAnalysis 主界面
     logMain = LogAnalysisMain()
     logMain.show()
+    # 实例化 LogAnalysis Import 界面
+    logImport = LogAnalysisImport()
 
     app.exec()
