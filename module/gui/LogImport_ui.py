@@ -72,57 +72,9 @@ class Ui_Form(object):
 
         self.formLayout.setWidget(0, QFormLayout.SpanningRole, self.usernote)
 
-        self.label_type = QLabel(self.formLayoutWidget)
-        self.label_type.setObjectName(u"label_type")
-        self.label_type.setMinimumSize(QSize(100, 0))
-        self.label_type.setLineWidth(2)
-        self.label_type.setAlignment(Qt.AlignCenter)
-
-        self.formLayout.setWidget(3, QFormLayout.LabelRole, self.label_type)
-
-        self.combox_type = QComboBox(self.formLayoutWidget)
-        self.combox_type.setObjectName(u"combox_type")
-
-        self.formLayout.setWidget(3, QFormLayout.FieldRole, self.combox_type)
-
-        self.label_company = QLabel(self.formLayoutWidget)
-        self.label_company.setObjectName(u"label_company")
-        self.label_company.setMinimumSize(QSize(100, 0))
-        self.label_company.setAlignment(Qt.AlignCenter)
-
-        self.formLayout.setWidget(4, QFormLayout.LabelRole, self.label_company)
-
-        self.combox_company = QComboBox(self.formLayoutWidget)
-        self.combox_company.setObjectName(u"combox_company")
-
-        self.formLayout.setWidget(4, QFormLayout.FieldRole, self.combox_company)
-
-        self.label_product_line = QLabel(self.formLayoutWidget)
-        self.label_product_line.setObjectName(u"label_product_line")
-        self.label_product_line.setMinimumSize(QSize(100, 0))
-        self.label_product_line.setAlignment(Qt.AlignCenter)
-
-        self.formLayout.setWidget(5, QFormLayout.LabelRole, self.label_product_line)
-
-        self.combox_product_line = QComboBox(self.formLayoutWidget)
-        self.combox_product_line.setObjectName(u"combox_product_line")
-
-        self.formLayout.setWidget(5, QFormLayout.FieldRole, self.combox_product_line)
-
-        self.label_product = QLabel(self.formLayoutWidget)
-        self.label_product.setObjectName(u"label_product")
-        self.label_product.setMinimumSize(QSize(100, 0))
-        self.label_product.setAlignment(Qt.AlignCenter)
-
-        self.formLayout.setWidget(6, QFormLayout.LabelRole, self.label_product)
-
-        self.combox_product = QComboBox(self.formLayoutWidget)
-        self.combox_product.setObjectName(u"combox_product")
-
-        self.formLayout.setWidget(6, QFormLayout.FieldRole, self.combox_product)
-
         self.label_max_process = QLabel(self.formLayoutWidget)
         self.label_max_process.setObjectName(u"label_max_process")
+        self.label_max_process.setMinimumSize(QSize(100, 0))
         self.label_max_process.setAlignment(Qt.AlignCenter)
 
         self.formLayout.setWidget(1, QFormLayout.LabelRole, self.label_max_process)
@@ -131,6 +83,55 @@ class Ui_Form(object):
         self.comboBox.setObjectName(u"comboBox")
 
         self.formLayout.setWidget(1, QFormLayout.FieldRole, self.comboBox)
+
+        self.label_type = QLabel(self.formLayoutWidget)
+        self.label_type.setObjectName(u"label_type")
+        self.label_type.setMinimumSize(QSize(100, 0))
+        self.label_type.setLineWidth(2)
+        self.label_type.setAlignment(Qt.AlignCenter)
+
+        self.formLayout.setWidget(2, QFormLayout.LabelRole, self.label_type)
+
+        self.combox_type = QComboBox(self.formLayoutWidget)
+        self.combox_type.setObjectName(u"combox_type")
+
+        self.formLayout.setWidget(2, QFormLayout.FieldRole, self.combox_type)
+
+        self.label_company = QLabel(self.formLayoutWidget)
+        self.label_company.setObjectName(u"label_company")
+        self.label_company.setMinimumSize(QSize(100, 0))
+        self.label_company.setAlignment(Qt.AlignCenter)
+
+        self.formLayout.setWidget(3, QFormLayout.LabelRole, self.label_company)
+
+        self.combox_company = QComboBox(self.formLayoutWidget)
+        self.combox_company.setObjectName(u"combox_company")
+
+        self.formLayout.setWidget(3, QFormLayout.FieldRole, self.combox_company)
+
+        self.label_product_line = QLabel(self.formLayoutWidget)
+        self.label_product_line.setObjectName(u"label_product_line")
+        self.label_product_line.setMinimumSize(QSize(100, 0))
+        self.label_product_line.setAlignment(Qt.AlignCenter)
+
+        self.formLayout.setWidget(4, QFormLayout.LabelRole, self.label_product_line)
+
+        self.combox_product_line = QComboBox(self.formLayoutWidget)
+        self.combox_product_line.setObjectName(u"combox_product_line")
+
+        self.formLayout.setWidget(4, QFormLayout.FieldRole, self.combox_product_line)
+
+        self.label_product = QLabel(self.formLayoutWidget)
+        self.label_product.setObjectName(u"label_product")
+        self.label_product.setMinimumSize(QSize(100, 0))
+        self.label_product.setAlignment(Qt.AlignCenter)
+
+        self.formLayout.setWidget(5, QFormLayout.LabelRole, self.label_product)
+
+        self.combox_product = QComboBox(self.formLayoutWidget)
+        self.combox_product.setObjectName(u"combox_product")
+
+        self.formLayout.setWidget(5, QFormLayout.FieldRole, self.combox_product)
 
         self.btn_cancel = QPushButton(Form)
         self.btn_cancel.setObjectName(u"btn_cancel")
@@ -148,11 +149,11 @@ class Ui_Form(object):
         Form.setWindowTitle(QCoreApplication.translate("Form", u"Form", None))
         self.label_abspath.setText(QCoreApplication.translate("Form", u"Path", None))
         self.btn_select_file_or_path.setText(QCoreApplication.translate("Form", u"Select", None))
+        self.label_max_process.setText(QCoreApplication.translate("Form", u"Max of Processes", None))
         self.label_type.setText(QCoreApplication.translate("Form", u"Path Type", None))
         self.label_company.setText(QCoreApplication.translate("Form", u"Company", None))
         self.label_product_line.setText(QCoreApplication.translate("Form", u"Product Line", None))
         self.label_product.setText(QCoreApplication.translate("Form", u"Product Name", None))
-        self.label_max_process.setText(QCoreApplication.translate("Form", u"Max of Processes", None))
         self.btn_cancel.setText(QCoreApplication.translate("Form", u"Cancel", None))
         self.btn_import.setText(QCoreApplication.translate("Form", u"Import", None))
     # retranslateUi
