@@ -121,11 +121,11 @@ class Ui_Form(object):
 
         self.formLayout.setWidget(6, QFormLayout.FieldRole, self.combox_product)
 
-        self.label_num_process = QLabel(self.formLayoutWidget)
-        self.label_num_process.setObjectName(u"label_num_process")
-        self.label_num_process.setAlignment(Qt.AlignCenter)
+        self.label_max_process = QLabel(self.formLayoutWidget)
+        self.label_max_process.setObjectName(u"label_max_process")
+        self.label_max_process.setAlignment(Qt.AlignCenter)
 
-        self.formLayout.setWidget(1, QFormLayout.LabelRole, self.label_num_process)
+        self.formLayout.setWidget(1, QFormLayout.LabelRole, self.label_max_process)
 
         self.comboBox = QComboBox(self.formLayoutWidget)
         self.comboBox.setObjectName(u"comboBox")
@@ -152,7 +152,7 @@ class Ui_Form(object):
         self.label_company.setText(QCoreApplication.translate("Form", u"Company", None))
         self.label_product_line.setText(QCoreApplication.translate("Form", u"Product Line", None))
         self.label_product.setText(QCoreApplication.translate("Form", u"Product Name", None))
-        self.label_num_process.setText(QCoreApplication.translate("Form", u"Num of Processes", None))
+        self.label_max_process.setText(QCoreApplication.translate("Form", u"Max of Processes", None))
         self.btn_cancel.setText(QCoreApplication.translate("Form", u"Cancel", None))
         self.btn_import.setText(QCoreApplication.translate("Form", u"Import", None))
     # retranslateUi

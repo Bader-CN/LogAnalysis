@@ -13,11 +13,12 @@ if __name__ == '__main__':
     # 启动软件
     app = QApplication([])
 
-    # 实例化并显示 LogAnalysis 主界面
+    # 实例化 LogAnalysis 主界面
     logMain = LogAnalysisMain()
     # 实例化 LogAnalysis Import 界面
     logImport = LogAnalysisImport()
 
+    # 当 LogAnalysis 主界面点击 Import 按钮时, 将会弹出 LogAnalysis Import 界面
     def showlogImportUI():
         logImport.show()
     logMain.ui.btn_import.clicked.connect(showlogImportUI)
