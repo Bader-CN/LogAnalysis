@@ -55,6 +55,11 @@ class LogAnalysisImport(QWidget):
         设定日志读取的进程数量值
         :return:
         """
+        # 根据 CPU 核心数来加载所有可能的选项
         max_process = ReadConfig.get_cpu_count()
-        nums = [str(x) for x in range(1, max_process+1)]
-        self.ui.combox_max_process.addItems(nums)
+        num_list = [str(x) for x in range(1, max_process+1)]
+        self.ui.combox_max_process.addItems(num_list)
+
+        # 根据配置文件的设置, 来决定默认的值
+        number = ReadConfig.get_max_process()
+        self.ui.combox_max_process.setCurrentIndex(num_list.index(str(number)))
