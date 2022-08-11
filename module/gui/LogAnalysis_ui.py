@@ -24,8 +24,8 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
-        MainWindow.resize(940, 600)
-        MainWindow.setMinimumSize(QSize(940, 600))
+        MainWindow.resize(965, 600)
+        MainWindow.setMinimumSize(QSize(965, 600))
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
         self.horizontalLayout = QHBoxLayout(self.centralwidget)
@@ -76,7 +76,7 @@ class Ui_MainWindow(object):
         self.date_start_time.setObjectName(u"date_start_time")
         sizePolicy.setHeightForWidth(self.date_start_time.sizePolicy().hasHeightForWidth())
         self.date_start_time.setSizePolicy(sizePolicy)
-        self.date_start_time.setMinimumSize(QSize(105, 0))
+        self.date_start_time.setMinimumSize(QSize(125, 0))
         self.date_start_time.setCalendarPopup(True)
 
         self.layout_hor1.addWidget(self.date_start_time)
@@ -93,7 +93,7 @@ class Ui_MainWindow(object):
         self.date_end_time.setObjectName(u"date_end_time")
         sizePolicy.setHeightForWidth(self.date_end_time.sizePolicy().hasHeightForWidth())
         self.date_end_time.setSizePolicy(sizePolicy)
-        self.date_end_time.setMinimumSize(QSize(105, 0))
+        self.date_end_time.setMinimumSize(QSize(125, 0))
         self.date_end_time.setCalendarPopup(True)
 
         self.layout_hor1.addWidget(self.date_end_time)
@@ -190,7 +190,7 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName(u"menubar")
-        self.menubar.setGeometry(QRect(0, 0, 940, 22))
+        self.menubar.setGeometry(QRect(0, 0, 965, 22))
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QStatusBar(MainWindow)
         self.statusbar.setObjectName(u"statusbar")

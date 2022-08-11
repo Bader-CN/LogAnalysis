@@ -19,6 +19,7 @@ class LogAnalysisImport(QWidget):
         self.ui.setupUi(self)
 
         # 调整软件界面
+        self.setWindowTitle("Import Wizard")
         self.setui_language_by_import()
 
     def setui_language_by_import(self):
@@ -37,6 +38,7 @@ class LogAnalysisImport(QWidget):
         :return:
         """
         from module.language.i18n_zh_CN import Language_zh_CN
+        self.setWindowTitle(Language_zh_CN.get("Import Wizard"))
         self.ui.label_abspath.setText(Language_zh_CN.get("Path"))
         self.ui.btn_select_file_or_path.setText(Language_zh_CN.get("Select"))
         self.ui.label_max_process.setText(Language_zh_CN.get("Max of Processes"))

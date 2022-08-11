@@ -22,6 +22,7 @@ class LogAnalysisMain(QMainWindow):
         AppMainLogger.debug("End initing AppGUI")
 
         # 调整软件界面
+        self.setWindowTitle("LogAnalysis alpha")
         self.setui_start_end_time()
         self.setui_language_by_main()
 

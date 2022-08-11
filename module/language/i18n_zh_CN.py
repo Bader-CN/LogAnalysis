@@ -18,6 +18,7 @@ Language_zh_CN = {
         "Template": "模板",
 
         # logImport Section
+        "Import Wizard": "导入向导",
         "Path": "路径",
         "Select": "选择",
         "Max of Processes": "进程数量",
