@@ -79,10 +79,10 @@ class Ui_Form(object):
 
         self.formLayout.setWidget(1, QFormLayout.LabelRole, self.label_max_process)
 
-        self.comboBox = QComboBox(self.formLayoutWidget)
-        self.comboBox.setObjectName(u"comboBox")
+        self.combox_max_process = QComboBox(self.formLayoutWidget)
+        self.combox_max_process.setObjectName(u"combox_max_process")
 
-        self.formLayout.setWidget(1, QFormLayout.FieldRole, self.comboBox)
+        self.formLayout.setWidget(1, QFormLayout.FieldRole, self.combox_max_process)
 
         self.label_type = QLabel(self.formLayoutWidget)
         self.label_type.setObjectName(u"label_type")

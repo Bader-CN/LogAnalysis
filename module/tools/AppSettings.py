@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import psutil
 import logging
 from configparser import ConfigParser
 
@@ -58,3 +59,39 @@ class ReadConfig():
             Logger.setLevel(logging.CRITICAL)
         else:
             Logger.setLevel(logging.INFO)
+
+    @staticmethod
+    def get_cpu_count(logical=False, *args, **kwargs):
+        """
+        返回 CPU 的物理核心数, 默认不包括逻辑核心
+        :param logical: 是否包含逻辑核心, 默认不包含(False)
+        :param args:
+        :param kwargs:
+        :return: int
+        """
+        if psutil.cpu_count(logical=logical) != None:
+            return psutil.cpu_count(logical=logical)
+        else:
+            return 2
+    
+    @staticmethod
+    def get_max_process(*args, **kwargs):
+        """
+        获取配置文件中设定的最大进程数, 如果是 Auto, 则根据处理器物理核心数来自行判断
+        :param args:
+        :param kwargs:
+        :return: int
+        """
+        max_cpu = psutil.cpu_count(logical=False)
+        # 如果 psutil.cpu_count(logical=False) 获取不到值, 则为了保险起见, 将值设定成2
+        if max_cpu != None:
+            max_process = psutil.cpu_count(logical=False) - 1
+        else:
+            max_process = 2
+
+        # 如果读取的值为 Auto, 则根据 psutil.cpu_count(logical=False) 的值自动判断
+        num_process = cfg.get("App_Optimiz", "Max_Processes")
+        if num_process in ["Auto", "auto"]:
+            return max_process
+        else:
+            return num_process

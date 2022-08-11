@@ -21,6 +21,7 @@ class LogAnalysisImport(QWidget):
         # 调整软件界面
         self.setWindowTitle("Import Wizard")
         self.setui_language_by_import()
+        self.set_max_process()
 
     def setui_language_by_import(self):
         """
@@ -48,3 +49,12 @@ class LogAnalysisImport(QWidget):
         self.ui.label_product.setText(Language_zh_CN.get("Product Name"))
         self.ui.btn_import.setText(Language_zh_CN.get("Import"))
         self.ui.btn_cancel.setText(Language_zh_CN.get("Cancel"))
+
+    def set_max_process(self):
+        """
+        设定日志读取的进程数量值
+        :return:
+        """
+        max_process = ReadConfig.get_cpu_count()
+        nums = [str(x) for x in range(1, max_process+1)]
+        self.ui.combox_max_process.addItems(nums)
