@@ -78,6 +78,8 @@ class LogAnalysisImport(QWidget):
         :return:
         """
         self.ui.combox_path_type.addItems(["Folder", "File"])
+        # 连接槽函数: slot_set_path_tree
+        self.ui.combox_path_type.activated.connect(self.slot_set_path_tree)
 
     def set_path_tree(self):
         """
@@ -105,3 +107,24 @@ class LogAnalysisImport(QWidget):
         """
         fullpath = self.path_model.filePath(self.ui.tree_filedir.currentIndex())
         self.ui.lineEdit.setText(fullpath)
+
+    def slot_set_path_tree(self):
+        """
+        判断路径类型, 根据路径类型来决定显示什么内容
+        :return:
+        """
+        if self.ui.combox_path_type.currentText() == "Folder":
+            # 新建一个模型, 重新进行设定 (http://www.qtcn.org/bbs/read.php?tid-32891.html)
+            self.path_model = QFileSystemModel()
+            self.path_model.setRootPath(QDir.rootPath())
+            # default filter 是 AllEntries | NoDotAndDotDot | AllDirs
+            self.path_model.setFilter(QDir.AllDirs | QDir.NoDotAndDotDot)
+            self.ui.tree_filedir.setModel(self.path_model)
+            AppMainLogger.debug("Change QTableView's model Filter type to [QDir.AllDirs | QDir.NoDotAndDotDot]")
+        else:
+            # 新建一个模型, 重新进行设定 (http://www.qtcn.org/bbs/read.php?tid-32891.html)
+            self.path_model = QFileSystemModel()
+            self.path_model.setRootPath(QDir.rootPath())
+            self.path_model.setFilter(QDir.AllEntries | QDir.AllDirs | QDir.NoDotAndDotDot)
+            self.ui.tree_filedir.setModel(self.path_model)
+            AppMainLogger.debug("Change QTableView's model Filter type to [QDir.AllEntries | QDir.AllDirs | QDir.NoDotAndDotDot]")
