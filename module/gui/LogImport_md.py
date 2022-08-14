@@ -22,6 +22,7 @@ class LogAnalysisImport(QWidget):
         self.setWindowTitle("Import Wizard")
         self.setui_language_by_import()
         self.set_max_process()
+        self.set_path_type()
 
     def setui_language_by_import(self):
         """
@@ -43,7 +44,7 @@ class LogAnalysisImport(QWidget):
         self.ui.label_abspath.setText(Language_zh_CN.get("Path"))
         self.ui.btn_select_file_or_path.setText(Language_zh_CN.get("Select"))
         self.ui.label_max_process.setText(Language_zh_CN.get("Max of Processes"))
-        self.ui.label_type.setText(Language_zh_CN.get("Path Type"))
+        self.ui.label_path_type.setText(Language_zh_CN.get("Path Type"))
         self.ui.label_company.setText(Language_zh_CN.get("Company"))
         self.ui.label_product_line.setText(Language_zh_CN.get("Product Line"))
         self.ui.label_product.setText(Language_zh_CN.get("Product Name"))
@@ -63,3 +64,10 @@ class LogAnalysisImport(QWidget):
         # 根据配置文件的设置, 来决定默认的值
         number = ReadConfig.get_max_process()
         self.ui.combox_max_process.setCurrentIndex(num_list.index(str(number)))
+
+    def set_path_type(self):
+        """
+        设置想要指定的路径类型, 可选为 Folder 或 File
+        :return:
+        """
+        self.ui.combox_path_type.addItems(["Folder", "File"])

@@ -115,7 +115,7 @@
      <widget class="QComboBox" name="combox_max_process"/>
     </item>
     <item row="2" column="0">
-     <widget class="QLabel" name="label_type">
+     <widget class="QLabel" name="label_path_type">
       <property name="minimumSize">
        <size>
         <width>100</width>
@@ -134,7 +134,7 @@
      </widget>
     </item>
     <item row="2" column="1">
-     <widget class="QComboBox" name="combox_type"/>
+     <widget class="QComboBox" name="combox_path_type"/>
     </item>
     <item row="3" column="0">
      <widget class="QLabel" name="label_company">

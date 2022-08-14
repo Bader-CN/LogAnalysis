@@ -84,18 +84,18 @@ class Ui_Form(object):
 
         self.formLayout.setWidget(1, QFormLayout.FieldRole, self.combox_max_process)
 
-        self.label_type = QLabel(self.formLayoutWidget)
-        self.label_type.setObjectName(u"label_type")
-        self.label_type.setMinimumSize(QSize(100, 0))
-        self.label_type.setLineWidth(2)
-        self.label_type.setAlignment(Qt.AlignCenter)
+        self.label_path_type = QLabel(self.formLayoutWidget)
+        self.label_path_type.setObjectName(u"label_path_type")
+        self.label_path_type.setMinimumSize(QSize(100, 0))
+        self.label_path_type.setLineWidth(2)
+        self.label_path_type.setAlignment(Qt.AlignCenter)
 
-        self.formLayout.setWidget(2, QFormLayout.LabelRole, self.label_type)
+        self.formLayout.setWidget(2, QFormLayout.LabelRole, self.label_path_type)
 
-        self.combox_type = QComboBox(self.formLayoutWidget)
-        self.combox_type.setObjectName(u"combox_type")
+        self.combox_path_type = QComboBox(self.formLayoutWidget)
+        self.combox_path_type.setObjectName(u"combox_path_type")
 
-        self.formLayout.setWidget(2, QFormLayout.FieldRole, self.combox_type)
+        self.formLayout.setWidget(2, QFormLayout.FieldRole, self.combox_path_type)
 
         self.label_company = QLabel(self.formLayoutWidget)
         self.label_company.setObjectName(u"label_company")
@@ -150,7 +150,7 @@ class Ui_Form(object):
         self.label_abspath.setText(QCoreApplication.translate("Form", u"Path", None))
         self.btn_select_file_or_path.setText(QCoreApplication.translate("Form", u"Select", None))
         self.label_max_process.setText(QCoreApplication.translate("Form", u"Max of Processes", None))
-        self.label_type.setText(QCoreApplication.translate("Form", u"Path Type", None))
+        self.label_path_type.setText(QCoreApplication.translate("Form", u"Path Type", None))
         self.label_company.setText(QCoreApplication.translate("Form", u"Company", None))
         self.label_product_line.setText(QCoreApplication.translate("Form", u"Product Line", None))
         self.label_product.setText(QCoreApplication.translate("Form", u"Product Name", None))
