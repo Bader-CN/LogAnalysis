@@ -86,6 +86,7 @@ class LogAnalysisImport(QWidget):
         设置左方的文件列表, 如果文件类型为 Folder, 则不显示文件
         :return:
         """
+        AppMainLogger.debug("Start setting path tree")
         self.path_model.setRootPath(QDir.rootPath())
         # QFileSystemModel 默认有4列, 分别为 Name, size, type, modified
         # 如果不想显示, 可以调用 QTreeView.setColumnHidden(<column_index>, True) 来隐藏掉
@@ -97,8 +98,9 @@ class LogAnalysisImport(QWidget):
         if self.ui.combox_path_type.currentText() == "Folder":
             # default filter 是 AllEntries | NoDotAndDotDot | AllDirs
             self.path_model.setFilter(QDir.AllDirs | QDir.NoDotAndDotDot)
-        # 将双击鼠标的事件连接到 get_path_tree()
-        self.ui.tree_filedir.doubleClicked.connect(self.get_path_tree)
+        # 将点击鼠标的事件连接到 get_path_tree()
+        self.ui.tree_filedir.clicked.connect(self.get_path_tree)
+        AppMainLogger.debug("End setting path tree")
 
     def get_path_tree(self):
         """
@@ -107,6 +109,7 @@ class LogAnalysisImport(QWidget):
         """
         fullpath = self.path_model.filePath(self.ui.tree_filedir.currentIndex())
         self.ui.lineEdit.setText(fullpath)
+        AppMainLogger.info("Clicked & Add Path [{}]".format(fullpath))
 
     def slot_set_path_tree(self):
         """

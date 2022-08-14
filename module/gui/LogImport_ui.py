@@ -45,6 +45,8 @@ class Ui_Form(object):
 
         self.lineEdit = QLineEdit(self.horizontalLayoutWidget)
         self.lineEdit.setObjectName(u"lineEdit")
+        self.lineEdit.setDragEnabled(False)
+        self.lineEdit.setClearButtonEnabled(True)
 
         self.horizontalLayout.addWidget(self.lineEdit)
 
