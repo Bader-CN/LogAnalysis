@@ -21,6 +21,17 @@ class LogAnalysisImport(QWidget):
         self.ui = Ui_Form()
         # 初始化界面
         self.ui.setupUi(self)
+        # 加载原始语言
+        self.ui.usernote.setText("""Note:
+1. Import function will cost much CPU and Memory
+    > this value is determined by "Number of Processes"
+    > Temporary modify: "Number of Processes"
+    > Permanent modify: "config.cfg"
+
+2. Select button to select the specified file or folder
+    > The file or folder is determined by "path type"
+    > Can click a file or folder on the left to add it auto
+    > Double click to expand subdirectories""")
 
         # 调整软件界面
         self.setWindowTitle("Import Wizard")
@@ -55,6 +66,7 @@ class LogAnalysisImport(QWidget):
         self.ui.label_product.setText(Language_zh_CN.get("Product Name"))
         self.ui.btn_import.setText(Language_zh_CN.get("Import"))
         self.ui.btn_cancel.setText(Language_zh_CN.get("Cancel"))
+        self.ui.usernote.setText(Language_zh_CN.get("User Note"))
 
     def set_max_process(self):
         """
@@ -98,7 +110,7 @@ class LogAnalysisImport(QWidget):
         if self.ui.combox_path_type.currentText() == "Folder":
             # default filter 是 AllEntries | NoDotAndDotDot | AllDirs
             self.path_model.setFilter(QDir.AllDirs | QDir.NoDotAndDotDot)
-        # 将点击鼠标的事件连接到 get_path_tree()
+        # 连接槽函数: 将点击鼠标的事件连接到 get_path_tree()
         self.ui.tree_filedir.clicked.connect(self.get_path_tree)
         AppMainLogger.debug("End setting path tree")
 
