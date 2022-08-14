@@ -17,8 +17,7 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QComboBox, QFormLayout, QHBoxLayout,
     QHeaderView, QLabel, QLineEdit, QPushButton,
-    QSizePolicy, QTextEdit, QTreeWidget, QTreeWidgetItem,
-    QWidget)
+    QSizePolicy, QTextEdit, QTreeView, QWidget)
 
 class Ui_Form(object):
     def setupUi(self, Form):
@@ -54,10 +53,7 @@ class Ui_Form(object):
 
         self.horizontalLayout.addWidget(self.btn_select_file_or_path)
 
-        self.tree_filedir = QTreeWidget(Form)
-        __qtreewidgetitem = QTreeWidgetItem()
-        __qtreewidgetitem.setText(0, u"1");
-        self.tree_filedir.setHeaderItem(__qtreewidgetitem)
+        self.tree_filedir = QTreeView(Form)
         self.tree_filedir.setObjectName(u"tree_filedir")
         self.tree_filedir.setGeometry(QRect(10, 40, 221, 351))
         self.formLayoutWidget = QWidget(Form)

@@ -63,7 +63,7 @@
     </item>
    </layout>
   </widget>
-  <widget class="QTreeWidget" name="tree_filedir">
+  <widget class="QTreeView" name="tree_filedir">
    <property name="geometry">
     <rect>
      <x>10</x>
@@ -72,11 +72,6 @@
      <height>351</height>
     </rect>
    </property>
-   <column>
-    <property name="text">
-     <string notr="true">1</string>
-    </property>
-   </column>
   </widget>
   <widget class="QWidget" name="formLayoutWidget">
    <property name="geometry">
