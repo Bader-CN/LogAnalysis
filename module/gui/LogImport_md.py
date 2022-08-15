@@ -13,12 +13,6 @@ class LogAnalysisImport(QWidget):
     """
     # QTreeView.setModel() 可以加载此模型
     path_model = QFileSystemModel()
-    productsdb = {
-        "MicroFocus": {
-            "ITOM": ["OA", "OBM"],
-            "IMG": ["CBK", "IDOL"],
-        },
-    }
 
     def __init__(self):
         # 继承父类 QWidget
@@ -117,7 +111,7 @@ class LogAnalysisImport(QWidget):
         """
         self.ui.combox_path_type.addItems(["Folder", "File"])
         # 连接槽函数: slot_set_path_tree
-        self.ui.combox_path_type.activated.connect(self.slot_set_path_tree)
+        self.ui.combox_path_type.activated.connect(self.slot_change_path_tree)
 
     def set_path_tree(self):
         """
@@ -149,7 +143,7 @@ class LogAnalysisImport(QWidget):
         self.ui.lineEdit.setText(fullpath)
         AppMainLogger.info("Clicked & Add Path [{}]".format(fullpath))
 
-    def slot_set_path_tree(self):
+    def slot_change_path_tree(self):
         """
         判断路径类型, 根据路径类型来决定显示什么内容
         :return:
