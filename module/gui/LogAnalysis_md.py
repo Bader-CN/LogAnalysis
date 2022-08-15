@@ -23,11 +23,11 @@ class LogAnalysisMain(QMainWindow):
 
         # 调整软件界面
         self.setWindowTitle("LogAnalysis alpha")
-        self.setui_start_end_time()
-        self.setui_language_by_main()
+        self.set_start_end_time()
+        self.set_language_by_main()
 
     # 调整软件界面
-    def setui_start_end_time(self):
+    def set_start_end_time(self):
         """
         软件启动时, 设置 Start/End Time 的显示时间
         :return:
@@ -38,17 +38,17 @@ class LogAnalysisMain(QMainWindow):
         AppMainLogger.debug("End setting setDateTime")
 
     # 调整显示语言
-    def setui_language_by_main(self):
+    def set_language_by_main(self):
         """
         根据配置文件来显示软件语言
         :return:
         """
         if ReadConfig.get_language() == "zh_CN":
             AppMainLogger.debug("Start setting logMain GUI to Chinese(zh_CN)")
-            self.setui_zh_CN()
+            self.set_zh_CN()
             AppMainLogger.debug("End setting logMain GUI to Chinese(zh_CN)")
 
-    def setui_zh_CN(self):
+    def set_zh_CN(self):
         """
         将软件界面设置为中文
         :return:

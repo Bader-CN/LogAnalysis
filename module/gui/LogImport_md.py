@@ -13,6 +13,12 @@ class LogAnalysisImport(QWidget):
     """
     # QTreeView.setModel() 可以加载此模型
     path_model = QFileSystemModel()
+    productsdb = {
+        "MicroFocus": {
+            "ITOM": ["OA", "OBM"],
+            "IMG": ["CBK", "IDOL"],
+        },
+    }
 
     def __init__(self):
         # 继承父类 QWidget
@@ -35,22 +41,22 @@ class LogAnalysisImport(QWidget):
 
         # 调整软件界面
         self.setWindowTitle("Import Wizard")
-        self.setui_language_by_import()
+        self.set_language_by_import()
         self.set_max_process()
         self.set_path_type()
         self.set_path_tree()
 
-    def setui_language_by_import(self):
+    def set_language_by_import(self):
         """
         根据配置文件来显示软件语言
         :return:
         """
         if ReadConfig.get_language() == "zh_CN":
             AppMainLogger.debug("Start setting logImport GUI to Chinese(zh_CN)")
-            self.setui_zh_CN()
+            self.set_zh_CN()
             AppMainLogger.debug("End setting logImport GUI to Chinese(zh_CN)")
 
-    def setui_zh_CN(self):
+    def set_zh_CN(self):
         """
         将软件界面设置为中文
         :return:
