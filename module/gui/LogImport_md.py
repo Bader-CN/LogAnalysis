@@ -75,14 +75,17 @@ class LogAnalysisImport(QWidget):
         """
         # 获取处理器物理核心数量
         num_cpu_count = ReadConfig.get_cpu_count()
+        AppMainLogger.debug("CPU have {} core".format(num_cpu_count))
         # 根据配置文件来决定可能的进程数
         max_processes = ReadConfig.get_max_process()
+        AppMainLogger.debug("ConfigFile App_Optimiz.Max_Processes's value: {}".format(max_processes))
         if max_processes in ["Auto", "auto"]:
             max_processes = num_cpu_count
         elif num_cpu_count >= int(max_processes):
             max_processes = num_cpu_count
         else:
             max_processes = int(max_processes)
+        AppMainLogger.debug("Final max_processes will set to {}".format(str(max_processes)))
         num_list = [str(x) for x in range(1, max_processes+1)]
         self.ui.combox_max_process.addItems(num_list)
 
@@ -97,6 +100,7 @@ class LogAnalysisImport(QWidget):
         # 其余情况, 则返回指定的值
         else:
             number = int(number)
+        AppMainLogger.debug("Default max_processes value to {}".format(str(number)))
 
         self.ui.combox_max_process.setCurrentIndex(num_list.index(str(number)))
 
