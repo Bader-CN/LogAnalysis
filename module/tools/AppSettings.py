@@ -77,21 +77,10 @@ class ReadConfig():
     @staticmethod
     def get_max_process(*args, **kwargs):
         """
-        获取配置文件中设定的最大进程数, 如果是 Auto, 则根据处理器物理核心数来自行判断
+        获取配置文件 Max_Processes 中的值
         :param args:
         :param kwargs:
-        :return: int
+        :return: str
         """
-        max_cpu = psutil.cpu_count(logical=False)
-        # 如果 psutil.cpu_count(logical=False) 获取不到值, 则为了保险起见, 将值设定成2
-        if max_cpu != None:
-            max_process = psutil.cpu_count(logical=False) - 1
-        else:
-            max_process = 2
+        return cfg.get("App_Optimiz", "Max_Processes")
 
-        # 如果读取的值为 Auto, 则根据 psutil.cpu_count(logical=False) 的值自动判断
-        num_process = cfg.get("App_Optimiz", "Max_Processes")
-        if num_process in ["Auto", "auto"]:
-            return max_process
-        else:
-            return num_process

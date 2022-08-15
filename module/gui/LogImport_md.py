@@ -73,16 +73,32 @@ class LogAnalysisImport(QWidget):
         设定日志读取的进程数量值
         :return:
         """
-        # 根据 CPU 核心数来加载所有可能的选项
-        max_process = ReadConfig.get_cpu_count()
-        AppMainLogger.debug("CPU total is {} core".format(max_process))
-        num_list = [str(x) for x in range(1, max_process+1)]
+        # 获取处理器物理核心数量
+        num_cpu_count = ReadConfig.get_cpu_count()
+        # 根据配置文件来决定可能的进程数
+        max_processes = ReadConfig.get_max_process()
+        if max_processes in ["Auto", "auto"]:
+            max_processes = num_cpu_count
+        elif num_cpu_count >= int(max_processes):
+            max_processes = num_cpu_count
+        else:
+            max_processes = int(max_processes)
+        num_list = [str(x) for x in range(1, max_processes+1)]
         self.ui.combox_max_process.addItems(num_list)
 
-        # 根据配置文件的设置, 来决定默认的值
+        # 进程数的默认数值
         number = ReadConfig.get_max_process()
+        # 如果值是 Auto, 则默认为物理核心数 - 1
+        if number in ["Auto", "auto"]:
+            number = ReadConfig.get_cpu_count() - 1
+        # 如果该值小于等于 2, 则固定返回 2
+        elif int(number) <= 2:
+            number = 2
+        # 其余情况, 则返回指定的值
+        else:
+            number = int(number)
+
         self.ui.combox_max_process.setCurrentIndex(num_list.index(str(number)))
-        AppMainLogger.debug("set {} read processes".format(number))
 
     def set_path_type(self):
         """
