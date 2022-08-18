@@ -49,6 +49,10 @@ class LogAnalysisImport(QWidget):
         self.set_path_tree()
         self.set_default_comboxs()
 
+        # 连接槽函数
+        self.ui.combox_company.activated.connect(self.slot_combox_company)
+        self.ui.combox_product_line.activated.connect(self.slot_combox_product_line)
+
     def set_language_by_import(self):
         """
         根据配置文件来显示软件语言
@@ -192,3 +196,35 @@ class LogAnalysisImport(QWidget):
             self.path_model.setFilter(QDir.AllEntries | QDir.AllDirs | QDir.NoDotAndDotDot)
             self.ui.tree_filedir.setModel(self.path_model)
             AppMainLogger.debug("Change QTableView's model Filter type to [QDir.AllEntries | QDir.AllDirs | QDir.NoDotAndDotDot]")
+
+    def slot_combox_company(self):
+        """
+        根据当前公司的 ComboBox(组合框) 里的值, 来决定 Company, ProductLine, Product 的值
+        :return:
+        """
+        current_company = self.ui.combox_company.currentText()
+        AppMainLogger.debug("QComboBox by Company is activated, now value is: {}".format(current_company))
+        productlines = self.category_dict.get(current_company)
+        productlines = [x for x in productlines]
+        self.ui.combox_product_line.clear()
+        self.ui.combox_product_line.addItems(productlines)
+        AppMainLogger.debug("addItems in ProductLine: {}".format(str(productlines)))
+        current_proline = self.ui.combox_product_line.currentText()
+        products = self.category_dict.get(current_company).get(current_proline)
+        self.ui.combox_product.clear()
+        self.ui.combox_product.addItems(products)
+        AppMainLogger.debug("addItems in Products: {}".format(str(products)))
+
+    def slot_combox_product_line(self):
+        """
+        根据当产品线 ComboBox(组合框) 里的值, 来决定 Product 里的值
+        :return:
+        """
+        current_company = self.ui.combox_company.currentText()
+        current_productline = self.ui.combox_product_line.currentText()
+        AppMainLogger.debug("QComboBox by ProductLine is activated, now value is: {}".format(current_productline))
+        productlinesdb = self.category_dict.get(current_company)
+        products = productlinesdb.get(current_productline)
+        self.ui.combox_product.clear()
+        self.ui.combox_product.addItems(products)
+        AppMainLogger.debug("addItems in Products: {}".format(str(products)))
