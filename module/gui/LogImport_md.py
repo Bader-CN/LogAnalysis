@@ -13,6 +13,14 @@ class LogAnalysisImport(QWidget):
     """
     # QTreeView.setModel() 可以加载此模型
     path_model = QFileSystemModel()
+    # 所有软件的分类数据
+    category_dict = {
+        "MicroFocus": {
+            "IMG": ["Connected Backup(CBK)", "IDOL"],
+            "ITOM": ["Operations Agent(OA)", "Operations Bridge Manager(OBM)"], },
+
+        "Company1": {"ProductLine1": ["ProductName1", "ProductName2"], }
+    }
 
     def __init__(self):
         # 继承父类 QWidget
@@ -39,6 +47,7 @@ class LogAnalysisImport(QWidget):
         self.set_max_process()
         self.set_path_type()
         self.set_path_tree()
+        self.set_default_comboxs()
 
     def set_language_by_import(self):
         """
@@ -142,6 +151,26 @@ class LogAnalysisImport(QWidget):
         fullpath = self.path_model.filePath(self.ui.tree_filedir.currentIndex())
         self.ui.lineEdit.setText(fullpath)
         AppMainLogger.info("Clicked & Add Path [{}]".format(fullpath))
+
+    def set_default_comboxs(self):
+        """
+        当点击导入按钮后, 默认显示 ComboBox(组合框) 的值
+        :return:
+        """
+        AppMainLogger.debug("Start setting Company, ProductLine and Product")
+        # 设置 ComboBox(组合框) 的值: 公司
+        companys = [x for x in self.category_dict]
+        self.ui.combox_company.addItems(companys)
+        # 设置 ComboBox(组合框) 的值: 产品线
+        current_company = self.ui.combox_company.currentText()
+        productlines = self.category_dict.get(current_company)
+        productlines = [x for x in productlines]
+        self.ui.combox_product_line.addItems(productlines)
+        # 设置 ComboBox(组合框) 的值: 产品
+        current_proline = self.ui.combox_product_line.currentText()
+        products = self.category_dict.get(current_company).get(current_proline)
+        self.ui.combox_product.addItems(products)
+        AppMainLogger.debug("End setting Company, ProductLine and Product")
 
     def slot_change_path_tree(self):
         """
