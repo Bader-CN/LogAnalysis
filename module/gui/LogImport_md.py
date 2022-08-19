@@ -52,6 +52,7 @@ class LogAnalysisImport(QWidget):
         # 连接槽函数
         self.ui.combox_company.activated.connect(self.slot_combox_company)
         self.ui.combox_product_line.activated.connect(self.slot_combox_product_line)
+        self.ui.btn_cancel.clicked.connect(self.close)
 
     def set_language_by_import(self):
         """
