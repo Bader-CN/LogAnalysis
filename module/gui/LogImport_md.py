@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from PySide6.QtCore import QDir
-from PySide6.QtWidgets import QWidget, QFileSystemModel
+from PySide6.QtWidgets import QWidget, QFileSystemModel, QFileDialog
 from module.gui.LogImport_ui import Ui_Form
 from module.tools.AppSettings import ReadConfig
 from module.tools.AppDebug import AppMainLogger
@@ -53,6 +53,7 @@ class LogAnalysisImport(QWidget):
         self.ui.combox_company.activated.connect(self.slot_combox_company)
         self.ui.combox_product_line.activated.connect(self.slot_combox_product_line)
         self.ui.btn_cancel.clicked.connect(self.close)
+        self.ui.btn_select.clicked.connect(self.slot_btn_select)
 
     def set_language_by_import(self):
         """
@@ -72,12 +73,12 @@ class LogAnalysisImport(QWidget):
         from module.language.i18n_zh_CN import Language_zh_CN
         self.setWindowTitle(Language_zh_CN.get("Import Wizard"))
         self.ui.label_abspath.setText(Language_zh_CN.get("Path"))
-        self.ui.btn_select_file_or_path.setText(Language_zh_CN.get("Select"))
         self.ui.label_max_process.setText(Language_zh_CN.get("Max of Processes"))
         self.ui.label_path_type.setText(Language_zh_CN.get("Path Type"))
         self.ui.label_company.setText(Language_zh_CN.get("Company"))
         self.ui.label_product_line.setText(Language_zh_CN.get("Product Line"))
         self.ui.label_product.setText(Language_zh_CN.get("Product Name"))
+        self.ui.btn_select.setText(Language_zh_CN.get("Select"))
         self.ui.btn_import.setText(Language_zh_CN.get("Import"))
         self.ui.btn_cancel.setText(Language_zh_CN.get("Cancel"))
         self.ui.usernote.setText(Language_zh_CN.get("User Note"))
@@ -229,3 +230,19 @@ class LogAnalysisImport(QWidget):
         self.ui.combox_product.clear()
         self.ui.combox_product.addItems(products)
         AppMainLogger.debug("addItems in Products: {}".format(str(products)))
+
+    def slot_btn_select(self):
+        """
+        根据路径类型来选择打开的是文件夹还是文件
+        :return:
+        """
+        pathtype = self.ui.combox_path_type.currentText()
+        if pathtype == "Folder":
+            dst_path = QFileDialog.getExistingDirectory()
+            self.ui.lineEdit.setText(dst_path)
+            AppMainLogger.info("Add Path Folder [{}]".format(dst_path))
+        else:
+            dst_path = QFileDialog.getOpenFileName(self)[0]
+            self.ui.lineEdit.setText(dst_path)
+            AppMainLogger.info("Add Path File [{}]".format(dst_path))
+            

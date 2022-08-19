@@ -50,10 +50,10 @@ class Ui_Form(object):
 
         self.horizontalLayout.addWidget(self.lineEdit)
 
-        self.btn_select_file_or_path = QPushButton(self.horizontalLayoutWidget)
-        self.btn_select_file_or_path.setObjectName(u"btn_select_file_or_path")
+        self.btn_select = QPushButton(self.horizontalLayoutWidget)
+        self.btn_select.setObjectName(u"btn_select")
 
-        self.horizontalLayout.addWidget(self.btn_select_file_or_path)
+        self.horizontalLayout.addWidget(self.btn_select)
 
         self.tree_filedir = QTreeView(Form)
         self.tree_filedir.setObjectName(u"tree_filedir")
@@ -146,7 +146,7 @@ class Ui_Form(object):
     def retranslateUi(self, Form):
         Form.setWindowTitle(QCoreApplication.translate("Form", u"Form", None))
         self.label_abspath.setText(QCoreApplication.translate("Form", u"Path", None))
-        self.btn_select_file_or_path.setText(QCoreApplication.translate("Form", u"Select", None))
+        self.btn_select.setText(QCoreApplication.translate("Form", u"Select", None))
         self.label_max_process.setText(QCoreApplication.translate("Form", u"Max of Processes", None))
         self.label_path_type.setText(QCoreApplication.translate("Form", u"Path Type", None))
         self.label_company.setText(QCoreApplication.translate("Form", u"Company", None))
