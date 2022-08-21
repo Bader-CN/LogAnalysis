@@ -23,37 +23,41 @@ class LogAnalysisImport(QWidget):
     }
 
     def __init__(self):
-        # 继承父类 QWidget
-        super().__init__()
-        # 导入自定义 Ui_From 界面 (module.gui.LogImport_ui.Ui_From)
-        self.ui = Ui_Form()
-        # 初始化界面
-        self.ui.setupUi(self)
-        # 加载原始语言
-        self.ui.usernote.setText("""Note:
-1. Import function will cost much CPU and Memory
-    > this value is determined by "Number of Processes"
-    > Temporary modify: "Number of Processes"
-    > Permanent modify: "config.cfg"
+        try:
+            # 继承父类 QWidget
+            super().__init__()
+            # 导入自定义 Ui_From 界面 (module.gui.LogImport_ui.Ui_From)
+            self.ui = Ui_Form()
+            # 初始化界面
+            self.ui.setupUi(self)
+            # 加载原始语言
+            self.ui.usernote.setText("""Note:
+    1. Import function will cost much CPU and Memory
+        > this value is determined by "Number of Processes"
+        > Temporary modify: "Number of Processes"
+        > Permanent modify: "config.cfg"
+    
+    2. Select button to select the specified file or folder
+        > The file or folder is determined by "path type"
+        > Can click a file or folder on the left to add it auto
+        > Double click to expand subdirectories""")
 
-2. Select button to select the specified file or folder
-    > The file or folder is determined by "path type"
-    > Can click a file or folder on the left to add it auto
-    > Double click to expand subdirectories""")
+            # 调整软件界面
+            self.setWindowTitle("Import Wizard")
+            self.set_language_by_import()
+            self.set_max_process()
+            self.set_path_type()
+            self.set_path_tree()
+            self.set_default_comboxs()
 
-        # 调整软件界面
-        self.setWindowTitle("Import Wizard")
-        self.set_language_by_import()
-        self.set_max_process()
-        self.set_path_type()
-        self.set_path_tree()
-        self.set_default_comboxs()
+            # 连接槽函数
+            self.ui.combox_company.activated.connect(self.slot_combox_company)
+            self.ui.combox_product_line.activated.connect(self.slot_combox_product_line)
+            self.ui.btn_cancel.clicked.connect(self.close)
+            self.ui.btn_select.clicked.connect(self.slot_btn_select)
 
-        # 连接槽函数
-        self.ui.combox_company.activated.connect(self.slot_combox_company)
-        self.ui.combox_product_line.activated.connect(self.slot_combox_product_line)
-        self.ui.btn_cancel.clicked.connect(self.close)
-        self.ui.btn_select.clicked.connect(self.slot_btn_select)
+        except Exception as e:
+            AppMainLogger.error(e)
 
     def set_language_by_import(self):
         """
@@ -61,9 +65,8 @@ class LogAnalysisImport(QWidget):
         :return:
         """
         if ReadConfig.get_language() == "zh_CN":
-            AppMainLogger.debug("Start setting logImport GUI to Chinese(zh_CN)")
+            AppMainLogger.info("ImportGUI Language setting to zh_CN")
             self.set_zh_CN()
-            AppMainLogger.debug("End setting logImport GUI to Chinese(zh_CN)")
 
     def set_zh_CN(self):
         """
@@ -133,7 +136,6 @@ class LogAnalysisImport(QWidget):
         设置左方的文件列表, 如果文件类型为 Folder, 则不显示文件
         :return:
         """
-        AppMainLogger.debug("Start setting path tree")
         self.path_model.setRootPath(QDir.rootPath())
         # QFileSystemModel 默认有4列, 分别为 Name, size, type, modified
         # 如果不想显示, 可以调用 QTreeView.setColumnHidden(<column_index>, True) 来隐藏掉
@@ -147,7 +149,6 @@ class LogAnalysisImport(QWidget):
             self.path_model.setFilter(QDir.AllDirs | QDir.NoDotAndDotDot)
         # 连接槽函数: 将点击鼠标的事件连接到 get_path_tree()
         self.ui.tree_filedir.clicked.connect(self.get_path_tree)
-        AppMainLogger.debug("End setting path tree")
 
     def get_path_tree(self):
         """
@@ -163,7 +164,6 @@ class LogAnalysisImport(QWidget):
         当点击导入按钮后, 默认显示 ComboBox(组合框) 的值
         :return:
         """
-        AppMainLogger.debug("Start setting Company, ProductLine and Product")
         # 设置 ComboBox(组合框) 的值: 公司
         companys = [x for x in self.category_dict]
         self.ui.combox_company.addItems(companys)
@@ -176,7 +176,6 @@ class LogAnalysisImport(QWidget):
         current_proline = self.ui.combox_product_line.currentText()
         products = self.category_dict.get(current_company).get(current_proline)
         self.ui.combox_product.addItems(products)
-        AppMainLogger.debug("End setting Company, ProductLine and Product")
 
     def slot_change_path_tree(self):
         """

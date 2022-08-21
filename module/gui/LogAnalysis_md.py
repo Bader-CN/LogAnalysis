@@ -44,7 +44,7 @@ class LogAnalysisMain(QMainWindow):
         :return:
         """
         if ReadConfig.get_language() == "zh_CN":
-            AppMainLogger.info("GUI Language setting to zh_CN")
+            AppMainLogger.info("MainGUI Language setting to zh_CN")
             self.set_zh_CN()
 
     def set_zh_CN(self):
