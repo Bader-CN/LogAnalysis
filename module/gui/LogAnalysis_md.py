@@ -12,19 +12,21 @@ class LogAnalysisMain(QMainWindow):
     LogAnalysis main window settings
     """
     def __init__(self):
-        AppMainLogger.debug("Start initing AppGUI")
-        # 继承 QMainWindow 父类
-        super().__init__()
-        # 导入自定义界面 (module.gui.LogAnalysis_ui.Ui_MainWindow)
-        self.ui = Ui_MainWindow()
-        # 初始化界面
-        self.ui.setupUi(self)
-        AppMainLogger.debug("End initing AppGUI")
+        try:
+            # 继承 QMainWindow 父类
+            super().__init__()
+            # 导入自定义界面 (module.gui.LogAnalysis_ui.Ui_MainWindow)
+            self.ui = Ui_MainWindow()
+            # 初始化界面
+            self.ui.setupUi(self)
 
-        # 调整软件界面
-        self.setWindowTitle("LogAnalysis alpha")
-        self.set_start_end_time()
-        self.set_language_by_main()
+            # 调整软件界面
+            self.setWindowTitle("LogAnalysis alpha")
+            self.set_start_end_time()
+            self.set_language_by_main()
+
+        except Exception as e:
+            AppMainLogger.error(e)
 
     # 调整软件界面
     def set_start_end_time(self):
@@ -32,10 +34,8 @@ class LogAnalysisMain(QMainWindow):
         软件启动时, 设置 Start/End Time 的显示时间
         :return:
         """
-        AppMainLogger.debug("Start setting setDateTime")
         self.ui.date_start_time.setDateTime(QDateTime.addDays(QDateTime.currentDateTime(), -30))
         self.ui.date_end_time.setDateTime(QDateTime.currentDateTime())
-        AppMainLogger.debug("End setting setDateTime")
 
     # 调整显示语言
     def set_language_by_main(self):
@@ -44,9 +44,8 @@ class LogAnalysisMain(QMainWindow):
         :return:
         """
         if ReadConfig.get_language() == "zh_CN":
-            AppMainLogger.debug("Start setting logMain GUI to Chinese(zh_CN)")
+            AppMainLogger.info("GUI Language setting to zh_CN")
             self.set_zh_CN()
-            AppMainLogger.debug("End setting logMain GUI to Chinese(zh_CN)")
 
     def set_zh_CN(self):
         """
