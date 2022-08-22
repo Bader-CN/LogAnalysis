@@ -5,6 +5,9 @@ Language_zh_CN = {
         "Import": "导入",
         "Cancel": "取消",
 
+        # QMessage Info
+        "msg_path_not_null": "路径不能为空!",
+
         # logMain Section
         "Start Time": "开始时间",
         "End Time": "结束时间",

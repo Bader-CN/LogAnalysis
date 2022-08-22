@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from PySide6.QtCore import QDir
-from PySide6.QtWidgets import QWidget, QFileSystemModel, QFileDialog
+from PySide6.QtWidgets import QWidget, QFileSystemModel, QFileDialog, QMessageBox
 from module.gui.LogImport_ui import Ui_Form
 from module.tools.AppSettings import ReadConfig
 from module.tools.AppDebug import AppMainLogger
@@ -11,6 +11,8 @@ class LogAnalysisImport(QWidget):
     """
     LogAnalysis Import GUI
     """
+    # QMessageBox String
+    msg_path_not_null = "path can't be empty!"
     # QTreeView.setModel() 可以加载此模型
     path_model = QFileSystemModel()
     # 所有软件的分类数据
@@ -86,6 +88,7 @@ class LogAnalysisImport(QWidget):
         self.ui.btn_import.setText(Language_zh_CN.get("Import"))
         self.ui.btn_cancel.setText(Language_zh_CN.get("Cancel"))
         self.ui.usernote.setText(Language_zh_CN.get("User Note"))
+        self.msg_path_not_null = Language_zh_CN.get("msg_path_not_null")
 
     def set_max_process(self):
         """
@@ -247,9 +250,20 @@ class LogAnalysisImport(QWidget):
             AppMainLogger.info("Add Path File [{}]".format(dst_path))
 
     def slot_btn_import(self):
-        taskdict = {}
-        taskdict["path"] = self.ui.line_abspath.text()
-        taskdict["company"] = self.ui.combox_company.currentText()
-        taskdict["productline"] = self.ui.combox_product_line.currentText()
-        taskdict["product"] = self.ui.combox_product.currentText()
-        print(taskdict)
+        """
+        将导入界面的所有信息传递到日志预处理线程
+        :return:
+        """
+        taskdict = {
+            "path": self.ui.line_abspath.text(),
+            "pathtype": self.ui.combox_path_type.currentText(),
+            "company": self.ui.combox_company.currentText(),
+            "productline": self.ui.combox_product_line.currentText(),
+            "product": self.ui.combox_product.currentText(),
+            "processes": self.ui.combox_max_process.currentText()
+        }
+        # 判断目前数据是否符合要求
+        if taskdict.get("path") == "":
+            QMessageBox.warning(self, "Warning", self.msg_path_not_null)
+        else:
+            print(taskdict)
