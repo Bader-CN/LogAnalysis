@@ -52,7 +52,7 @@
      </widget>
     </item>
     <item>
-     <widget class="QLineEdit" name="lineEdit">
+     <widget class="QLineEdit" name="line_abspath">
       <property name="dragEnabled">
        <bool>false</bool>
       </property>

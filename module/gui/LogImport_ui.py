@@ -43,12 +43,12 @@ class Ui_Form(object):
 
         self.horizontalLayout.addWidget(self.label_abspath)
 
-        self.lineEdit = QLineEdit(self.horizontalLayoutWidget)
-        self.lineEdit.setObjectName(u"lineEdit")
-        self.lineEdit.setDragEnabled(False)
-        self.lineEdit.setClearButtonEnabled(True)
+        self.line_abspath = QLineEdit(self.horizontalLayoutWidget)
+        self.line_abspath.setObjectName(u"line_abspath")
+        self.line_abspath.setDragEnabled(False)
+        self.line_abspath.setClearButtonEnabled(True)
 
-        self.horizontalLayout.addWidget(self.lineEdit)
+        self.horizontalLayout.addWidget(self.line_abspath)
 
         self.btn_select = QPushButton(self.horizontalLayoutWidget)
         self.btn_select.setObjectName(u"btn_select")

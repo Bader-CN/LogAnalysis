@@ -55,6 +55,7 @@ class LogAnalysisImport(QWidget):
             self.ui.combox_product_line.activated.connect(self.slot_combox_product_line)
             self.ui.btn_cancel.clicked.connect(self.close)
             self.ui.btn_select.clicked.connect(self.slot_btn_select)
+            self.ui.btn_import.clicked.connect(self.slot_btn_import)
 
         except Exception as e:
             AppMainLogger.error(e)
@@ -156,7 +157,7 @@ class LogAnalysisImport(QWidget):
         :return:
         """
         fullpath = self.path_model.filePath(self.ui.tree_filedir.currentIndex())
-        self.ui.lineEdit.setText(fullpath)
+        self.ui.line_abspath.setText(fullpath)
         AppMainLogger.info("Clicked & Add Path [{}]".format(fullpath))
 
     def set_default_comboxs(self):
@@ -238,10 +239,17 @@ class LogAnalysisImport(QWidget):
         pathtype = self.ui.combox_path_type.currentText()
         if pathtype == "Folder":
             dst_path = QFileDialog.getExistingDirectory()
-            self.ui.lineEdit.setText(dst_path)
+            self.ui.line_abspath.setText(dst_path)
             AppMainLogger.info("Add Path Folder [{}]".format(dst_path))
         else:
             dst_path = QFileDialog.getOpenFileName(self)[0]
-            self.ui.lineEdit.setText(dst_path)
+            self.ui.line_abspath.setText(dst_path)
             AppMainLogger.info("Add Path File [{}]".format(dst_path))
-            
+
+    def slot_btn_import(self):
+        taskdict = {}
+        taskdict["path"] = self.ui.line_abspath.text()
+        taskdict["company"] = self.ui.combox_company.currentText()
+        taskdict["productline"] = self.ui.combox_product_line.currentText()
+        taskdict["product"] = self.ui.combox_product.currentText()
+        print(taskdict)
