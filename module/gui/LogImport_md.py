@@ -103,7 +103,7 @@ class LogAnalysisImport(QWidget):
             max_processes = num_cpu_count
         else:
             max_processes = int(max_processes)
-        AppMainLogger.debug("Final max_processes will set to {}".format(str(max_processes)))
+        AppMainLogger.debug("Maximum max_processes will set to {}".format(str(max_processes)))
         num_list = [str(x) for x in range(1, max_processes+1)]
         self.ui.combox_max_process.addItems(num_list)
 
