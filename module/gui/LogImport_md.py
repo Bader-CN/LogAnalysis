@@ -5,6 +5,7 @@ from PySide6.QtWidgets import QWidget, QFileSystemModel, QFileDialog, QMessageBo
 from module.gui.LogImport_ui import Ui_Form
 from module.tools.AppSettings import ReadConfig
 from module.tools.AppDebug import AppMainLogger
+from module.internal.customSignals import allSignals
 
 
 class LogAnalysisImport(QWidget):
@@ -267,3 +268,4 @@ class LogAnalysisImport(QWidget):
             QMessageBox.warning(self, "Warning", self.msg_path_not_null)
         else:
             print(taskdict)
+            allSignals.send_want_data.emit(taskdict)
