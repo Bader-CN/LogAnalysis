@@ -5,7 +5,7 @@ from PySide6.QtWidgets import QMainWindow
 from module.gui.LogAnalysis_ui import Ui_MainWindow
 from module.tools.AppSettings import ReadConfig
 from module.tools.AppDebug import AppMainLogger
-from module.internal.customSignals import allSignals
+from module.bridge.customSignals import allSignals
 
 
 class LogAnalysisMain(QMainWindow):
@@ -27,7 +27,7 @@ class LogAnalysisMain(QMainWindow):
             self.set_language_by_main()
 
             # 定制信号连接槽函数
-            allSignals.send_want_data.connect(self.demo1)
+            allSignals.user_want_data.connect(self.slot_check_taskdict)
 
         except Exception as e:
             AppMainLogger.error(e)
@@ -69,5 +69,5 @@ class LogAnalysisMain(QMainWindow):
         self.ui.tabLeft.setTabText(0, Language_zh_CN.get("Database"))
         self.ui.tabLeft.setTabText(1, Language_zh_CN.get("Template"))
 
-    def demo1(self, dict):
+    def slot_check_taskdict(self, dict):
         print(dict)

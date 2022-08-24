@@ -5,7 +5,7 @@ from PySide6.QtWidgets import QWidget, QFileSystemModel, QFileDialog, QMessageBo
 from module.gui.LogImport_ui import Ui_Form
 from module.tools.AppSettings import ReadConfig
 from module.tools.AppDebug import AppMainLogger
-from module.internal.customSignals import allSignals
+from module.bridge.customSignals import allSignals
 
 
 class LogAnalysisImport(QWidget):
@@ -108,6 +108,7 @@ class LogAnalysisImport(QWidget):
             max_processes = num_cpu_count
         else:
             max_processes = int(max_processes)
+
         AppMainLogger.debug("Maximum max_processes will set to {}".format(str(max_processes)))
         num_list = [str(x) for x in range(1, max_processes+1)]
         self.ui.combox_max_process.addItems(num_list)
@@ -123,8 +124,8 @@ class LogAnalysisImport(QWidget):
         # 其余情况, 则返回指定的值
         else:
             number = int(number)
-        AppMainLogger.debug("Default max_processes value to {}".format(str(number)))
 
+        AppMainLogger.debug("Default max_processes value to {}".format(str(number)))
         self.ui.combox_max_process.setCurrentIndex(num_list.index(str(number)))
 
     def set_path_type(self):
@@ -267,5 +268,5 @@ class LogAnalysisImport(QWidget):
         if taskdict.get("path") == "":
             QMessageBox.warning(self, "Warning", self.msg_path_not_null)
         else:
-            print(taskdict)
-            allSignals.send_want_data.emit(taskdict)
+            # 如果符合条件, 则将 taskdict 通过 allSignals.user_want_data 信号发送出去
+            allSignals.user_want_data.emit(taskdict)
