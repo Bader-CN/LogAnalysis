@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from threading import Thread
 from PySide6.QtCore import QDateTime
 from PySide6.QtWidgets import QMainWindow
 from module.gui.LogAnalysis_ui import Ui_MainWindow
@@ -71,3 +72,21 @@ class LogAnalysisMain(QMainWindow):
 
     def slot_check_taskdict(self, dict):
         print(dict)
+
+        # 定义待分析函数
+        def check_taskdict(dict):
+            print(dict)
+            # 加载文件规则
+            if dict.get("company") == "MicroFocus" and dict.get("productline") == "ITOM" and dict.get("product") == "Operations Agent(OA)":
+                from rules.MicroFocus.ITOM import OA_FileRule as FileRule
+
+            # 输出待导入的文件
+            print(FileRule.NeedFilesRule)
+            print(FileRule.BlckFilesRule)
+            if dict.get("pathtype") == "Folder":
+                allfiles = [dict.get("path")]
+            else:
+                # 需要遍历目录, 找出所有的文件
+                allfiles = []
+
+        check_taskdict(dict)
