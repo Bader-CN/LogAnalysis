@@ -107,7 +107,7 @@ class LogAnalysisMain(QMainWindow):
                             # 初始化标记位
                             isNeed = False
                             isBlck = False
-                            
+
                 # 展示准备处理的文件
                 print(allfiles)
 
