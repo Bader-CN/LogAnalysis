@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import os
+import os, re
 from threading import Thread
 from PySide6.QtCore import QDateTime
 from PySide6.QtWidgets import QMainWindow
@@ -81,18 +81,34 @@ class LogAnalysisMain(QMainWindow):
                 from rules.MicroFocus.ITOM import OA_FileRule as FileRule
 
             # 输出待导入的文件
-            # print(FileRule.NeedFilesRule)
-            # print(FileRule.BlckFilesRule)
             if dict.get("pathtype") == "File":
                 allfiles = [dict.get("path")]
             else:
                 # 需要遍历目录, 找出所有的文件
                 allfiles = []
+                isNeed = False
+                isBlck = False
                 for root, dirs, files in os.walk(dict.get("path")):
-                    print("root", root)
-                    print("dirs", dirs)
-                    print("files", files)
                     for file in files:
-                        allfiles.append(os.path.join(root, file))
+                        # 生成文件的绝对路径
+                        filepath = os.path.join(root, file)
+                        # 判断每个文件是否需要导入
+                        for needfilerule in FileRule.NeedFilesRule:
+                            # 如果符合匹配列表: FileRule.NeedFilesRule, 将标记位 isNeed 设置为 True
+                            if re.search(needfilerule, filepath, re.IGNORECASE):
+                                isNeed = True
+                            # 如果符合反匹列表: FileRule.BlckFilesRule, 将标记位 isBlck 设置为 True
+                            for blckfilerule in FileRule.BlckFilesRule:
+                                if re.search(blckfilerule, filepath, re.IGNORECASE):
+                                    isBlck = True
+                            # 如果符合匹配列表, 并且不在反匹列表, 则将此目录加入到 allfiles 列表里
+                            if isNeed == True and isBlck == False:
+                                allfiles.append(filepath)
+                            # 初始化标记位
+                            isNeed = False
+                            isBlck = False
+                            
+                # 展示准备处理的文件
+                print(allfiles)
 
         check_taskdict(dict)
