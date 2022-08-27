@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import os
 from threading import Thread
 from PySide6.QtCore import QDateTime
 from PySide6.QtWidgets import QMainWindow
@@ -71,7 +72,6 @@ class LogAnalysisMain(QMainWindow):
         self.ui.tabLeft.setTabText(1, Language_zh_CN.get("Template"))
 
     def slot_check_taskdict(self, dict):
-        print(dict)
 
         # 定义待分析函数
         def check_taskdict(dict):
@@ -81,12 +81,18 @@ class LogAnalysisMain(QMainWindow):
                 from rules.MicroFocus.ITOM import OA_FileRule as FileRule
 
             # 输出待导入的文件
-            print(FileRule.NeedFilesRule)
-            print(FileRule.BlckFilesRule)
-            if dict.get("pathtype") == "Folder":
+            # print(FileRule.NeedFilesRule)
+            # print(FileRule.BlckFilesRule)
+            if dict.get("pathtype") == "File":
                 allfiles = [dict.get("path")]
             else:
                 # 需要遍历目录, 找出所有的文件
                 allfiles = []
+                for root, dirs, files in os.walk(dict.get("path")):
+                    print("root", root)
+                    print("dirs", dirs)
+                    print("files", files)
+                    for file in files:
+                        allfiles.append(os.path.join(root, file))
 
         check_taskdict(dict)
