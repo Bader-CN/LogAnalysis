@@ -88,6 +88,7 @@ class LogAnalysisImport(QWidget):
         self.ui.btn_select.setText(Language_zh_CN.get("Select"))
         self.ui.btn_import.setText(Language_zh_CN.get("Import"))
         self.ui.btn_cancel.setText(Language_zh_CN.get("Cancel"))
+        self.ui.btn_targetdb.setText(Language_zh_CN.get("Target DB"))
         self.ui.usernote.setText(Language_zh_CN.get("User Note"))
         self.msg_path_not_null = Language_zh_CN.get("msg_path_not_null")
 

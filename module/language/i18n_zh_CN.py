@@ -22,6 +22,7 @@ Language_zh_CN = {
 
         # logImport Section
         "Import Wizard": "导入向导",
+        "Target DB": "目标数据库",
         "Path": "路径",
         "Select": "选择",
         "Max of Processes": "进程数量",
