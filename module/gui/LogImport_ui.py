@@ -133,6 +133,7 @@ class Ui_Form(object):
 
         self.line_dbname = QLineEdit(self.formLayoutWidget)
         self.line_dbname.setObjectName(u"line_dbname")
+        self.line_dbname.setClearButtonEnabled(True)
 
         self.formLayout.setWidget(1, QFormLayout.FieldRole, self.line_dbname)
 
