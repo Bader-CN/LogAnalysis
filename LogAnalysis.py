@@ -9,6 +9,8 @@ if __name__ == '__main__':
     # 检查相关目录及文件是否存在
     if not os.path.exists("./log"):
         os.mkdir("./log")
+    if not os.path.exists("./data"):
+        os.mkdir("./data")
 
     # 启动软件
     app = QApplication([])

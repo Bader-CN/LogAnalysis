@@ -151,3 +151,4 @@ cython_debug/
 # My Custom
 log/
 test/
+data/
