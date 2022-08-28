@@ -131,11 +131,11 @@ class Ui_Form(object):
 
         self.formLayout.setWidget(6, QFormLayout.FieldRole, self.combox_product)
 
-        self.line_dbname = QLineEdit(self.formLayoutWidget)
-        self.line_dbname.setObjectName(u"line_dbname")
-        self.line_dbname.setClearButtonEnabled(True)
+        self.line_targetdb = QLineEdit(self.formLayoutWidget)
+        self.line_targetdb.setObjectName(u"line_targetdb")
+        self.line_targetdb.setClearButtonEnabled(True)
 
-        self.formLayout.setWidget(1, QFormLayout.FieldRole, self.line_dbname)
+        self.formLayout.setWidget(1, QFormLayout.FieldRole, self.line_targetdb)
 
         self.btn_targetdb = QPushButton(self.formLayoutWidget)
         self.btn_targetdb.setObjectName(u"btn_targetdb")

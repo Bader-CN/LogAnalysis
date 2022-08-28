@@ -7,6 +7,8 @@ Language_zh_CN = {
 
         # QMessage Info
         "msg_path_not_null": "路径不能为空!",
+        "msg_db_not_null": "目标数据库不能为空!",
+        "msg_db_not_blank": "目标数据库名不能有空格!",
 
         # logMain Section
         "Start Time": "开始时间",

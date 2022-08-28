@@ -15,6 +15,8 @@ class LogAnalysisImport(QWidget):
     """
     # QMessageBox String
     msg_path_not_null = "path can't be empty!"
+    msg_db_not_null = "target database can't be empty!"
+    msg_db_not_blank = "target database name can't contain space!"
     # QTreeView.setModel() 可以加载此模型
     path_model = QFileSystemModel()
     # 所有软件的分类数据
@@ -93,6 +95,8 @@ class LogAnalysisImport(QWidget):
         self.ui.btn_targetdb.setText(Language_zh_CN.get("Target DB"))
         self.ui.usernote.setText(Language_zh_CN.get("User Note"))
         self.msg_path_not_null = Language_zh_CN.get("msg_path_not_null")
+        self.msg_db_not_null = Language_zh_CN.get("msg_db_not_null")
+        self.msg_db_not_blank = Language_zh_CN.get("msg_db_not_blank")
 
     def set_max_process(self):
         """
@@ -259,9 +263,9 @@ class LogAnalysisImport(QWidget):
         选择将数据导入到哪一个数据库
         :return:
         """
-        dst_path = QFileDialog.getOpenFileName(self)[0]
+        dst_path = QFileDialog.getOpenFileName(self, dir="./data/database", filter="SqliteDB (*.db)")[0]
         database = os.path.basename(dst_path)[0:-3]
-        self.ui.line_dbname.setText(database)
+        self.ui.line_targetdb.setText(database)
 
     def slot_btn_import(self):
         """
@@ -269,7 +273,7 @@ class LogAnalysisImport(QWidget):
         :return:
         """
         taskdict = {
-            "dbname": self.ui.line_dbname.text(),
+            "targetdb": self.ui.line_targetdb.text(),
             "path": self.ui.line_abspath.text(),
             "pathtype": self.ui.combox_path_type.currentText(),
             "company": self.ui.combox_company.currentText(),
@@ -278,8 +282,15 @@ class LogAnalysisImport(QWidget):
             "processes": self.ui.combox_max_process.currentText()
         }
         # 判断目前数据是否符合要求
+        # 不符合要求: 路径为空
         if taskdict.get("path") == "":
             QMessageBox.warning(self, "Warning", self.msg_path_not_null)
+        # 不符合要求: 目标数据库为空
+        elif self.ui.line_targetdb.text() == "":
+            QMessageBox.warning(self, "Warning", self.msg_db_not_null)
+        # 不符合要求: 目标数据库名存在空格
+        elif " " in self.ui.line_targetdb.text():
+            QMessageBox.warning(self, "Warning", self.msg_db_not_blank)
         else:
             # 如果符合条件, 则将 taskdict 通过 allSignals.user_want_data 信号发送出去
             allSignals.user_want_data.emit(taskdict)
