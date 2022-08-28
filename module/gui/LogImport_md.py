@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import os
 from PySide6.QtCore import QDir
 from PySide6.QtWidgets import QWidget, QFileSystemModel, QFileDialog, QMessageBox
 from module.gui.LogImport_ui import Ui_Form
@@ -59,6 +60,7 @@ class LogAnalysisImport(QWidget):
             self.ui.btn_cancel.clicked.connect(self.close)
             self.ui.btn_select.clicked.connect(self.slot_btn_select)
             self.ui.btn_import.clicked.connect(self.slot_btn_import)
+            self.ui.btn_targetdb.clicked.connect(self.slot_btn_targetdb)
 
         except Exception as e:
             AppMainLogger.error(e)
@@ -252,12 +254,22 @@ class LogAnalysisImport(QWidget):
             self.ui.line_abspath.setText(dst_path)
             AppMainLogger.info("Add Path File [{}]".format(dst_path))
 
+    def slot_btn_targetdb(self):
+        """
+        选择将数据导入到哪一个数据库
+        :return:
+        """
+        dst_path = QFileDialog.getOpenFileName(self)[0]
+        database = os.path.basename(dst_path)[0:-3]
+        self.ui.line_dbname.setText(database)
+
     def slot_btn_import(self):
         """
         将导入界面的所有信息传递到日志预处理线程
         :return:
         """
         taskdict = {
+            "dbname": self.ui.line_dbname.text(),
             "path": self.ui.line_abspath.text(),
             "pathtype": self.ui.combox_path_type.currentText(),
             "company": self.ui.combox_company.currentText(),
