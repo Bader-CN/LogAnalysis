@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import os, re
+import os, re, hashlib
 from threading import Thread
 from PySide6.QtCore import QDateTime
 from PySide6.QtWidgets import QMainWindow
@@ -75,7 +75,6 @@ class LogAnalysisMain(QMainWindow):
 
         # 定义待分析函数
         def check_taskdict(dict):
-            print(dict)
             # 加载文件规则
             if dict.get("company") == "MicroFocus" and dict.get("productline") == "ITOM" and dict.get("product") == "Operations Agent(OA)":
                 from rules.MicroFocus.ITOM import OA_FileRule as FileRule
@@ -108,7 +107,10 @@ class LogAnalysisMain(QMainWindow):
                             isNeed = False
                             isBlck = False
 
-                # 展示准备处理的文件
-                print(allfiles)
+                # 展示准备处理的文件/hash
+                dict["files"] = allfiles
+                print(dict)
+                for file in allfiles:
+                    print(file)
 
         check_taskdict(dict)
