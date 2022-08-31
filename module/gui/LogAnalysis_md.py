@@ -107,10 +107,18 @@ class LogAnalysisMain(QMainWindow):
                             isNeed = False
                             isBlck = False
 
-                # 展示准备处理的文件/hash
+                # 此时字典里存储的是所有符合条件的文件
                 dict["files"] = allfiles
                 print(dict)
                 for file in allfiles:
                     print(file)
+
+                # 结合文件 hash 来决定哪些文件需要被导入
+                if os.path.exists(os.path.join("./data/database", dict.get("targetdb") + ".db")):
+                    print("开始连接数据库进行判断")
+                    pass
+                else:
+                    print("首次建立, 不用检查hash")
+                print(os.path.join("./data/database", dict.get("targetdb") + ".db"))
 
         check_taskdict(dict)
