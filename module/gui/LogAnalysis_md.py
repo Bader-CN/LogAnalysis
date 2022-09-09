@@ -8,6 +8,8 @@ from module.gui.LogAnalysis_ui import Ui_MainWindow
 from module.tools.AppSettings import ReadConfig
 from module.tools.AppDebug import AppMainLogger
 from module.bridge.customSignals import allSignals
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
 
 
 class LogAnalysisMain(QMainWindow):
@@ -78,6 +80,7 @@ class LogAnalysisMain(QMainWindow):
             # 加载文件规则
             if dict.get("company") == "MicroFocus" and dict.get("productline") == "ITOM" and dict.get("product") == "Operations Agent(OA)":
                 from rules.MicroFocus.ITOM import OA_FileRule as FileRule
+                from rules.MicroFocus.ITOM import OA_SQLTable as SQLTable
 
             # 输出待导入的文件
             if dict.get("pathtype") == "File":
@@ -119,6 +122,15 @@ class LogAnalysisMain(QMainWindow):
                     pass
                 else:
                     print("首次建立, 不用检查hash")
-                print(dict.get("targetdb"))
+                    # 创建数据库
+                    write_engine = create_engine("sqlite:///"+ dict.get("targetdb"), future=True)
+                    SQLTable.BASE.metadata.create_all(write_engine)
+                    # 向数据库里写入数据
+                    Session = sessionmaker(write_engine)
+                    writesession = Session()
+                    testdata = SQLTable.FileHash(filepath="demo1/demofile.txt", hash="hash1")
+                    writesession.add(testdata)
+                    writesession.commit()
+                    writesession.close()
 
         check_taskdict(dict)
