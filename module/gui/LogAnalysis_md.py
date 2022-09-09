@@ -114,11 +114,11 @@ class LogAnalysisMain(QMainWindow):
                     print(file)
 
                 # 结合文件 hash 来决定哪些文件需要被导入
-                if os.path.exists(os.path.join("./data/database", dict.get("targetdb") + ".db")):
+                if os.path.exists(dict.get("targetdb")):
                     print("开始连接数据库进行判断")
                     pass
                 else:
                     print("首次建立, 不用检查hash")
-                print(os.path.join("./data/database", dict.get("targetdb") + ".db"))
+                print(dict.get("targetdb"))
 
         check_taskdict(dict)

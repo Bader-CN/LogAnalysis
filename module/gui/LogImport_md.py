@@ -293,6 +293,7 @@ class LogAnalysisImport(QWidget):
             QMessageBox.warning(self, "Warning", self.msg_db_not_blank)
         else:
             # 如果符合条件, 则将 taskdict 通过 allSignals.user_want_data 信号发送出去
+            taskdict["targetdb"] = os.path.join("./data/database", taskdict.get("targetdb") + ".db")
             allSignals.user_want_data.emit(taskdict)
             # 信号发送完成后, 关闭窗口
             self.close()
