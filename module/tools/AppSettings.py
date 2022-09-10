@@ -84,3 +84,30 @@ class ReadConfig():
         """
         return cfg.get("App_Optimiz", "Max_Processes")
 
+    @staticmethod
+    def get_max_hashsize(*args, **kwargs):
+        """
+        获取哈希计算每次读取的最大值
+        :param args:
+        :param kwargs:
+        :return: int
+        """
+        size = int(cfg.getint("App_Optimiz", "Max_Hashsizes"))
+        if size >= 1:
+            return size
+        else:
+            return 8192
+
+    @staticmethod
+    def get_hash_method(*args, **kwargs):
+        """
+        返回哈希校验指定的方法, 默认返回 md5
+        :param args:
+        :param kwargs:
+        :return: str
+        """
+        method = cfg.get("App_Optimiz", "Hash_Method")
+        if method in ["md5", "sha1", "sha224", "sha256", "sha384", "sha512"]:
+            return method
+        else:
+            return "md5"

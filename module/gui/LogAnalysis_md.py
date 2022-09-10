@@ -6,6 +6,7 @@ from PySide6.QtCore import QDateTime
 from PySide6.QtWidgets import QMainWindow
 from module.gui.LogAnalysis_ui import Ui_MainWindow
 from module.tools.AppSettings import ReadConfig
+from module.tools.HashTools import HashTools
 from module.tools.AppDebug import AppMainLogger
 from module.bridge.customSignals import allSignals
 from sqlalchemy import create_engine
@@ -115,6 +116,9 @@ class LogAnalysisMain(QMainWindow):
                 print(dict)
                 for file in allfiles:
                     print(file)
+                    # 测试hash
+                    hash = HashTools()
+                    print(hash.filehash(file))
 
                 # 结合文件 hash 来决定哪些文件需要被导入
                 if os.path.exists(dict.get("targetdb")):
