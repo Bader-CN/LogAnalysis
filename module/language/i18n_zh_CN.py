@@ -9,6 +9,7 @@ Language_zh_CN = {
         "msg_path_not_null": "路径不能为空!",
         "msg_db_not_null": "目标数据库不能为空!",
         "msg_db_not_blank": "目标数据库名不能有空格!",
+        "msg_no_file": "没有文件需要被导入!",
 
         # logMain Section
         "Start Time": "开始时间",

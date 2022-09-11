@@ -3,7 +3,7 @@ import copy
 import os, re, hashlib
 from threading import Thread
 from PySide6.QtCore import QDateTime
-from PySide6.QtWidgets import QMainWindow
+from PySide6.QtWidgets import QMainWindow, QMessageBox
 from module.gui.LogAnalysis_ui import Ui_MainWindow
 from module.tools.AppSettings import ReadConfig
 from module.tools.HashTools import HashTools
@@ -17,6 +17,8 @@ class LogAnalysisMain(QMainWindow):
     """
     LogAnalysis main window settings
     """
+    msg_no_file = "No file needs to be insert!"
+
     def __init__(self):
         try:
             # 继承 QMainWindow 父类
@@ -73,6 +75,7 @@ class LogAnalysisMain(QMainWindow):
         self.ui.chk_component.setText(Language_zh_CN.get("Inclube Component"))
         self.ui.tabLeft.setTabText(0, Language_zh_CN.get("Database"))
         self.ui.tabLeft.setTabText(1, Language_zh_CN.get("Template"))
+        self.msg_no_file = Language_zh_CN.get("msg_no_file")
 
     def slot_check_taskdict(self, dict):
 
@@ -113,53 +116,62 @@ class LogAnalysisMain(QMainWindow):
 
                 # 此时字典里存储的是所有符合条件的文件
                 dict["files"] = allfiles
-                # 实例化计算哈希工具, 准备后面进行文件哈希计算
-                hash = HashTools()
 
-                # 准备数据库会话
-                engine = create_engine("sqlite:///" + dict.get("targetdb"), future=True)
-                Session = sessionmaker(engine)
-                hash_session = Session()
+                # 判断此时符合的文件是否为空, 非空才会继续处理
+                if allfiles == []:
+                    QMessageBox.warning(self, "Warning", self.msg_no_file)
+                else:
+                    # 实例化计算哈希工具, 准备后面进行文件哈希计算
+                    hash = HashTools()
 
-                if os.path.exists(dict.get("targetdb")):
-                    AppMainLogger.info("Open the specified database:[{}]".format(dict.get("targetdb")))
-                    # 遍历所有符合的文件, 检查是否存在重复的文件
-                    # 需要复制一份字典, 否则会更改原数据
-                    indexdict = copy.deepcopy(allfiles)
-                    for file in indexdict:
-                        filehash = hash.filehash(file)
-                        # 如果数据库里有对应的数据, 则将对应的文件从 allfiles 中移除掉
-                        query = hash_session.query(SQLTable.FileHash).filter(SQLTable.FileHash.hash == filehash).first()
-                        if query:
-                            allfiles.remove(file)
-                            AppMainLogger.debug("Will not be ingest file:[{}]".format(file))
-                        # 如果数据库里没有, 则将此文件的哈希值添加到数据库中
+                    # 准备数据库会话
+                    engine = create_engine("sqlite:///" + dict.get("targetdb"), future=True)
+                    Session = sessionmaker(engine)
+                    hash_session = Session()
+
+                    if os.path.exists(dict.get("targetdb")):
+                        AppMainLogger.info("Open the specified database:[{}]".format(dict.get("targetdb")))
+                        # 遍历所有符合的文件, 检查是否存在重复的文件
+                        # 需要复制一份字典, 否则会更改原数据
+                        indexdict = copy.deepcopy(allfiles)
+                        for file in indexdict:
+                            filehash = hash.filehash(file)
+                            # 如果数据库里有对应的数据, 则将对应的文件从 allfiles 中移除掉
+                            query = hash_session.query(SQLTable.FileHash).filter(SQLTable.FileHash.hash == filehash).first()
+                            if query:
+                                allfiles.remove(file)
+                                AppMainLogger.debug("Will not be ingest file:[{}]".format(file))
+                            # 如果数据库里没有, 则将此文件的哈希值添加到数据库中
+                            else:
+                                sqldata = SQLTable.FileHash(filepath=file, hash=filehash)
+                                hash_session.add(sqldata)
+                                AppMainLogger.debug("Will insert file:[{}], file hash is:[{}]".format(file, filehash))
+                        # 提交并关闭会话连接
+                        hash_session.commit()
+                        hash_session.close()
+
+                        # 如果所有allfiles 里面没有数据, 则说明没有数据需要导入
+                        if allfiles == []:
+                            QMessageBox.warning(self, "Warning", self.msg_no_file)
                         else:
+                            # 预处理完成的数据
+                            print(dict)
+
+                    else:
+                        AppMainLogger.info("Create a new database:[{}]".format(dict.get("targetdb")))
+                        # 创建数据库
+                        SQLTable.BASE.metadata.create_all(engine)
+                        # 针对每个文件计算哈希值, 并将数据写入到数据库中
+                        for file in allfiles:
+                            filehash = hash.filehash(file)
                             sqldata = SQLTable.FileHash(filepath=file, hash=filehash)
                             hash_session.add(sqldata)
                             AppMainLogger.debug("Will insert file:[{}], file hash is:[{}]".format(file, filehash))
-                    # 提交并关闭会话连接
-                    hash_session.commit()
-                    hash_session.close()
+                        # 提交并关闭会话连接
+                        hash_session.commit()
+                        hash_session.close()
 
-                    # 预处理完成的数据
-                    print(dict)
-
-                else:
-                    AppMainLogger.info("Create a new database:[{}]".format(dict.get("targetdb")))
-                    # 创建数据库
-                    SQLTable.BASE.metadata.create_all(engine)
-                    # 针对每个文件计算哈希值, 并将数据写入到数据库中
-                    for file in allfiles:
-                        filehash = hash.filehash(file)
-                        sqldata = SQLTable.FileHash(filepath=file, hash=filehash)
-                        hash_session.add(sqldata)
-                        AppMainLogger.debug("Will insert file:[{}], file hash is:[{}]".format(file, filehash))
-                    # 提交并关闭会话连接
-                    hash_session.commit()
-                    hash_session.close()
-
-                    # 预处理完成的数据
-                    print(dict)
+                        # 预处理完成的数据
+                        print(dict)
 
         check_taskdict(dict)
