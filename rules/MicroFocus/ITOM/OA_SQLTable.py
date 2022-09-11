@@ -14,3 +14,6 @@ class FileHash(BASE):
     id = Column(Integer, primary_key=True, autoincrement=True)
     filepath = Column(String, unique=True)
     hash = Column(String, unique=True)
+
+    def __repr__(self):
+        return "<FileHash(id='%s', filepath='%s', hash='%s')>" % (self.id, self.filepath, self.hash)
