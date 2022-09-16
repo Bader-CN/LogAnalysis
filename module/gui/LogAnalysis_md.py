@@ -156,6 +156,7 @@ class LogAnalysisMain(QMainWindow):
                         else:
                             # 预处理完成的数据
                             print(dict)
+                            self.statusBar().showMessage("准备分析数据")
 
                     else:
                         AppMainLogger.info("Create a new database:[{}]".format(dict.get("targetdb")))
@@ -173,5 +174,6 @@ class LogAnalysisMain(QMainWindow):
 
                         # 预处理完成的数据
                         print(dict)
+                        self.statusBar().showMessage("准备分析数据")
 
         check_taskdict(dict)
