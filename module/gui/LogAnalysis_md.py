@@ -11,6 +11,7 @@ from module.tools.AppDebug import AppMainLogger
 from module.bridge.customSignals import allSignals
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+from multiprocessing import Queue, Process
 
 
 class LogAnalysisMain(QMainWindow):
@@ -35,6 +36,7 @@ class LogAnalysisMain(QMainWindow):
 
             # 定制信号连接槽函数
             allSignals.user_want_data.connect(self.slot_check_taskdict)
+            allSignals.need_want_data.connect(self.slot_importlog_to_db)
 
         except Exception as e:
             AppMainLogger.error(e)
@@ -156,7 +158,9 @@ class LogAnalysisMain(QMainWindow):
                         else:
                             # 预处理完成的数据
                             print(dict)
-                            self.statusBar().showMessage("准备分析数据")
+                            self.statusBar().showMessage("checking file hash")
+                            # 发射信号, 将预处理的字典数据传递给日志分析进程
+                            allSignals.need_want_data.emit(dict)
 
                     else:
                         AppMainLogger.info("Create a new database:[{}]".format(dict.get("targetdb")))
@@ -174,6 +178,8 @@ class LogAnalysisMain(QMainWindow):
 
                         # 预处理完成的数据
                         print(dict)
-                        self.statusBar().showMessage("准备分析数据")
+                        self.statusBar().showMessage("checking file hash")
+                        # 发射信号, 将预处理的字典数据传递给日志分析进程
+                        allSignals.need_want_data.emit(dict)
 
         check_taskdict(dict)
