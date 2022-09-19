@@ -7,10 +7,10 @@ from module.gui.LogImport_md import LogAnalysisImport
 from module.bridge.customSignals import allSignals
 from multiprocessing import Queue, Process
 
-def mult_import_log(dict, id):
-    print("多进程开始,id={}".format(str(id)))
-    time.sleep(4)
-    print("多进程结束,id={}".format(str(id)))
+def logfile_to_sql(dict, queue_task, queue_data):
+    for i in range(100):
+        print("多进程正在运行")
+        time.sleep(1)
 
 if __name__ == '__main__':
     # 检查相关目录及文件是否存在
@@ -36,15 +36,19 @@ if __name__ == '__main__':
 
     # 多进程部分
     #########################################################################
-    def start_mult_task(dict):
-        task1 = Process(target=mult_import_log, args=(dict, 1))
-        task2 = Process(target=mult_import_log, args=(dict, 2))
-        task3 = Process(target=mult_import_log, args=(dict, 3))
+    queue_task = Queue()    # 向子进程发布任务
+    queue_data = Queue()    # 子进程处理完成的数据
+    queue_sign = Queue()    # 向子进程发送结束信号
+
+    def taskImportlog(dict):
+        task1 = Process(target=logfile_to_sql, args=(dict, queue_task, queue_data), name="Log1", daemon=True)
+        task2 = Process(target=logfile_to_sql, args=(dict, queue_task, queue_data), name="Log2", daemon=True)
+        task3 = Process(target=logfile_to_sql, args=(dict, queue_task, queue_data), name="Log3", daemon=True)
         task1.start()
         task2.start()
         task3.start()
 
-    allSignals.need_want_data.connect(start_mult_task)
+    allSignals.need_want_data.connect(taskImportlog)
     #########################################################################
 
     # 显示主界面
