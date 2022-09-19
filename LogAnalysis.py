@@ -9,7 +9,7 @@ from multiprocessing import Queue, Process
 
 def mult_import_log(dict, id):
     print("多进程开始,id={}".format(str(id)))
-    time.sleep(1)
+    time.sleep(4)
     print("多进程结束,id={}".format(str(id)))
 
 if __name__ == '__main__':
