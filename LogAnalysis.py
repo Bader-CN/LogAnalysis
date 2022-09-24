@@ -9,15 +9,22 @@ from module.bridge.customQueues import QTask
 from module.bridge.customQueues import QData
 from multiprocessing import Process, freeze_support
 
-def logfile_to_sql(TaskInfo, QTask, QData):
+def logfile_to_sql(QTask, QData):
     """
-    根据 TaskDict 里的信息读取指定文件, 并将生成的数据回传到主进程
-    :param TaskInfo: 任务数据, 包含规则和指定文件
+    根据 QTask 里的信息读取指定文件, 并将生成的数据回传到主进程
     :param QTask: 获取 TaskInfo 的 Queue
     :param QData: 回传数据的 Queue
     :return:
     """
-    pass
+    while True:
+        data = QTask.get()
+        print(data)
+        if data.get("Sign") == "Stop!":
+            print("结束咯!")
+            exit(0)
+        else:
+            time.sleep(1)
+
 
 if __name__ == '__main__':
     # 解决 Windows 多进程异常的问题
@@ -47,12 +54,38 @@ if __name__ == '__main__':
     # 多进程部分
     #########################################################################
     def taskImportlog(dict):
-        task1 = Process(target=logfile_to_sql, args=(dict, QTask, QData), daemon=True)
-        task2 = Process(target=logfile_to_sql, args=(dict, QTask, QData), daemon=True)
-        task3 = Process(target=logfile_to_sql, args=(dict, QTask, QData), daemon=True)
-        task1.start()
-        # task2.start()
-        # task3.start()
+        """
+        将预处理任务按照文件进一步拆分, 并将拆分的任务传递给多进程开始处理
+        :param dict: {targetdb, path, pathtype, company, productline, product, processes, files}
+        :return:
+        """
+        print("任务字典:{}".format(str(dict)))
+        fileslist = dict.get("files")
+        processes = int(dict.get("processes"))
+        # 如果文件数小于进程数, 则按照文件数启动多进程
+        if processes > len(fileslist):
+            processes = len(fileslist)
+        # 基于文件生成多进程的任务列表, 每一个任务都是一个字典, 包含具体的任务信息
+        tasks = []
+        for file in fileslist:
+            task = {
+                "file": file,
+                "targetdb": dict.get("targetdb"),
+                "company": dict.get("company"),
+                "productline": dict.get("productline"),
+                "product": dict.get("product"),
+            }
+            tasks.append(task)
+        # 将任务信息放入 QTask 中
+        for task in tasks:
+            QTask.put(task)
+        # 启动多进程
+        for p in range(processes):
+            p = Process(target=logfile_to_sql, args=(QTask, QData), daemon=True)
+            p.start()
+        # 输入结束信号
+        for p in range(processes):
+            QTask.put({"Sign":"Stop!"})
 
     allSignals.need_want_data.connect(taskImportlog)
     #########################################################################
