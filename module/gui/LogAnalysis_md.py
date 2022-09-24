@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import os, re, copy, hashlib
+import os, re, copy, time, hashlib
 from threading import Thread
 from PySide6.QtCore import QDateTime
 from PySide6.QtWidgets import QMainWindow, QMessageBox
@@ -9,6 +9,8 @@ from module.tools.AppSettings import ReadConfig
 from module.tools.HashTools import HashTools
 from module.tools.AppDebug import AppMainLogger
 from module.bridge.customSignals import allSignals
+from module.bridge.customQueues import QTask
+from module.bridge.customQueues import QData
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
@@ -184,6 +186,13 @@ class LogAnalysisMain(QMainWindow):
                     allSignals.need_want_data.emit(dict)
                     self.statusBar().clearMessage()
 
+    def import_to_db(self):
+        pass
+        # while True:
+        #     print("写入 SQL 线程可以获得数据:{}".format(str(queue_task.get())))
+        #     time.sleep(1)
+
+
     def slot_check_taskdict(self, dict):
         """
         利用槽函数来调用真正的 check_taskdict(), 计划采用子线程来处理
@@ -192,3 +201,6 @@ class LogAnalysisMain(QMainWindow):
         """
         t1 = Thread(target=self.check_taskdict, args=(dict,), daemon=True)
         t1.start()
+
+        t2 = Thread(target=self.import_to_db, daemon=True)
+        t2.start()
