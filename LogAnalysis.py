@@ -27,7 +27,7 @@ def logfile_to_sql(QTask, QData):
         # 如果不是 Stop, 那么就开始处理数据
         else:
             if TaskInfo.get("company") == "MicroFocus" and TaskInfo.get("productline") == "ITOM" and TaskInfo.get("product") == "Operations Agent(OA)":
-                pass
+                print("处理文件:{}".format(TaskInfo.get("file")))
 
 
 if __name__ == '__main__':
