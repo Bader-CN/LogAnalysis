@@ -15,10 +15,21 @@ FileHandler1 = logging.FileHandler("./log/AppMain.log")
 FileHandler1.setFormatter(formatter)
 ReadConfig.set_loglevel(FileHandler1, "App_Main_Level")
 
+FileHandler2 = logging.FileHandler("./log/MultSQL.log")
+FileHandler2.setFormatter(formatter)
+ReadConfig.set_loglevel(FileHandler2, "App_MultSQL_Level")
+
+
 # 设置记录器及默认等级
 AppMainLogger = logging.getLogger("AppMain")
 AppMainLogger.setLevel(logging.DEBUG)
 
+MultSQLLogger = logging.getLogger("MultSQL")
+MultSQLLogger.setLevel(logging.DEBUG)
+
 # 记录器添加 Handler
 AppMainLogger.addHandler(FileHandler1)
 AppMainLogger.addHandler(StreamHandler)
+
+MultSQLLogger.addHandler(FileHandler2)
+MultSQLLogger.addHandler(StreamHandler)

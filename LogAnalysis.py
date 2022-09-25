@@ -7,6 +7,8 @@ from module.gui.LogImport_md import LogAnalysisImport
 from module.bridge.customSignals import allSignals
 from module.bridge.customQueues import QTask
 from module.bridge.customQueues import QData
+from module.tools.AppDebug import AppMainLogger
+from module.tools.AppDebug import MultSQLLogger
 from multiprocessing import Process, freeze_support
 
 def logfile_to_sql(QTask, QData):
@@ -19,10 +21,11 @@ def logfile_to_sql(QTask, QData):
     while True:
         TaskInfo = QTask.get()
         # 如果接收的信号是 Stop
-        if TaskInfo.get("Sign") == "Stop":
+        if TaskInfo.get("Signal") == "Stop":
+            MultSQLLogger.info("Received signal -> Stop, process will exit.")
             exit(0)
+        # 如果不是 Stop, 那么就开始处理数据
         else:
-            # 开始处理数据
             pass
 
 
@@ -59,7 +62,7 @@ if __name__ == '__main__':
         :param dict: {targetdb, path, pathtype, company, productline, product, processes, files}
         :return:
         """
-        print("任务字典:{}".format(str(dict)))
+        AppMainLogger.debug("TaskDict: {}".format(str(dict)))
         fileslist = dict.get("files")
         processes = int(dict.get("processes"))
         # 如果文件数小于进程数, 则按照文件数启动多进程
@@ -85,7 +88,7 @@ if __name__ == '__main__':
             p.start()
         # 输入结束信号
         for p in range(processes):
-            QTask.put({"Sign":"Stop"})
+            QTask.put({"Signal":"Stop"})
 
     allSignals.need_want_data.connect(taskImportlog)
     #########################################################################
