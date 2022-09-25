@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import os, time
+import os
 from PySide6.QtWidgets import QApplication
 from module.gui.LogAnalysis_md import LogAnalysisMain
 from module.gui.LogImport_md import LogAnalysisImport
@@ -17,13 +17,13 @@ def logfile_to_sql(QTask, QData):
     :return:
     """
     while True:
-        data = QTask.get()
-        print(data)
-        if data.get("Sign") == "Stop!":
-            print("结束咯!")
+        TaskInfo = QTask.get()
+        # 如果接收的信号是 Stop
+        if TaskInfo.get("Sign") == "Stop":
             exit(0)
         else:
-            time.sleep(1)
+            # 开始处理数据
+            pass
 
 
 if __name__ == '__main__':
@@ -85,7 +85,7 @@ if __name__ == '__main__':
             p.start()
         # 输入结束信号
         for p in range(processes):
-            QTask.put({"Sign":"Stop!"})
+            QTask.put({"Sign":"Stop"})
 
     allSignals.need_want_data.connect(taskImportlog)
     #########################################################################
