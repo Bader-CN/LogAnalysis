@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 from datetime import datetime
-from module.tools.AppDebug import MultSQLLogger
 
 class ReadFile():
     """
@@ -32,7 +31,9 @@ class ReadFile():
 
         for datetime_format in datetime_formats:
             try:
+                # 尝试生成 datetime_str, 如果失败, 则替换 datetime_format 重新执行一次
                 datetime_str = datetime.strptime(logdate, datetime_format)
+                # 如果上一条命令可以执行, 则再返回时间的字符串数据
                 if datetime_format == '%Y-%m-%d %H:%M:%S.%f':
                     return datetime_str.strftime('%Y-%m-%d %H:%M:%S.%f')
                 elif datetime_format == '%Y-%m-%dT%H:%M:%S.%f':
@@ -45,7 +46,7 @@ class ReadFile():
                     return datetime_str.strftime('%Y-%m-%d %H:%M:%S.%f')
 
             except Exception as e:
-                MultSQLLogger.warning(e)
+                pass
 
         # 如果都不符合, 则返回 Null
         return str('Null')
