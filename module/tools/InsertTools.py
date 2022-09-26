@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
 
 from datetime import datetime
+# 类似 java 的抽象类, 这里子类必须要实现带有 @abstractmethod 的方法
+# https://docs.python.org/zh-cn/3/library/abc.html
+from abc import ABCMeta, abstractmethod
 
-class ReadFile():
+class ReadFileTemplate(metaclass=ABCMeta):
     """
     读取日志文件的基类, 同时也是公用的工具类
     """
@@ -41,3 +44,11 @@ class ReadFile():
 
         # 如果都不符合, 则返回 Null
         return str('Null')
+
+    @abstractmethod
+    def classifiles(self):
+        """
+        分类文件, 基于文件来决定后续调用什么方法来处理文件
+        :return:
+        """
+        pass
