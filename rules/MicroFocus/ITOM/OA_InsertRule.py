@@ -11,7 +11,8 @@ class OAFiles(ReadFile):
 
 
 if __name__ == '__main__':
-    TaskInfo = {"file": "c:\\demo", "targetdb": "demo"}
-    oa1 = OAFiles(TaskInfo)
-    print(oa1.file)
-    print(oa1.get_logtime("2022-02-03 01:01:11"))
+    # 测试部分, 测试时请修改 file 的值
+    file = r"c:\demo"
+    TaskInfo = {"file": file, "targetdb": "demo"}
+
+    oa = OAFiles(TaskInfo)

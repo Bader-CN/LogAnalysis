@@ -34,16 +34,7 @@ class ReadFile():
                 # 尝试生成 datetime_str, 如果失败, 则替换 datetime_format 重新执行一次
                 datetime_str = datetime.strptime(logdate, datetime_format)
                 # 如果上一条命令可以执行, 则再返回时间的字符串数据
-                if datetime_format == '%Y-%m-%d %H:%M:%S.%f':
-                    return datetime_str.strftime('%Y-%m-%d %H:%M:%S.%f')
-                elif datetime_format == '%Y-%m-%dT%H:%M:%S.%f':
-                    return datetime_str.strftime('%Y-%m-%dT%H:%M:%S.%f')
-                elif datetime_format == '%Y-%m-%d %H:%M:%S,%f':
-                    return datetime_str.strftime('%Y-%m-%d %H:%M:%S.%f')
-                elif datetime_format == '%Y/%m/%d %H:%M:%S.%f':
-                    return datetime_str.strftime('%Y-%m-%d %H:%M:%S.%f')
-                else:
-                    return datetime_str.strftime('%Y-%m-%d %H:%M:%S.%f')
+                return datetime_str.strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]
 
             except Exception as e:
                 pass
