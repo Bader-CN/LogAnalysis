@@ -7,8 +7,11 @@ class OAFiles(ReadFileTemplate):
     """
     MicroFocus ITOM OA 文件解析类
     """
-    def __int__(self, TaskInfo):
-        pass
+    def __init__(self, TaskInfo):
+        # 父类里包含 self.file 和 self.targetdb
+        super().__init__(TaskInfo)
+        # 处理的实际逻辑
+        self.classifiles()
 
     def classifiles(self):
         """
@@ -16,15 +19,17 @@ class OAFiles(ReadFileTemplate):
         :return:
         """
         if re.findall("system\.txt", self.file, re.IGNORECASE):
-            pass
+            self.readfile_system()
+        else:
+            print("没有文件需要处理")
 
     def readfile_system(self):
-        pass
-
+        with open(self.file, mode="r", encoding="utf-8", errors="replace") as file:
+            for line in file:
+                print(line.strip())
 
 if __name__ == '__main__':
     # 测试部分, 测试时请修改 file 的值
-    file = r"c:\demo"
+    file = r"C:\oa_data\System.txt"
     TaskInfo = {"file": file, "targetdb": "demo"}
-
     oa = OAFiles(TaskInfo)
