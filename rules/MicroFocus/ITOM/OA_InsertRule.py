@@ -15,9 +15,7 @@ class OAFiles(ReadFileTemplate):
             "<rolled=0>",
         ]
         # 处理的实际逻辑
-        datadict = self.classifiles()
-        for i in datadict.get("data"):
-            print(i)
+        data = self.classifiles()
 
     def classifiles(self):
         """
@@ -30,12 +28,12 @@ class OAFiles(ReadFileTemplate):
     def readfile_system(self):
         """
         OA System.txt 文件解析函数
-        :return: {"targetdb":self.targetdb, "data":DList}
+        :return: {"targetdb":self.targetdb, "file":self.file, "data":DList}
         """
         with open(self.file, mode="r", encoding="utf-8", errors="replace") as file:
             # 初始化变量
             num_line = 0
-            DList = []  # 最终数据的列表
+            DList = []
             # 读取文件的每一行
             for line in file:
                 num_line += 1
@@ -49,7 +47,7 @@ class OAFiles(ReadFileTemplate):
                             DList.append({
                                 "log_line": num_line,
                                 "log_time": self.get_logtime(line.split(': ',4)[2].strip()),
-                                "loglevel": line.split(': ', 4)[1].strip(),
+                                "log_level": line.split(': ', 4)[1].strip(),
                                 "log_comp": line.split(': ', 4)[3].strip(),
                                 "log_cont": line.split(': ', 4)[4].strip(),
                             })
@@ -57,8 +55,12 @@ class OAFiles(ReadFileTemplate):
                         else:
                             DList[-1]["log_cont"] = DList[-1]["log_cont"] + "\n" + line
 
+        # 测试数据
+        # for data in DList:
+        #     print(data)
+
         # 将结果数据返回
-        return {"targetdb": self.targetdb, "data": DList}
+        return {"targetdb":self.targetdb, "file":self.file, "data":DList}
 
 if __name__ == '__main__':
     # 测试部分, 测试时请修改 file 的值
