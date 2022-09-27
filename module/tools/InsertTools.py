@@ -9,9 +9,8 @@ class ReadFileTemplate(metaclass=ABCMeta):
     """
     读取日志文件的基类, 同时也是公用的工具类
     """
-    def __init__(self, TaskInfo):
-        self.file = TaskInfo.get("file")
-        self.targetdb = TaskInfo.get("targetdb")
+    def __init__(self):
+        pass
 
     def get_logtime(self, logdate):
         """

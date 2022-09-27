@@ -2,20 +2,32 @@
 
 import re
 from module.tools.InsertTools import ReadFileTemplate
+# 测试时注释掉 from module.tools.AppDebug import MultSQLLogger
+from module.tools.AppDebug import MultSQLLogger
 
 class OAFiles(ReadFileTemplate):
     """
     MicroFocus ITOM OA 文件解析类
     """
-    def __init__(self, TaskInfo):
-        # 继承父类里的 self.file 和 self.targetdb
-        super().__init__(TaskInfo)
+    def __init__(self, TaskInfo, QData=None):
+        super().__init__()
+        self.TaskInfo = TaskInfo
+        self.file = self.TaskInfo.get("file")
+        self.targetdb = self.TaskInfo.get("targetdb")
+        self.company = self.TaskInfo.get("company")
+        self.productline = self.TaskInfo.get("productline")
+        self.product = self.TaskInfo.get("product")
+
         # 如果匹配到此内容, 则改行不做任何处理
         self.blkline = [
-            "<rolled=0>",
+            "<rolled=\d>",
         ]
+
         # 处理的实际逻辑
         data = self.classifiles()
+
+        # 测试时请注释掉
+        QData.put(data)
 
     def classifiles(self):
         """
@@ -28,7 +40,7 @@ class OAFiles(ReadFileTemplate):
     def readfile_system(self):
         """
         OA System.txt 文件解析函数
-        :return: {"targetdb":self.targetdb, "file":self.file, "data":DList}
+        :return: TaskInfo["data"] = DList
         """
         with open(self.file, mode="r", encoding="utf-8", errors="replace") as file:
             # 初始化变量
@@ -43,27 +55,33 @@ class OAFiles(ReadFileTemplate):
                     # 如果该行不在黑名单里, 并且长度不为 0, 则处理该行信息
                     if re.findall(blk, line) == [] and len(line) != 0:
                         # 如果有 INF:/WRN:/ERR:, 则说明是事件的开头
-                        if len(re.findall("INF:|WRN:|ERR:", line)) > 0:
-                            DList.append({
-                                "log_line": num_line,
-                                "log_time": self.get_logtime(line.split(': ',4)[2].strip()),
-                                "log_level": line.split(': ', 4)[1].strip(),
-                                "log_comp": line.split(': ', 4)[3].strip(),
-                                "log_cont": line.split(': ', 4)[4].strip(),
-                            })
-                        # 否则, 该行就是上一个事件的内容
-                        else:
-                            DList[-1]["log_cont"] = DList[-1]["log_cont"] + "\n" + line
+                        try:
+                            if len(re.findall("INF:|WRN:|ERR:", line)) > 0:
+                                DList.append({
+                                    "log_line": num_line,
+                                    "log_time": self.get_logtime(line.split(': ',4)[2].strip()),
+                                    "log_level": line.split(': ', 4)[1].strip(),
+                                    "log_comp": line.split(': ', 4)[3].strip(),
+                                    "log_cont": line.split(': ', 4)[4].strip(),
+                                })
+                            # 否则, 该行就是上一个事件的内容
+                            else:
+                                DList[-1]["log_cont"] = DList[-1]["log_cont"] + "\n" + line
+                        except Exception as e:
+                            # 测试时请注释掉这段内容
+                            MultSQLLogger.warning(e)
+                            MultSQLLogger.debug(line)
 
-        # 测试数据
+        # 测试代码
         # for data in DList:
         #     print(data)
 
         # 将结果数据返回
-        return {"targetdb":self.targetdb, "file":self.file, "data":DList}
+        self.TaskInfo["data"] = DList
+        return self.TaskInfo
 
 if __name__ == '__main__':
     # 测试部分, 测试时请修改 file 的值
     file = r"C:\oa_data\System.txt"
-    TaskInfo = {"file": file, "targetdb": "demo"}
+    TaskInfo = {"file": file, "targetdb": "demo", "company": "company", "productline": "productline", "product": "product"}
     oa = OAFiles(TaskInfo)

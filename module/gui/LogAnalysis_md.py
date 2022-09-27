@@ -187,11 +187,13 @@ class LogAnalysisMain(QMainWindow):
                     self.statusBar().clearMessage()
 
     def import_to_db(self):
-        pass
-        # while True:
-        #     print("写入 SQL 线程可以获得数据:{}".format(str(queue_task.get())))
-        #     time.sleep(1)
-
+        """
+        获取管道里面的数据, 并将数据保存到数据库中
+        :return:
+        """
+        while True:
+            dict = QData.get()
+            print(dict.get("file"))
 
     def slot_check_taskdict(self, dict):
         """

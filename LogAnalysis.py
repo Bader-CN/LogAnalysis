@@ -27,8 +27,8 @@ def logfile_to_sql(QTask, QData):
         # 如果不是 Stop, 那么就开始处理数据
         else:
             if TaskInfo.get("company") == "MicroFocus" and TaskInfo.get("productline") == "ITOM" and TaskInfo.get("product") == "Operations Agent(OA)":
-                print("处理文件:{}".format(TaskInfo.get("file")))
-
+                from rules.MicroFocus.ITOM import OA_InsertRule
+                OA_InsertRule.OAFiles(TaskInfo, QData)
 
 if __name__ == '__main__':
     # 解决 Windows 多进程异常的问题
