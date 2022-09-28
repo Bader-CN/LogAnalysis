@@ -2,6 +2,7 @@
 
 import re
 from module.tools.InsertTools import ReadFileTemplate
+from rules.MicroFocus.ITOM.OA_SQLTable import FileHash
 # 测试时注释掉 from module.tools.AppDebug import MultSQLLogger
 from module.tools.AppDebug import MultSQLLogger
 
@@ -25,6 +26,7 @@ class OAFiles(ReadFileTemplate):
 
         # 处理的实际逻辑
         data = self.classifiles()
+        self.get_file_id(targetdb=self.targetdb, file=self.file, FileHash=FileHash)
 
         # 测试时请注释掉
         QData.put(data)

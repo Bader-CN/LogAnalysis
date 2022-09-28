@@ -1,9 +1,12 @@
 # -*- coding: utf-8 -*-
-
+import os.path
 from datetime import datetime
 # 类似 java 的抽象类, 这里子类必须要实现带有 @abstractmethod 的方法
 # https://docs.python.org/zh-cn/3/library/abc.html
 from abc import ABCMeta, abstractmethod
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import declarative_base
 
 class ReadFileTemplate(metaclass=ABCMeta):
     """
@@ -43,6 +46,22 @@ class ReadFileTemplate(metaclass=ABCMeta):
 
         # 如果都不符合, 则返回 Null
         return str('Null')
+
+    def get_file_id(self, targetdb, file, FileHash):
+        """
+        返回对应文件的文件 id
+        :param targetdb:
+        :param file:
+        :param FileHash:
+        :return:
+        """
+        path = r"sqlite:///" + os.path.abspath(targetdb)
+        engine = create_engine(path, future=True)
+        Session = sessionmaker(bind=engine)
+        session = Session()
+        query = session.query(FileHash).filter(FileHash.filepath == file).first()
+        print(query)
+        session.close()
 
     @abstractmethod
     def classifiles(self):
