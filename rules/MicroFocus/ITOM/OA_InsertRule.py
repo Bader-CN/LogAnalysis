@@ -26,7 +26,6 @@ class OAFiles(ReadFileTemplate):
 
         # 处理的实际逻辑
         data = self.classifiles()
-        self.get_file_id(targetdb=self.targetdb, file=self.file, FileHash=FileHash)
 
         # 测试时请注释掉
         QData.put(data)
@@ -42,12 +41,13 @@ class OAFiles(ReadFileTemplate):
     def readfile_system(self):
         """
         OA System.txt 文件解析函数
-        :return: TaskInfo["data"] = DList
+        :return: TaskInfo["data"] = SList
         """
         with open(self.file, mode="r", encoding="utf-8", errors="replace") as file:
             # 初始化变量
             num_line = 0
             DList = []
+            SList = []
             # 读取文件的每一行
             for line in file:
                 num_line += 1
@@ -74,12 +74,24 @@ class OAFiles(ReadFileTemplate):
                             MultSQLLogger.warning(e)
                             MultSQLLogger.debug(line)
 
+            # 将 DList 转换为 SQLAlchemy 类型的数据类型, 并保存在 SList 中
+            from rules.MicroFocus.ITOM.OA_SQLTable import System
+            file_id = self.get_file_id(targetdb=self.targetdb, file=self.file, FileHash=FileHash)
+            for data in DList:
+                SList.append(System(
+                    file_id = file_id,
+                    log_line = data.get("log_line"),
+                    log_time = data.get("log_time"),
+                    log_level = data.get("log_level"),
+                    log_comp = data.get("log_comp"),
+                    log_cont = data.get("log_cont")))
+
         # 测试代码
         # for data in DList:
         #     print(data)
 
         # 将结果数据返回
-        self.TaskInfo["data"] = DList
+        self.TaskInfo["data"] = SList
         return self.TaskInfo
 
 if __name__ == '__main__':
