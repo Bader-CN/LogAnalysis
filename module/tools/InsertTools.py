@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+
 import os.path
 from datetime import datetime
 # 类似 java 的抽象类, 这里子类必须要实现带有 @abstractmethod 的方法
@@ -49,19 +50,20 @@ class ReadFileTemplate(metaclass=ABCMeta):
 
     def get_file_id(self, targetdb, file, FileHash):
         """
-        返回对应文件的文件 id
+        返回 FileHash 表中对应的 id
         :param targetdb:
         :param file:
         :param FileHash:
-        :return:
+        :return: int
         """
         path = r"sqlite:///" + os.path.abspath(targetdb)
         engine = create_engine(path, future=True)
         Session = sessionmaker(bind=engine)
         session = Session()
         query = session.query(FileHash).filter(FileHash.filepath == file).first()
-        print(query)
         session.close()
+        file_id = query.id
+        return file_id
 
     @abstractmethod
     def classifiles(self):
