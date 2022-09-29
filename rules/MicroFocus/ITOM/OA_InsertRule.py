@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import re
+from datetime import datetime
 from module.tools.InsertTools import ReadFileTemplate
 from rules.MicroFocus.ITOM.OA_SQLTable import FileHash
 # 测试时注释掉 from module.tools.AppDebug import MultSQLLogger
@@ -81,7 +82,7 @@ class OAFiles(ReadFileTemplate):
                 SList.append(System(
                     file_id = file_id,
                     log_line = data.get("log_line"),
-                    log_time = data.get("log_time"),
+                    log_time = datetime.strptime(data.get("log_time"), "%Y-%m-%d %H:%M:%S.%f"),
                     log_level = data.get("log_level"),
                     log_comp = data.get("log_comp"),
                     log_cont = data.get("log_cont")))

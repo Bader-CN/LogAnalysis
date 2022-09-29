@@ -191,9 +191,19 @@ class LogAnalysisMain(QMainWindow):
         获取管道里面的数据, 并将数据保存到数据库中
         :return:
         """
+        path = r"sqlite:///"
         while True:
             dict = QData.get()
-            print(dict.get("file"))
+            if path == r"sqlite:///":
+                path = r"sqlite:///" + os.path.abspath(dict.get("targetdb"))
+                engine = create_engine(path, future=True)
+                Session = sessionmaker(bind=engine)
+                session = Session()
+                session.add_all(dict.get("data"))
+                session.commit()
+            else:
+                session.add_all(dict.get("data"))
+                session.commit()
 
     def slot_check_taskdict(self, dict):
         """
