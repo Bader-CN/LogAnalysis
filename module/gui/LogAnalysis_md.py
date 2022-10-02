@@ -84,7 +84,7 @@ class LogAnalysisMain(QMainWindow):
         """
         实际的预检查函数, 负责查找哪些文件符合导入规则
         :param dict: 字典类型的预处理数据
-        :return:dict or Null
+        :return:{"Signal": "Start"} / {"Signal": "Stop"}
         """
         # 加载文件规则
         if dict.get("company") == "MicroFocus" and dict.get("productline") == "ITOM" and dict.get("product") == "Operations Agent(OA)":
@@ -174,6 +174,8 @@ class LogAnalysisMain(QMainWindow):
                         # 发射信号, 将预处理的字典数据传递给日志分析进程
                         allSignals.need_want_data.emit(dict)
                         self.statusBar().clearMessage()
+                        # 返回开始信号
+                        return {"Signal": "Start"}
 
                 else:
                     AppMainLogger.info("Create a new database:[{}]".format(dict.get("targetdb")))
@@ -191,6 +193,8 @@ class LogAnalysisMain(QMainWindow):
                     # 发射信号, 将预处理的字典数据传递给日志分析进程
                     allSignals.need_want_data.emit(dict)
                     self.statusBar().clearMessage()
+                    # 返回开始信号
+                    return {"Signal": "Start"}
 
     def import_to_db(self):
         """
@@ -243,7 +247,7 @@ class LogAnalysisMain(QMainWindow):
         :return:
         """
         task_result = self.check_taskdict(dict)
-        # 如果收到的信号不是 {"Signal": "Stop"}, 则启动数据库写入线程
-        if task_result.get("Signal") != "Stop":
+        # 如果收到的信号是 {"Signal": "Stop"}, 则启动数据库写入线程
+        if task_result.get("Signal") == "Start":
             t1 = Thread(target=self.import_to_db, daemon=True)
             t1.start()
