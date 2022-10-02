@@ -128,9 +128,9 @@ class LogAnalysisMain(QMainWindow):
 
             # 判断此时符合的文件是否为空, 非空才会继续处理
             if allfiles == []:
+                self.statusBar().clearMessage()
                 AppMainLogger.warning("No file matching the rules")
                 QMessageBox.warning(self, "Warning", self.msg_no_file)
-                self.statusBar().clearMessage()
                 # 返回停止信号
                 return {"Signal": "Stop"}
 
@@ -166,6 +166,7 @@ class LogAnalysisMain(QMainWindow):
 
                     # 如果所有allfiles 里面没有数据, 则说明没有数据需要导入
                     if allfiles == []:
+                        self.statusBar().clearMessage()
                         AppMainLogger.warning("No file needs to be imported because the file already exists")
                         QMessageBox.warning(self, "Warning", self.msg_no_file)
                         # 返回停止信号
