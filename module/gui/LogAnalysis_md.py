@@ -84,7 +84,7 @@ class LogAnalysisMain(QMainWindow):
         """
         实际的预检查函数, 负责查找哪些文件符合导入规则
         :param dict: 字典类型的预处理数据
-        :return:
+        :return:dict or Null
         """
         # 加载文件规则
         if dict.get("company") == "MicroFocus" and dict.get("productline") == "ITOM" and dict.get("product") == "Operations Agent(OA)":
@@ -128,9 +128,12 @@ class LogAnalysisMain(QMainWindow):
 
             # 判断此时符合的文件是否为空, 非空才会继续处理
             if allfiles == []:
+                AppMainLogger.warning("No file matching the rules")
                 QMessageBox.warning(self, "Warning", self.msg_no_file)
                 self.statusBar().clearMessage()
-                AppMainLogger.warning("No file matching the rules")
+                # 返回停止信号
+                return {"Signal": "Stop"}
+
             else:
                 # 实例化计算哈希工具, 准备后面进行文件哈希计算
                 hash = HashTools()
@@ -163,8 +166,10 @@ class LogAnalysisMain(QMainWindow):
 
                     # 如果所有allfiles 里面没有数据, 则说明没有数据需要导入
                     if allfiles == []:
-                        QMessageBox.warning(self, "Warning", self.msg_no_file)
                         AppMainLogger.warning("No file needs to be imported because the file already exists")
+                        QMessageBox.warning(self, "Warning", self.msg_no_file)
+                        # 返回停止信号
+                        return {"Signal": "Stop"}
                     else:
                         # 发射信号, 将预处理的字典数据传递给日志分析进程
                         allSignals.need_want_data.emit(dict)
@@ -233,12 +238,12 @@ class LogAnalysisMain(QMainWindow):
 
     def slot_check_taskdict(self, dict):
         """
-        利用槽函数来调用真正的 check_taskdict(), 计划采用子线程来处理
+        利用槽函数来调用真正的 check_taskdict(), 写入部分将采用子线程
         :param dict: 字典类型的预处理数据
         :return:
         """
-        t1 = Thread(target=self.check_taskdict, args=(dict,), daemon=True)
-        t1.start()
-
-        t2 = Thread(target=self.import_to_db, daemon=True)
-        t2.start()
+        task_result = self.check_taskdict(dict)
+        # 如果收到的信号不是 {"Signal": "Stop"}, 则启动数据库写入线程
+        if task_result.get("Signal") != "Stop":
+            t1 = Thread(target=self.import_to_db, daemon=True)
+            t1.start()
