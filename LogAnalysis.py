@@ -78,6 +78,7 @@ if __name__ == '__main__':
                 "company": dict.get("company"),
                 "productline": dict.get("productline"),
                 "product": dict.get("product"),
+                "total": len(fileslist),
             }
             tasks.append(task)
         # 将任务信息放入 QTask 中

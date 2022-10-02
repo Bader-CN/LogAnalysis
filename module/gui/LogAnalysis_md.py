@@ -192,8 +192,11 @@ class LogAnalysisMain(QMainWindow):
         :return:
         """
         path = r"sqlite:///"
+        tasksnum = 0
         while True:
             dict = QData.get()
+            totalnum = dict.get("total")
+
             if path == r"sqlite:///":
                 path = r"sqlite:///" + os.path.abspath(dict.get("targetdb"))
                 engine = create_engine(path, future=True)
@@ -201,9 +204,13 @@ class LogAnalysisMain(QMainWindow):
                 session = Session()
                 session.add_all(dict.get("data"))
                 session.commit()
+                tasksnum += 1
             else:
                 session.add_all(dict.get("data"))
                 session.commit()
+                tasksnum += 1
+
+            print(int((tasksnum/totalnum)*100))
 
     def slot_check_taskdict(self, dict):
         """

@@ -19,6 +19,7 @@ class OAFiles(ReadFileTemplate):
         self.company = self.TaskInfo.get("company")
         self.productline = self.TaskInfo.get("productline")
         self.product = self.TaskInfo.get("product")
+        self.total = self.TaskInfo.get("total")
 
         # 如果匹配到此内容, 则改行不做任何处理
         self.blkline = [
