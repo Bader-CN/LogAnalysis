@@ -34,6 +34,7 @@ class LogAnalysisMain(QMainWindow):
             self.setWindowTitle("LogAnalysis alpha")
             self.set_start_end_time()
             self.set_language_by_main()
+            self.ui.progressBar.hide()
 
             # 定制信号连接槽函数
             allSignals.user_want_data.connect(self.slot_check_taskdict)
@@ -193,24 +194,42 @@ class LogAnalysisMain(QMainWindow):
         """
         path = r"sqlite:///"
         tasksnum = 0
+        self.ui.progressBar.setValue(0)
+        self.ui.progressBar.show()
+        # 从 QData 队列里获取数据, 并将获取到的数据写入到数据库中
         while True:
             dict = QData.get()
             totalnum = dict.get("total")
-
-            if path == r"sqlite:///":
-                path = r"sqlite:///" + os.path.abspath(dict.get("targetdb"))
-                engine = create_engine(path, future=True)
-                Session = sessionmaker(bind=engine)
-                session = Session()
-                session.add_all(dict.get("data"))
-                session.commit()
+            try:
+                # 任务首次, 创建 SQLAlchemy 会话, 写入数据
+                if path == r"sqlite:///":
+                    path = r"sqlite:///" + os.path.abspath(dict.get("targetdb"))
+                    engine = create_engine(path, future=True)
+                    Session = sessionmaker(bind=engine)
+                    session = Session()
+                    session.add_all(dict.get("data"))
+                    session.commit()
+                    tasksnum += 1
+                # 后续内容, 因为 SQLAlchemy 会话已经存在, 所以直接写入数据
+                else:
+                    session.add_all(dict.get("data"))
+                    session.commit()
+                    tasksnum += 1
+            except Exception as e:
+                # 如果出现了异常, 为了程序能够正常结束, tasksnum 计数仍然 + 1
                 tasksnum += 1
-            else:
-                session.add_all(dict.get("data"))
-                session.commit()
-                tasksnum += 1
+                AppMainLogger.warning("Write to SQLiteDB faild, file is [{}], result is:\n{}".format(dict.get("file"), e))
 
-            print(int((tasksnum/totalnum)*100))
+            # 追加 debug 日志
+            AppMainLogger.debug("Successful write to SQLiteDB, finish {}%, targetdb is:[{}]".format(str(int((tasksnum/totalnum)*100)), dict.get("targetdb")))
+
+            # 更新进度条
+            self.ui.progressBar.setValue(int((tasksnum/totalnum)*100))
+            self.ui.progressBar.text()
+            # 判断条件, 如果进度达到 100%, 则退出循环
+            if int((tasksnum/totalnum)*100) == 100:
+                self.ui.progressBar.hide()
+                break
 
     def slot_check_taskdict(self, dict):
         """
