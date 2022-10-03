@@ -38,6 +38,9 @@ class LogAnalysisMain(QMainWindow):
             self.ui.progressBar.hide()
             self.update_db_list()
 
+            # 默认信号和槽函数(测试)
+            self.ui.treeWidget_db.itemDoubleClicked.connect(self.demo)
+
             # 定制信号连接槽函数
             allSignals.user_want_data.connect(self.slot_check_taskdict)
 
@@ -287,4 +290,8 @@ class LogAnalysisMain(QMainWindow):
         else:
             # 如果没有 SQLite DB 文件, 则直接清空内容
             self.ui.treeWidget_db.clear()
+
+    def demo(self, item):
+        # 测试代码
+        print("active!", item.text(0))
 
