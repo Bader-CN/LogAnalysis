@@ -20,7 +20,10 @@ class LogAnalysisMain(QMainWindow):
     """
     LogAnalysis main window settings
     """
+
+    # 类变量
     msg_no_file = "No file needs to be insert!"
+    current_db = None
 
     def __init__(self):
         try:
@@ -38,8 +41,8 @@ class LogAnalysisMain(QMainWindow):
             self.ui.progressBar.hide()
             self.update_db_list()
 
-            # 默认信号和槽函数(测试)
-            self.ui.treeWidget_db.itemDoubleClicked.connect(self.demo)
+            # 默认信号和槽函数
+            self.ui.treeWidget_db.itemExpanded.connect(self.set_current_db)
 
             # 定制信号连接槽函数
             allSignals.user_want_data.connect(self.slot_check_taskdict)
@@ -84,6 +87,16 @@ class LogAnalysisMain(QMainWindow):
         self.ui.tabLeft.setTabText(0, Language_zh_CN.get("Database"))
         self.ui.tabLeft.setTabText(1, Language_zh_CN.get("Template"))
         self.msg_no_file = Language_zh_CN.get("msg_no_file")
+
+    def set_current_db(self, dbitem):
+        """
+        设置当前打开的 DB
+        :param dbitem:
+        :return:
+        """
+        self.current_db = dbitem.text(0)
+        AppMainLogger.info("Current select DB is {}".format(self.current_db))
+        self.statusBar().showMessage("Current DB is {}".format(self.current_db))
 
     def check_taskdict(self, dict):
         """
@@ -290,8 +303,4 @@ class LogAnalysisMain(QMainWindow):
         else:
             # 如果没有 SQLite DB 文件, 则直接清空内容
             self.ui.treeWidget_db.clear()
-
-    def demo(self, item):
-        # 测试代码
-        print("active!", item.text(0))
 
