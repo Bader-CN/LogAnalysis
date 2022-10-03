@@ -4,6 +4,7 @@ import os, re, copy, time, hashlib
 from threading import Thread
 from PySide6.QtCore import QDateTime
 from PySide6.QtWidgets import QMainWindow, QMessageBox, QTreeWidgetItem
+from PySide6.QtSql import QSqlDatabase
 from module.gui.LogAnalysis_ui import Ui_MainWindow
 from module.tools.AppSettings import ReadConfig
 from module.tools.HashTools import HashTools
@@ -35,7 +36,7 @@ class LogAnalysisMain(QMainWindow):
             self.set_start_end_time()
             self.set_language_by_main()
             self.ui.progressBar.hide()
-            self.show_db_list()
+            self.update_db_list()
 
             # 定制信号连接槽函数
             allSignals.user_want_data.connect(self.slot_check_taskdict)
@@ -254,11 +255,36 @@ class LogAnalysisMain(QMainWindow):
             t1 = Thread(target=self.import_to_db, daemon=True)
             t1.start()
 
-    def show_db_list(self):
-        # test code
+    def update_db_list(self):
+        """
+        更新数据库列表信息
+        :return:
+        """
+        # 清空 DB List 原始内容
         self.ui.treeWidget_db.clear()
-        root1 = QTreeWidgetItem(self.ui.treeWidget_db)
-        root1.setText(0, "db1")
 
-        root2 = QTreeWidgetItem(self.ui.treeWidget_db)
-        root2.setText(0, "db2")
+        # 获取目录下的数据库文件
+        dbfiles = os.listdir('./data/database')
+        if dbfiles != []:
+            # 如果存在 SQLite DB 文件, 则循环获取每个数据库包含的表名, 并保存在字典 dbinfo 里
+            dbinfo = {}
+            for dbfile in dbfiles:
+                dbpath = os.path.abspath(os.path.join('./data/database', dbfile))
+                db = QSqlDatabase.addDatabase('QSQLITE')
+                db.setDatabaseName(dbpath)
+                db.open()
+                dbinfo[dbfile] = (sorted(db.tables()))
+                db.close()
+
+            # 获取了表后, 更新 DB List 内容
+            for db, tbs in dbinfo.items():
+                root = QTreeWidgetItem(self.ui.treeWidget_db)
+                root.setText(0, db[:-3])
+                # 进一步更新 DB List 的二级内容
+                for tb in tbs:
+                    sub_item = QTreeWidgetItem(root)
+                    sub_item.setText(0, tb)
+        else:
+            # 如果没有 SQLite DB 文件, 则直接清空内容
+            self.ui.treeWidget_db.clear()
+
