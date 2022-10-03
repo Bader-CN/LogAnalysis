@@ -3,7 +3,7 @@
 import os, re, copy, time, hashlib
 from threading import Thread
 from PySide6.QtCore import QDateTime
-from PySide6.QtWidgets import QMainWindow, QMessageBox
+from PySide6.QtWidgets import QMainWindow, QMessageBox, QTreeWidgetItem
 from module.gui.LogAnalysis_ui import Ui_MainWindow
 from module.tools.AppSettings import ReadConfig
 from module.tools.HashTools import HashTools
@@ -35,6 +35,7 @@ class LogAnalysisMain(QMainWindow):
             self.set_start_end_time()
             self.set_language_by_main()
             self.ui.progressBar.hide()
+            self.show_db_list()
 
             # 定制信号连接槽函数
             allSignals.user_want_data.connect(self.slot_check_taskdict)
@@ -252,3 +253,12 @@ class LogAnalysisMain(QMainWindow):
         if task_result.get("Signal") == "Start":
             t1 = Thread(target=self.import_to_db, daemon=True)
             t1.start()
+
+    def show_db_list(self):
+        # test code
+        self.ui.treeWidget_db.clear()
+        root1 = QTreeWidgetItem(self.ui.treeWidget_db)
+        root1.setText(0, "db1")
+
+        root2 = QTreeWidgetItem(self.ui.treeWidget_db)
+        root2.setText(0, "db2")

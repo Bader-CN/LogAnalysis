@@ -16,10 +16,10 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QCheckBox, QDateTimeEdit, QHBoxLayout,
-    QLabel, QLineEdit, QMainWindow, QMenuBar,
-    QProgressBar, QPushButton, QSizePolicy, QSpacerItem,
-    QSplitter, QStatusBar, QTabWidget, QVBoxLayout,
-    QWidget)
+    QHeaderView, QLabel, QLineEdit, QMainWindow,
+    QMenuBar, QProgressBar, QPushButton, QSizePolicy,
+    QSpacerItem, QSplitter, QStatusBar, QTabWidget,
+    QTreeWidget, QTreeWidgetItem, QVBoxLayout, QWidget)
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -44,9 +44,23 @@ class Ui_MainWindow(object):
         self.tabLeft.setObjectName(u"tabLeft")
         self.tab_database = QWidget()
         self.tab_database.setObjectName(u"tab_database")
+        self.verticalLayout_3 = QVBoxLayout(self.tab_database)
+        self.verticalLayout_3.setObjectName(u"verticalLayout_3")
+        self.treeWidget_db = QTreeWidget(self.tab_database)
+        self.treeWidget_db.setObjectName(u"treeWidget_db")
+
+        self.verticalLayout_3.addWidget(self.treeWidget_db)
+
         self.tabLeft.addTab(self.tab_database, "")
         self.tab_template = QWidget()
         self.tab_template.setObjectName(u"tab_template")
+        self.verticalLayout_4 = QVBoxLayout(self.tab_template)
+        self.verticalLayout_4.setObjectName(u"verticalLayout_4")
+        self.treeWidget_temp = QTreeWidget(self.tab_template)
+        self.treeWidget_temp.setObjectName(u"treeWidget_temp")
+
+        self.verticalLayout_4.addWidget(self.treeWidget_temp)
+
         self.tabLeft.addTab(self.tab_template, "")
 
         self.verticalLayout_2.addWidget(self.tabLeft)
@@ -205,7 +219,7 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.tabLeft.setCurrentIndex(0)
+        self.tabLeft.setCurrentIndex(1)
         self.tabSQLResult.setCurrentIndex(0)
 
 
@@ -214,7 +228,11 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"MainWindow", None))
+        ___qtreewidgetitem = self.treeWidget_db.headerItem()
+        ___qtreewidgetitem.setText(0, QCoreApplication.translate("MainWindow", u"DB List", None));
         self.tabLeft.setTabText(self.tabLeft.indexOf(self.tab_database), QCoreApplication.translate("MainWindow", u"Database", None))
+        ___qtreewidgetitem1 = self.treeWidget_temp.headerItem()
+        ___qtreewidgetitem1.setText(0, QCoreApplication.translate("MainWindow", u"Template List", None));
         self.tabLeft.setTabText(self.tabLeft.indexOf(self.tab_template), QCoreApplication.translate("MainWindow", u"Template", None))
         self.label_start_time.setText(QCoreApplication.translate("MainWindow", u"Start Time", None))
         self.label_end_time.setText(QCoreApplication.translate("MainWindow", u"End Time", None))

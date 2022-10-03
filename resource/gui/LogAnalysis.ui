@@ -43,17 +43,39 @@
         <item>
          <widget class="QTabWidget" name="tabLeft">
           <property name="currentIndex">
-           <number>0</number>
+           <number>1</number>
           </property>
           <widget class="QWidget" name="tab_database">
            <attribute name="title">
             <string>Database</string>
            </attribute>
+           <layout class="QVBoxLayout" name="verticalLayout_3">
+            <item>
+             <widget class="QTreeWidget" name="treeWidget_db">
+              <column>
+               <property name="text">
+                <string>DB List</string>
+               </property>
+              </column>
+             </widget>
+            </item>
+           </layout>
           </widget>
           <widget class="QWidget" name="tab_template">
            <attribute name="title">
             <string>Template</string>
            </attribute>
+           <layout class="QVBoxLayout" name="verticalLayout_4">
+            <item>
+             <widget class="QTreeWidget" name="treeWidget_temp">
+              <column>
+               <property name="text">
+                <string>Template List</string>
+               </property>
+              </column>
+             </widget>
+            </item>
+           </layout>
           </widget>
          </widget>
         </item>
