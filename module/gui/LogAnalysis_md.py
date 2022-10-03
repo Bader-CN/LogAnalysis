@@ -101,7 +101,7 @@ class LogAnalysisMain(QMainWindow):
             isBlck = False
 
             # 开始遍历符合规则的文件
-            AppMainLogger.info("Start finding files that match the rules ……")
+            AppMainLogger.info("Start finding files that match the rules...")
             self.statusBar().showMessage("Finding files that match the rules ……")
             for root, dirs, files in os.walk(dict.get("path")):
                 for file in files:
