@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import os, re, copy, time, hashlib
+import os, re, copy
 from threading import Thread
 from PySide6.QtCore import QDateTime
 from PySide6.QtWidgets import QMainWindow, QMessageBox, QTreeWidgetItem
