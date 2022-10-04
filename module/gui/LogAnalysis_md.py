@@ -2,8 +2,9 @@
 
 import os, re, copy
 from threading import Thread
+from PySide6.QtGui import QFont
 from PySide6.QtCore import QDateTime
-from PySide6.QtWidgets import QMainWindow, QMessageBox, QTreeWidgetItem, QTextEdit
+from PySide6.QtWidgets import QMainWindow, QMessageBox, QTreeWidgetItem, QTextEdit, QWidget, QVBoxLayout
 from PySide6.QtSql import QSqlDatabase
 from module.gui.LogAnalysis_ui import Ui_MainWindow
 from module.tools.AppSettings import ReadConfig
@@ -24,6 +25,7 @@ class LogAnalysisMain(QMainWindow):
     # 类变量
     msg_no_file = "No file needs to be insert!"
     current_db = None
+    num_new_query = 1
 
     def __init__(self):
         try:
@@ -44,6 +46,7 @@ class LogAnalysisMain(QMainWindow):
             # 默认信号和槽函数
             self.ui.treeWidget_db.itemExpanded.connect(self.set_current_db)
             self.ui.treeWidget_db.itemDoubleClicked.connect(self.slot_dblist_sql_query)
+            self.ui.btn_new.clicked.connect(self.slot_add_new_query)
 
             # 定制信号连接槽函数
             allSignals.user_want_data.connect(self.slot_check_taskdict)
@@ -287,6 +290,34 @@ class LogAnalysisMain(QMainWindow):
             end_time = self.ui.date_end_time.text().replace("/", "-")
             SQLTextEdit = self.ui.tabSQLQuery.currentWidget().findChild(QTextEdit)
             SQLTextEdit.setText("select * from {}\nwhere log_time >= '{}' and log_time <= '{}'\norder by logtime desc;".format(item.text(0), str_time, end_time))
+
+    def slot_add_new_query(self):
+        """
+        槽函数：创建新的 Table 标签
+        :return:
+        """
+        # 新建的 Tab 名字
+        self.num_new_query += 1
+        tablabel = 'Query' + str(self.num_new_query)
+        tlaylout = 'Layout' + str(self.num_new_query)
+        textedit = 'sqlEdit' + str(self.num_new_query)
+        # 生成 QWidget 以及 QTextEdit 中的内容
+        self.tab_page = QWidget()
+        self.tab_page.setObjectName(tablabel)
+        self.tab_layout = QVBoxLayout(self.tab_page)
+        self.tab_layout.setObjectName(tlaylout)
+        self.tab_text = QTextEdit(self.tab_page)
+        self.tab_text.setObjectName(textedit)
+        self.tab_layout.addWidget(self.tab_text)
+        # 将生成的 QWidget 中的内容追加到 QTabWidget 中
+        self.ui.tabSQLQuery.addTab(self.tab_page, tablabel)
+        self.ui.tabSQLQuery.setObjectName(tablabel)
+        # 设置当前索引为当前新建的 Tab
+        self.ui.tabSQLQuery.setCurrentIndex(self.ui.tabSQLQuery.count() - 1)
+        # 设置字体
+        font = QFont()
+        font.setFamily("Consolas")
+        self.tab_text.setFont(font)
 
     def update_db_list(self):
         """
