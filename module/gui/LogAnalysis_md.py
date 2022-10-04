@@ -281,9 +281,12 @@ class LogAnalysisMain(QMainWindow):
         dbfiles = os.listdir("./data/database")
         dbfiles = [dbfile[:-3] for dbfile in dbfiles]
         tabname = item.text(0)
+        # 如果选择的不是 DB 名, 则根据对应的表来自动生成 SQL 语句
         if tabname not in dbfiles:
+            str_time = self.ui.date_start_time.text().replace("/", "-")
+            end_time = self.ui.date_end_time.text().replace("/", "-")
             SQLTextEdit = self.ui.tabSQLQuery.currentWidget().findChild(QTextEdit)
-            SQLTextEdit.setText("SELECT * FROM {}".format(item.text(0)))
+            SQLTextEdit.setText("select * from {}\nwhere log_time >= '{}' and log_time <= '{}'\norder by logtime desc;".format(item.text(0), str_time, end_time))
 
     def update_db_list(self):
         """
