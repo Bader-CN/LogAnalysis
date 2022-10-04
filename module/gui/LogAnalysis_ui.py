@@ -190,6 +190,9 @@ class Ui_MainWindow(object):
         self.verticalLayout_5.setObjectName(u"verticalLayout_5")
         self.SQLTextEdit = QTextEdit(self.tabSQL1)
         self.SQLTextEdit.setObjectName(u"SQLTextEdit")
+        font = QFont()
+        font.setFamilies([u"Consolas"])
+        self.SQLTextEdit.setFont(font)
 
         self.verticalLayout_5.addWidget(self.SQLTextEdit)
 
