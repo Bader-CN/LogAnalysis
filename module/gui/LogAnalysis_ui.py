@@ -19,7 +19,8 @@ from PySide6.QtWidgets import (QApplication, QCheckBox, QDateTimeEdit, QHBoxLayo
     QHeaderView, QLabel, QLineEdit, QMainWindow,
     QMenuBar, QProgressBar, QPushButton, QSizePolicy,
     QSpacerItem, QSplitter, QStatusBar, QTabWidget,
-    QTreeWidget, QTreeWidgetItem, QVBoxLayout, QWidget)
+    QTextEdit, QTreeWidget, QTreeWidgetItem, QVBoxLayout,
+    QWidget)
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -185,6 +186,13 @@ class Ui_MainWindow(object):
         self.tabSQLQuery.setMovable(True)
         self.tabSQL1 = QWidget()
         self.tabSQL1.setObjectName(u"tabSQL1")
+        self.verticalLayout_5 = QVBoxLayout(self.tabSQL1)
+        self.verticalLayout_5.setObjectName(u"verticalLayout_5")
+        self.SQLTextEdit = QTextEdit(self.tabSQL1)
+        self.SQLTextEdit.setObjectName(u"SQLTextEdit")
+
+        self.verticalLayout_5.addWidget(self.SQLTextEdit)
+
         self.tabSQLQuery.addTab(self.tabSQL1, "")
         self.splitter_by_hor.addWidget(self.tabSQLQuery)
         self.tabSQLResult = QTabWidget(self.splitter_by_hor)

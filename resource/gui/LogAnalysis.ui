@@ -294,6 +294,11 @@
             <attribute name="title">
              <string>Query1</string>
             </attribute>
+            <layout class="QVBoxLayout" name="verticalLayout_5">
+             <item>
+              <widget class="QTextEdit" name="SQLTextEdit"/>
+             </item>
+            </layout>
            </widget>
           </widget>
           <widget class="QTabWidget" name="tabSQLResult">
