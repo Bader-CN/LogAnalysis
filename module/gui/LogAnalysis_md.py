@@ -3,7 +3,7 @@
 import os, re, copy
 from threading import Thread
 from PySide6.QtCore import QDateTime
-from PySide6.QtWidgets import QMainWindow, QMessageBox, QTreeWidgetItem
+from PySide6.QtWidgets import QMainWindow, QMessageBox, QTreeWidgetItem, QTextEdit
 from PySide6.QtSql import QSqlDatabase
 from module.gui.LogAnalysis_ui import Ui_MainWindow
 from module.tools.AppSettings import ReadConfig
@@ -43,6 +43,7 @@ class LogAnalysisMain(QMainWindow):
 
             # 默认信号和槽函数
             self.ui.treeWidget_db.itemExpanded.connect(self.set_current_db)
+            self.ui.treeWidget_db.itemDoubleClicked.connect(self.slot_dblist_sql_query)
 
             # 定制信号连接槽函数
             allSignals.user_want_data.connect(self.slot_check_taskdict)
@@ -270,6 +271,19 @@ class LogAnalysisMain(QMainWindow):
         if task_result.get("Signal") == "Start":
             t1 = Thread(target=self.import_to_db, daemon=True)
             t1.start()
+
+    def slot_dblist_sql_query(self, item):
+        """
+        双击表时自动生成 SQL 语句
+        :param item: QTreeWidgetItem 对象
+        :return:
+        """
+        dbfiles = os.listdir("./data/database")
+        dbfiles = [dbfile[:-3] for dbfile in dbfiles]
+        tabname = item.text(0)
+        if tabname not in dbfiles:
+            SQLTextEdit = self.ui.tabSQLQuery.currentWidget().findChild(QTextEdit)
+            SQLTextEdit.setText("SELECT * FROM {}".format(item.text(0)))
 
     def update_db_list(self):
         """
