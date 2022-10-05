@@ -47,6 +47,7 @@ class LogAnalysisMain(QMainWindow):
             self.ui.treeWidget_db.itemExpanded.connect(self.set_current_db)
             self.ui.treeWidget_db.itemDoubleClicked.connect(self.slot_dblist_sql_query)
             self.ui.tabSQLQuery.tabCloseRequested['int'].connect(self.slot_tab_sqlquery_close)
+            self.ui.tabSQLResult.tabCloseRequested['int'].connect(self.slot_tab_sqlresult_close)
             self.ui.btn_new.clicked.connect(self.slot_add_new_query)
             self.ui.btn_query.clicked.connect(self.slot_run_sql_query)
 
@@ -343,7 +344,16 @@ class LogAnalysisMain(QMainWindow):
         :param index: QtabWidget 的 index
         """
         if self.ui.tabSQLQuery.count() > 1:
-           self.ui.tabSQLQuery.removeTab(index)
+            self.ui.tabSQLQuery.removeTab(index)
+
+    def slot_tab_sqlresult_close(self, index):
+        """
+        槽函数: SQL Result Tab 关闭函数
+        :param index:
+        :return:
+        """
+        if self.ui.tabSQLResult.count() > 1:
+            self.ui.tabSQLResult.removeTab(index)
 
     def slot_run_sql_query(self):
         """
