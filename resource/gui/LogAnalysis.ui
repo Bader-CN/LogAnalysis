@@ -290,7 +290,7 @@
            <property name="movable">
             <bool>true</bool>
            </property>
-           <widget class="QWidget" name="tabSQL1">
+           <widget class="QWidget" name="Query1">
             <attribute name="title">
              <string>Query1</string>
             </attribute>

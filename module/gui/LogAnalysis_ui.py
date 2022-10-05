@@ -184,11 +184,11 @@ class Ui_MainWindow(object):
         self.tabSQLQuery.setObjectName(u"tabSQLQuery")
         self.tabSQLQuery.setTabsClosable(True)
         self.tabSQLQuery.setMovable(True)
-        self.tabSQL1 = QWidget()
-        self.tabSQL1.setObjectName(u"tabSQL1")
-        self.verticalLayout_5 = QVBoxLayout(self.tabSQL1)
+        self.Query1 = QWidget()
+        self.Query1.setObjectName(u"Query1")
+        self.verticalLayout_5 = QVBoxLayout(self.Query1)
         self.verticalLayout_5.setObjectName(u"verticalLayout_5")
-        self.SQLTextEdit = QTextEdit(self.tabSQL1)
+        self.SQLTextEdit = QTextEdit(self.Query1)
         self.SQLTextEdit.setObjectName(u"SQLTextEdit")
         font = QFont()
         font.setFamilies([u"Consolas"])
@@ -196,7 +196,7 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_5.addWidget(self.SQLTextEdit)
 
-        self.tabSQLQuery.addTab(self.tabSQL1, "")
+        self.tabSQLQuery.addTab(self.Query1, "")
         self.splitter_by_hor.addWidget(self.tabSQLQuery)
         self.tabSQLResult = QTabWidget(self.splitter_by_hor)
         self.tabSQLResult.setObjectName(u"tabSQLResult")
@@ -254,7 +254,7 @@ class Ui_MainWindow(object):
         self.chk_regexp.setText(QCoreApplication.translate("MainWindow", u"Enable Regexp", None))
         self.chk_component.setText(QCoreApplication.translate("MainWindow", u"Inclube Component", None))
         self.btn_query.setText(QCoreApplication.translate("MainWindow", u"Query", None))
-        self.tabSQLQuery.setTabText(self.tabSQLQuery.indexOf(self.tabSQL1), QCoreApplication.translate("MainWindow", u"Query1", None))
+        self.tabSQLQuery.setTabText(self.tabSQLQuery.indexOf(self.Query1), QCoreApplication.translate("MainWindow", u"Query1", None))
         self.tabSQLResult.setTabText(self.tabSQLResult.indexOf(self.tabResult), QCoreApplication.translate("MainWindow", u"Result1", None))
     # retranslateUi
 

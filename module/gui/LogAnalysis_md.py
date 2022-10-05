@@ -4,8 +4,8 @@ import os, re, copy
 from threading import Thread
 from PySide6.QtGui import QFont
 from PySide6.QtCore import QDateTime
-from PySide6.QtWidgets import QMainWindow, QMessageBox, QTreeWidgetItem, QTextEdit, QWidget, QVBoxLayout
-from PySide6.QtSql import QSqlDatabase
+from PySide6.QtWidgets import QMainWindow, QMessageBox, QTreeWidgetItem, QTextEdit, QWidget, QTableView, QVBoxLayout
+from PySide6.QtSql import QSqlDatabase, QSqlQueryModel
 from module.gui.LogAnalysis_ui import Ui_MainWindow
 from module.tools.AppSettings import ReadConfig
 from module.tools.HashTools import HashTools
@@ -48,6 +48,7 @@ class LogAnalysisMain(QMainWindow):
             self.ui.treeWidget_db.itemDoubleClicked.connect(self.slot_dblist_sql_query)
             self.ui.tabSQLQuery.tabCloseRequested['int'].connect(self.slot_tab_sqlquery_close)
             self.ui.btn_new.clicked.connect(self.slot_add_new_query)
+            self.ui.btn_query.clicked.connect(self.slot_run_sql_query)
 
             # 定制信号连接槽函数
             allSignals.user_want_data.connect(self.slot_check_taskdict)
@@ -99,9 +100,10 @@ class LogAnalysisMain(QMainWindow):
         :param dbitem:
         :return:
         """
-        self.current_db = dbitem.text(0)
-        AppMainLogger.info("Current select DB is {}".format(self.current_db))
-        self.statusBar().showMessage("Current DB is {}".format(self.current_db))
+        dbname = dbitem.text(0) + ".db"
+        self.current_db = os.path.abspath(os.path.join("./data/database", dbname))
+        AppMainLogger.info("Current select DB is {}".format(dbname))
+        self.statusBar().showMessage("Current DB is {}".format(dbname))
 
     def set_sql_statement(self, **kwargs):
         """
@@ -342,6 +344,75 @@ class LogAnalysisMain(QMainWindow):
         """
         if self.ui.tabSQLQuery.count() > 1:
            self.ui.tabSQLQuery.removeTab(index)
+
+    def slot_run_sql_query(self):
+        """
+        槽函数：执行查询语句, 并且返回结果
+        :return:
+        """
+        # 获取 sqlEdit 上一级的对象名
+        sqltitle = self.ui.tabSQLQuery.currentWidget().objectName()
+        # sqlEdit 返回的是当前激活的 QTextEdit 对象
+        sqlEdit = self.ui.tabSQLQuery.currentWidget().findChild(QTextEdit)
+        sqlText = sqlEdit.toPlainText().split(";")[0] + ";"
+
+        # 如果获取的内容长度非0, 并且当前 db 不是 None, 则继续执行查询
+        if len(sqlText) != 0 and self.current_db != None:
+            querydb = QSqlDatabase.addDatabase('QSQLITE')
+            querydb.setDatabaseName(self.current_db)
+            querydb.open()
+
+            # 创建 model
+            model = QSqlQueryModel()
+            model.setQuery(sqlText, db=querydb)
+            # 判断返回的数据是否多余 256 行, 如果多余 256 行, 则允许获取更多的数据 (fetchmode 意思是判断是否有更多的数据)
+            # 参考链接 https://xbuba.com/questions/42286016
+            while model.canFetchMore():
+                model.fetchMore()
+            # 校验语句是否出现错误
+            if model.lastError().isValid():
+                AppMainLogger.warning((model.lastError().text()))
+                QMessageBox.warning(self, "SQL Error", model.lastError().text())
+            else:
+                AppMainLogger.info("SQL Query is: {}".format(sqlText))
+
+            # 生成 QWidget 和 QtableView 对象: self.tab_view
+            tablabel = sqltitle.replace('Query','Result')
+            self.tab_page_result = QWidget()
+            self.tab_page_result.setObjectName(tablabel)
+            self.tab_layout_result = QVBoxLayout(self.tab_page_result)
+            self.tab_view = QTableView(self.tab_page_result)
+            self.tab_view.setObjectName(tablabel)
+            self.tab_layout_result.addWidget(self.tab_view)
+
+            # 将生成的 QWidget 追加到 QTabWidget 中
+            self.ui.tabSQLResult.addTab(self.tab_page_result, tablabel)
+            self.ui.tabSQLResult.setObjectName(tablabel)
+            self.ui.tabSQLResult.setCurrentIndex(self.ui.tabSQLResult.count() - 1)
+
+            # 展示表格并优化显示
+            self.tab_view.setModel(model)
+            ## 水平方向标签拓展剩下的窗口部分
+            self.tab_view.horizontalHeader().setStretchLastSection(True)
+            # self.tab_view.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+            ## 设置单元格默认的行高
+            self.tab_view.verticalHeader().setDefaultSectionSize(8)
+            ## 设置单元格显示的字体
+            self.tab_view.setFont(QFont('Consolas', 8, QFont.Normal))
+            ## 自动调整每列的宽度
+            self.tab_view.resizeColumnsToContents()
+            ## 自动换行
+            self.tab_view.setWordWrap(True)
+            ## 隐藏行号
+            self.tab_view.verticalHeader().hide()
+            ## 连接槽函数, 在双击单元格时触发
+            # self.tab_view.doubleClicked.connect(self.slot_show_cell)
+            self.tab_view.show()
+
+            # 关闭数据库连接
+            querydb.close()
+
+
 
     def update_db_list(self):
         """
