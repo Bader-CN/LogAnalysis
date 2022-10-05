@@ -105,8 +105,8 @@ class LogAnalysisMain(QMainWindow):
 
     def set_sql_statement(self, **kwargs):
         """
-        根据输入的内容自动生成 SQL 语句
-        :param kwargs:
+        根据输入的内容自动生成 SQL 语句(还得改, 目前暂定!!!!!)
+        :param kwargs: tabname
         :return: str
         """
         str_time = self.ui.date_start_time.text().replace("/", "-")
