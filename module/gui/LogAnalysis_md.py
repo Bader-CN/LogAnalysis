@@ -46,6 +46,7 @@ class LogAnalysisMain(QMainWindow):
             # 默认信号和槽函数
             self.ui.treeWidget_db.itemExpanded.connect(self.set_current_db)
             self.ui.treeWidget_db.itemDoubleClicked.connect(self.slot_dblist_sql_query)
+            self.ui.tabSQLQuery.tabCloseRequested['int'].connect(self.slot_tab_sqlquery_close)
             self.ui.btn_new.clicked.connect(self.slot_add_new_query)
 
             # 定制信号连接槽函数
@@ -318,6 +319,14 @@ class LogAnalysisMain(QMainWindow):
         font = QFont()
         font.setFamily("Consolas")
         self.tab_text.setFont(font)
+
+    def slot_tab_sqlquery_close(self, index):
+        """
+        槽函数：SQL Query Tab 关闭函数
+        :param index: QtabWidget 的 index
+        """
+        if self.ui.tabSQLQuery.count() > 1:
+           self.ui.tabSQLQuery.removeTab(index)
 
     def update_db_list(self):
         """
