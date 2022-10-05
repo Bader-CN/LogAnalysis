@@ -202,9 +202,6 @@ class Ui_MainWindow(object):
         self.tabSQLResult.setObjectName(u"tabSQLResult")
         self.tabSQLResult.setTabsClosable(True)
         self.tabSQLResult.setMovable(True)
-        self.tabResult = QWidget()
-        self.tabResult.setObjectName(u"tabResult")
-        self.tabSQLResult.addTab(self.tabResult, "")
         self.splitter_by_hor.addWidget(self.tabSQLResult)
 
         self.verticalLayout.addWidget(self.splitter_by_hor)
@@ -231,7 +228,7 @@ class Ui_MainWindow(object):
         self.retranslateUi(MainWindow)
 
         self.tabLeft.setCurrentIndex(1)
-        self.tabSQLResult.setCurrentIndex(0)
+        self.tabSQLResult.setCurrentIndex(-1)
 
 
         QMetaObject.connectSlotsByName(MainWindow)
@@ -255,6 +252,5 @@ class Ui_MainWindow(object):
         self.chk_component.setText(QCoreApplication.translate("MainWindow", u"Inclube Component", None))
         self.btn_query.setText(QCoreApplication.translate("MainWindow", u"Query", None))
         self.tabSQLQuery.setTabText(self.tabSQLQuery.indexOf(self.Query1), QCoreApplication.translate("MainWindow", u"Query1", None))
-        self.tabSQLResult.setTabText(self.tabSQLResult.indexOf(self.tabResult), QCoreApplication.translate("MainWindow", u"Result1", None))
     # retranslateUi
 

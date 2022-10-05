@@ -309,7 +309,7 @@
           </widget>
           <widget class="QTabWidget" name="tabSQLResult">
            <property name="currentIndex">
-            <number>0</number>
+            <number>-1</number>
            </property>
            <property name="tabsClosable">
             <bool>true</bool>
@@ -317,11 +317,6 @@
            <property name="movable">
             <bool>true</bool>
            </property>
-           <widget class="QWidget" name="tabResult">
-            <attribute name="title">
-             <string>Result1</string>
-            </attribute>
-           </widget>
           </widget>
          </widget>
         </item>
