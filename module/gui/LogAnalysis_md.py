@@ -103,6 +103,22 @@ class LogAnalysisMain(QMainWindow):
         AppMainLogger.info("Current select DB is {}".format(self.current_db))
         self.statusBar().showMessage("Current DB is {}".format(self.current_db))
 
+    def set_sql_statement(self, **kwargs):
+        """
+        根据输入的内容自动生成 SQL 语句
+        :param kwargs:
+        :return: str
+        """
+        str_time = self.ui.date_start_time.text().replace("/", "-")
+        end_time = self.ui.date_end_time.text().replace("/", "-")
+
+        # 如果表名为 filehash, 则生成特殊的 SQL 语句
+        if kwargs.get("tabname") == "filehash":
+            return "select * from {};".format(kwargs.get("tabname"))
+        # 其余情况, 生成默认的 SQL 语句
+        else:
+            return "select * from {}\nwhere log_time >= '{}' and log_time <= '{}'\norder by logtime desc;".format(kwargs.get("tabname"), str_time, end_time)
+
     def check_taskdict(self, dict):
         """
         实际的预检查函数, 负责查找哪些文件符合导入规则
@@ -287,10 +303,9 @@ class LogAnalysisMain(QMainWindow):
         tabname = item.text(0)
         # 如果选择的不是 DB 名, 则根据对应的表来自动生成 SQL 语句
         if tabname not in dbfiles:
-            str_time = self.ui.date_start_time.text().replace("/", "-")
-            end_time = self.ui.date_end_time.text().replace("/", "-")
+            sql_query_text = self.set_sql_statement(tabname = tabname)
             SQLTextEdit = self.ui.tabSQLQuery.currentWidget().findChild(QTextEdit)
-            SQLTextEdit.setText("select * from {}\nwhere log_time >= '{}' and log_time <= '{}'\norder by logtime desc;".format(item.text(0), str_time, end_time))
+            SQLTextEdit.setText(sql_query_text)
 
     def slot_add_new_query(self):
         """
