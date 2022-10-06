@@ -120,7 +120,7 @@ class LogAnalysisMain(QMainWindow):
             return "select * from {};".format(kwargs.get("tabname"))
         # 其余情况, 生成默认的 SQL 语句
         else:
-            return "select * from {}\nwhere log_time >= '{}' and log_time <= '{}'\norder by logtime desc;".format(kwargs.get("tabname"), str_time, end_time)
+            return "select * from {}\nwhere log_time >= '{}' and log_time <= '{}'\norder by log_time desc;".format(kwargs.get("tabname"), str_time, end_time)
 
     def check_taskdict(self, dict):
         """
