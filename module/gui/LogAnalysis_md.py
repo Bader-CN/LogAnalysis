@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 
-import os, re, copy
+import os, re, csv, copy
 from threading import Thread
 from PySide6.QtGui import QFont
 from PySide6.QtCore import QDateTime
-from PySide6.QtWidgets import QMainWindow, QMessageBox, QTreeWidgetItem, QTextEdit, QWidget, QTableView, QVBoxLayout
+from PySide6.QtWidgets import QMainWindow, QMessageBox, QTreeWidgetItem, QTextEdit, QWidget, QTableView, QVBoxLayout, QFileDialog
 from PySide6.QtSql import QSqlDatabase, QSqlQueryModel
 from module.gui.LogAnalysis_ui import Ui_MainWindow
 from module.tools.AppSettings import ReadConfig
@@ -26,6 +26,7 @@ class LogAnalysisMain(QMainWindow):
     msg_no_file = "No file needs to be insert!"
     current_db = None
     num_new_query = 1
+
 
     def __init__(self):
         try:
@@ -50,6 +51,7 @@ class LogAnalysisMain(QMainWindow):
             self.ui.tabSQLResult.tabCloseRequested['int'].connect(self.slot_tab_sqlresult_close)
             self.ui.btn_new.clicked.connect(self.slot_add_new_query)
             self.ui.btn_query.clicked.connect(self.slot_run_sql_query)
+            self.ui.btn_export.clicked.connect(self.slot_export_to_csv)
 
             # 定制信号连接槽函数
             allSignals.user_want_data.connect(self.slot_check_taskdict)
@@ -428,6 +430,20 @@ class LogAnalysisMain(QMainWindow):
 
             # 关闭数据库连接
             querydb.close()
+
+    def slot_export_to_csv(self):
+        """
+        将查询的数据导出到 csv 文件
+        :return:
+        """
+        # path, ok = QFileDialog.getSaveFileName(self, 'Export to CSV', os.getenv('HOME'), '*.csv')
+        tableview = self.ui.tabSQLResult.currentWidget().findChild(QTableView)
+
+        # 参考链接：https://cloud.tencent.com/developer/ask/sof/1252779
+        print(tableview.selectionModel().selectedRows())
+        print(tableview.selectionModel().selectedColumns())
+        print(tableview.selectionModel().selectedIndexes())
+        print("write finish!")
 
     def update_db_list(self):
         """
