@@ -106,21 +106,28 @@ class LogAnalysisMain(QMainWindow):
         AppMainLogger.info("Current select DB is {}".format(dbname))
         self.statusBar().showMessage("Current DB is {}".format(dbname))
 
-    def set_sql_statement(self, **kwargs):
+    def set_sql_statement(self, type, tabname, **kwargs):
         """
-        根据输入的内容自动生成 SQL 语句(还得改, 目前暂定!!!!!)
-        :param kwargs: tabname
+        根据输入的内容自动生成 SQL 语句
+        :param type: database / template
+        :param tabname: str
+        :param kwargs:
         :return: str
         """
         str_time = self.ui.date_start_time.text().replace("/", "-")
         end_time = self.ui.date_end_time.text().replace("/", "-")
 
-        # 如果表名为 filehash, 则生成特殊的 SQL 语句
-        if kwargs.get("tabname") == "filehash":
-            return "select * from {};".format(kwargs.get("tabname"))
-        # 其余情况, 生成默认的 SQL 语句
+        # 如果获取的表名来自于 database
+        if type == "database":
+            # 如果表名为 filehash, 则生成特殊的 SQL 语句
+            if tabname == "filehash":
+                return "select * from {};".format(tabname)
+            # 其余情况, 生成默认的 SQL 语句
+            else:
+                return "select * from {}\nwhere log_time >= '{}' and log_time <= '{}'\norder by log_time desc;".format(tabname, str_time, end_time)
+        # 其它情况
         else:
-            return "select * from {}\nwhere log_time >= '{}' and log_time <= '{}'\norder by log_time desc;".format(kwargs.get("tabname"), str_time, end_time)
+            pass
 
     def check_taskdict(self, dict):
         """
@@ -306,7 +313,7 @@ class LogAnalysisMain(QMainWindow):
         tabname = item.text(0)
         # 如果选择的不是 DB 名, 则根据对应的表来自动生成 SQL 语句
         if tabname not in dbfiles:
-            sql_query_text = self.set_sql_statement(tabname = tabname)
+            sql_query_text = self.set_sql_statement(type = "database", tabname = tabname)
             SQLTextEdit = self.ui.tabSQLQuery.currentWidget().findChild(QTextEdit)
             SQLTextEdit.setText(sql_query_text)
 
@@ -421,8 +428,6 @@ class LogAnalysisMain(QMainWindow):
 
             # 关闭数据库连接
             querydb.close()
-
-
 
     def update_db_list(self):
         """
