@@ -433,22 +433,40 @@ class LogAnalysisMain(QMainWindow):
 
     def slot_export_to_csv(self):
         """
-        将查询的数据导出到 csv 文件
+        将查询的数据导出到 csv 文件, 代码参考了如下链接:
+        https://doc.qt.io/qtforpython/PySide6/QtWidgets/QAbstractItemView.html?highlight=selectionmodel#PySide6.QtWidgets.PySide6.QtWidgets.QAbstractItemView.model
+        https://doc.qt.io/qtforpython/PySide6/QtSql/QSqlRecord.html#PySide6.QtSql.PySide6.QtSql.QSqlRecord.fieldName
+        https://cloud.tencent.com/developer/ask/sof/1252779
         :return:
         """
-        # path, ok = QFileDialog.getSaveFileName(self, 'Export to CSV', os.getenv('HOME'), '*.csv')
+        path, ok = QFileDialog.getSaveFileName(self, 'Export to CSV', os.getenv('HOME'), '*.csv')
         tableview = self.ui.tabSQLResult.currentWidget().findChild(QTableView)
+        sqlrecord = tableview.selectionModel().model().record(0)
 
-        # 参考链接：
-        # https://cloud.tencent.com/developer/ask/sof/1252779
-        # https://doc.qt.io/qtforpython/PySide6/QtWidgets/QAbstractItemView.html?highlight=selectionmodel#PySide6.QtWidgets.PySide6.QtWidgets.QAbstractItemView.model
-        selectlist = tableview.selectionModel().selectedIndexes()
-        for cellModel in selectlist:
-            print(cellModel.data(), cellModel.column(), cellModel.row())
+        rows_index = []
+        columns_index = []
+        select_datas = []
 
-        print(tableview.selectionModel().model().record())
+        # 获取选中的数据
+        sqldatas = tableview.selectionModel().selectedIndexes()
+        for sqldata in sqldatas:
+            if sqldata.column() not in columns_index:
+                columns_index.append(sqldata.column())
+            if sqldata.row() not in rows_index:
+                rows_index.append(sqldata.row())
+            select_datas.append(sqldata.data())
 
-        print("write finish!")
+        # 列的标题名
+        columns_header = [sqlrecord.fieldName(x) for x in columns_index]
+
+        # 整理数据, 按组分割
+        csv_datas = [select_datas[i: i + len(columns_header)] for i in range(0, len(select_datas), len(columns_header))]
+
+        # 将数据写入到 csv 中
+        with open(path, "w", encoding="utf-8") as f:
+            write = csv.writer(f, lineterminator="\n")
+            write.writerow(columns_header)
+            write.writerows(csv_datas)
 
     def update_db_list(self):
         """
