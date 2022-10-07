@@ -439,10 +439,15 @@ class LogAnalysisMain(QMainWindow):
         # path, ok = QFileDialog.getSaveFileName(self, 'Export to CSV', os.getenv('HOME'), '*.csv')
         tableview = self.ui.tabSQLResult.currentWidget().findChild(QTableView)
 
-        # 参考链接：https://cloud.tencent.com/developer/ask/sof/1252779
-        print(tableview.selectionModel().selectedRows())
-        print(tableview.selectionModel().selectedColumns())
-        print(tableview.selectionModel().selectedIndexes())
+        # 参考链接：
+        # https://cloud.tencent.com/developer/ask/sof/1252779
+        # https://doc.qt.io/qtforpython/PySide6/QtWidgets/QAbstractItemView.html?highlight=selectionmodel#PySide6.QtWidgets.PySide6.QtWidgets.QAbstractItemView.model
+        selectlist = tableview.selectionModel().selectedIndexes()
+        for cellModel in selectlist:
+            print(cellModel.data(), cellModel.column(), cellModel.row())
+
+        print(tableview.selectionModel().model().record())
+
         print("write finish!")
 
     def update_db_list(self):
