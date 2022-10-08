@@ -6,10 +6,13 @@ Language_zh_CN = {
         "Cancel": "取消",
 
         # QMessage Info
-        "msg_path_not_null": "路径不能为空!",
-        "msg_db_not_null": "目标数据库不能为空!",
-        "msg_db_not_blank": "目标数据库名不能有空格!",
-        "msg_no_file": "没有文件需要被导入!",
+        "msg_path_not_null": "路径不能为空",
+        "msg_db_not_null": "目标数据库不能为空",
+        "msg_db_not_blank": "目标数据库名不能有空格",
+        "msg_no_file": "没有文件需要被导入",
+        "msg_export_no_select": "请先选中需要导出的内容",
+        "msg_export_no_query": "请先进行查询, 然后导出功能才能工作",
+        "msg_export_not_full": "所选数据形状必须为一个矩阵",
 
         # logMain Section
         "Start Time": "开始时间",

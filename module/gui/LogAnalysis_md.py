@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import os, re, csv, copy
+import os, re, csv, copy, time
 from threading import Thread
 from PySide6.QtGui import QFont
 from PySide6.QtCore import QDateTime
@@ -23,7 +23,10 @@ class LogAnalysisMain(QMainWindow):
     """
 
     # 类变量
-    msg_no_file = "No file needs to be insert!"
+    msg_no_file = "No file needs to be insert"
+    msg_export_no_select = "Plese select the data you want to export"
+    msg_export_no_query = "Please query first and then export function can work"
+    msg_export_not_full = "Selected data must be a matrix"
     current_db = None
     num_new_query = 1
 
@@ -96,6 +99,9 @@ class LogAnalysisMain(QMainWindow):
         self.ui.tabLeft.setTabText(0, Language_zh_CN.get("Database"))
         self.ui.tabLeft.setTabText(1, Language_zh_CN.get("Template"))
         self.msg_no_file = Language_zh_CN.get("msg_no_file")
+        self.msg_export_no_select = Language_zh_CN.get("msg_export_no_select")
+        self.msg_export_no_query = Language_zh_CN.get("msg_export_no_query")
+        self.msg_export_not_full = Language_zh_CN.get("msg_export_not_full")
 
     def set_current_db(self, dbitem):
         """
@@ -439,34 +445,51 @@ class LogAnalysisMain(QMainWindow):
         https://cloud.tencent.com/developer/ask/sof/1252779
         :return:
         """
-        path, ok = QFileDialog.getSaveFileName(self, 'Export to CSV', os.getenv('HOME'), '*.csv')
-        tableview = self.ui.tabSQLResult.currentWidget().findChild(QTableView)
-        sqlrecord = tableview.selectionModel().model().record(0)
+        # 判断有没有选择数据
+        try:
+            self.statusBar().showMessage("Checking the selected data, please wait...", timeout=5)
+            isSelect = self.ui.tabSQLResult.currentWidget().findChild(QTableView).selectionModel().selectedIndexes()
+            if isSelect != []:
+                tableview = self.ui.tabSQLResult.currentWidget().findChild(QTableView)
+                sqlrecord = tableview.selectionModel().model().record(0)
+                rows_index = []
+                columns_index = []
+                select_datas = []
+                num = 0
+                # 获取选中的数据
+                sqldatas = tableview.selectionModel().selectedIndexes()
+                for sqldata in sqldatas:
+                    num += 1
+                    if sqldata.column() not in columns_index:
+                        columns_index.append(sqldata.column())
+                    if sqldata.row() not in rows_index:
+                        rows_index.append(sqldata.row())
+                    select_datas.append(sqldata.data())
 
-        rows_index = []
-        columns_index = []
-        select_datas = []
+                # 判断数据是否符合要求
+                if len(select_datas) == len(rows_index) * len(columns_index):
+                    path, ok = QFileDialog.getSaveFileName(self, 'Export to CSV', os.getenv('HOME'), '*.csv')
+                    if ok:
+                        self.statusBar().showMessage("Exporting, please wait...")
 
-        # 获取选中的数据
-        sqldatas = tableview.selectionModel().selectedIndexes()
-        for sqldata in sqldatas:
-            if sqldata.column() not in columns_index:
-                columns_index.append(sqldata.column())
-            if sqldata.row() not in rows_index:
-                rows_index.append(sqldata.row())
-            select_datas.append(sqldata.data())
+                        # 列的标题名
+                        columns_header = [sqlrecord.fieldName(x) for x in columns_index]
 
-        # 列的标题名
-        columns_header = [sqlrecord.fieldName(x) for x in columns_index]
+                        # 整理数据, 按组分割
+                        csv_datas = [select_datas[i: i + len(columns_header)] for i in range(0, len(select_datas), len(columns_header))]
 
-        # 整理数据, 按组分割
-        csv_datas = [select_datas[i: i + len(columns_header)] for i in range(0, len(select_datas), len(columns_header))]
-
-        # 将数据写入到 csv 中
-        with open(path, "w", encoding="utf-8") as f:
-            write = csv.writer(f, lineterminator="\n")
-            write.writerow(columns_header)
-            write.writerows(csv_datas)
+                        # 将数据写入到 csv 中
+                        with open(path, "w", encoding="utf-8") as f:
+                            write = csv.writer(f, lineterminator="\n")
+                            write.writerow(columns_header)
+                            write.writerows(csv_datas)
+                        self.statusBar().showMessage("Export is complete! filepath: {}".format(path))
+                else:
+                    QMessageBox.warning(self, "Warning", self.msg_export_not_full)
+            else:
+                QMessageBox.warning(self, "Warning", self.msg_export_no_select)
+        except:
+            QMessageBox.warning(self, "Warning", self.msg_export_no_query)
 
     def update_db_list(self):
         """
