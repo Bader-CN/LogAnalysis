@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import os, re, csv, copy, time
+import os, re, csv, copy
 from threading import Thread
 from PySide6.QtGui import QFont
 from PySide6.QtCore import QDateTime
@@ -455,11 +455,9 @@ class LogAnalysisMain(QMainWindow):
                 rows_index = []
                 columns_index = []
                 select_datas = []
-                num = 0
                 # 获取选中的数据
                 sqldatas = tableview.selectionModel().selectedIndexes()
                 for sqldata in sqldatas:
-                    num += 1
                     if sqldata.column() not in columns_index:
                         columns_index.append(sqldata.column())
                     if sqldata.row() not in rows_index:
