@@ -26,7 +26,7 @@ Language_zh_CN = {
         "Inclube Component": "包括组件",
         "Database": "数据",
         "Template": "模板",
-        "DeleteDB": "删除数据",
+        "DeleteDB": "删除数据库",
 
         # logImport Section
         "Import Wizard": "导入向导",
