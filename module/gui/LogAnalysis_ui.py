@@ -11,16 +11,17 @@
 from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
     QMetaObject, QObject, QPoint, QRect,
     QSize, QTime, QUrl, Qt)
-from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
-    QFont, QFontDatabase, QGradient, QIcon,
-    QImage, QKeySequence, QLinearGradient, QPainter,
-    QPalette, QPixmap, QRadialGradient, QTransform)
+from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient,
+    QCursor, QFont, QFontDatabase, QGradient,
+    QIcon, QImage, QKeySequence, QLinearGradient,
+    QPainter, QPalette, QPixmap, QRadialGradient,
+    QTransform)
 from PySide6.QtWidgets import (QApplication, QCheckBox, QDateTimeEdit, QHBoxLayout,
     QHeaderView, QLabel, QLineEdit, QMainWindow,
-    QMenuBar, QProgressBar, QPushButton, QSizePolicy,
-    QSpacerItem, QSplitter, QStatusBar, QTabWidget,
-    QTextEdit, QTreeWidget, QTreeWidgetItem, QVBoxLayout,
-    QWidget)
+    QMenu, QMenuBar, QProgressBar, QPushButton,
+    QSizePolicy, QSpacerItem, QSplitter, QStatusBar,
+    QTabWidget, QTextEdit, QTreeWidget, QTreeWidgetItem,
+    QVBoxLayout, QWidget)
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -28,6 +29,10 @@ class Ui_MainWindow(object):
             MainWindow.setObjectName(u"MainWindow")
         MainWindow.resize(965, 600)
         MainWindow.setMinimumSize(QSize(965, 600))
+        self.actionDeleteDB = QAction(MainWindow)
+        self.actionDeleteDB.setObjectName(u"actionDeleteDB")
+        self.action2 = QAction(MainWindow)
+        self.action2.setObjectName(u"action2")
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
         self.horizontalLayout = QHBoxLayout(self.centralwidget)
@@ -220,10 +225,15 @@ class Ui_MainWindow(object):
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName(u"menubar")
         self.menubar.setGeometry(QRect(0, 0, 965, 22))
+        self.menuFile = QMenu(self.menubar)
+        self.menuFile.setObjectName(u"menuFile")
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QStatusBar(MainWindow)
         self.statusbar.setObjectName(u"statusbar")
         MainWindow.setStatusBar(self.statusbar)
+
+        self.menubar.addAction(self.menuFile.menuAction())
+        self.menuFile.addAction(self.actionDeleteDB)
 
         self.retranslateUi(MainWindow)
 
@@ -236,6 +246,8 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"MainWindow", None))
+        self.actionDeleteDB.setText(QCoreApplication.translate("MainWindow", u"Delete DB", None))
+        self.action2.setText(QCoreApplication.translate("MainWindow", u"2", None))
         ___qtreewidgetitem = self.treeWidget_db.headerItem()
         ___qtreewidgetitem.setText(0, QCoreApplication.translate("MainWindow", u"DB List", None));
         self.tabLeft.setTabText(self.tabLeft.indexOf(self.tab_database), QCoreApplication.translate("MainWindow", u"Database", None))
@@ -252,5 +264,6 @@ class Ui_MainWindow(object):
         self.chk_component.setText(QCoreApplication.translate("MainWindow", u"Inclube Component", None))
         self.btn_query.setText(QCoreApplication.translate("MainWindow", u"Query", None))
         self.tabSQLQuery.setTabText(self.tabSQLQuery.indexOf(self.Query1), QCoreApplication.translate("MainWindow", u"Query1", None))
+        self.menuFile.setTitle(QCoreApplication.translate("MainWindow", u"File", None))
     # retranslateUi
 

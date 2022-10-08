@@ -29,6 +29,7 @@ class LogAnalysisMain(QMainWindow):
     msg_export_not_full = "Selected data must be a matrix"
     current_db = None
     num_new_query = 1
+    rmove_db_file = None
 
 
     def __init__(self):
@@ -55,6 +56,8 @@ class LogAnalysisMain(QMainWindow):
             self.ui.btn_new.clicked.connect(self.slot_add_new_query)
             self.ui.btn_query.clicked.connect(self.slot_run_sql_query)
             self.ui.btn_export.clicked.connect(self.slot_export_to_csv)
+            self.ui.treeWidget_db.clicked['QModelIndex'].connect(self.slot_set_remove_db_file)
+            self.ui.actionDeleteDB.triggered.connect(self.slot_action_delete)
 
             # 定制信号连接槽函数
             allSignals.user_want_data.connect(self.slot_check_taskdict)
@@ -102,6 +105,8 @@ class LogAnalysisMain(QMainWindow):
         self.msg_export_no_select = Language_zh_CN.get("msg_export_no_select")
         self.msg_export_no_query = Language_zh_CN.get("msg_export_no_query")
         self.msg_export_not_full = Language_zh_CN.get("msg_export_not_full")
+        self.ui.menuFile.setTitle(Language_zh_CN.get("File"))
+        self.ui.actionDeleteDB.setText(Language_zh_CN.get("DeleteDB"))
 
     def set_current_db(self, dbitem):
         """
@@ -488,6 +493,26 @@ class LogAnalysisMain(QMainWindow):
                 QMessageBox.warning(self, "Warning", self.msg_export_no_select)
         except:
             QMessageBox.warning(self, "Warning", self.msg_export_no_query)
+
+    def slot_set_remove_db_file(self):
+        """
+        槽函数：设定需要删除数据库的文件
+        """
+        try:
+            self.rmove_db_file = os.path.join('.\data\database', self.ui.treeWidget_db.currentItem().parent().text(0) + '.db')
+        except:
+            self.rmove_db_file = os.path.join('.\data\database', self.ui.treeWidget_db.currentItem().text(0) + '.db')
+
+    def slot_action_delete(self):
+        """
+        槽函数：删除指定的 SQLite 数据库
+        """
+        if self.rmove_db_file != None:
+            try:
+                os.remove(self.rmove_db_file)
+                self.update_db_list()
+            except Exception as e:
+                AppMainLogger.error(e)
 
     def update_db_list(self):
         """
