@@ -46,6 +46,7 @@ class LogAnalysisMain(QMainWindow):
             self.set_start_end_time()
             self.set_language_by_main()
             self.ui.progressBar.hide()
+            self.ui.toolBar.addAction(self.ui.actionDeleteDB)
             self.update_db_list()
 
             # 默认信号和槽函数

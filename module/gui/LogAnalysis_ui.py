@@ -20,8 +20,8 @@ from PySide6.QtWidgets import (QApplication, QCheckBox, QDateTimeEdit, QHBoxLayo
     QHeaderView, QLabel, QLineEdit, QMainWindow,
     QMenu, QMenuBar, QProgressBar, QPushButton,
     QSizePolicy, QSpacerItem, QSplitter, QStatusBar,
-    QTabWidget, QTextEdit, QTreeWidget, QTreeWidgetItem,
-    QVBoxLayout, QWidget)
+    QTabWidget, QTextEdit, QToolBar, QTreeWidget,
+    QTreeWidgetItem, QVBoxLayout, QWidget)
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -231,13 +231,16 @@ class Ui_MainWindow(object):
         self.statusbar = QStatusBar(MainWindow)
         self.statusbar.setObjectName(u"statusbar")
         MainWindow.setStatusBar(self.statusbar)
+        self.toolBar = QToolBar(MainWindow)
+        self.toolBar.setObjectName(u"toolBar")
+        MainWindow.addToolBar(Qt.TopToolBarArea, self.toolBar)
 
         self.menubar.addAction(self.menuFile.menuAction())
         self.menuFile.addAction(self.actionDeleteDB)
 
         self.retranslateUi(MainWindow)
 
-        self.tabLeft.setCurrentIndex(1)
+        self.tabLeft.setCurrentIndex(0)
         self.tabSQLResult.setCurrentIndex(-1)
 
 
@@ -265,5 +268,6 @@ class Ui_MainWindow(object):
         self.btn_query.setText(QCoreApplication.translate("MainWindow", u"Query", None))
         self.tabSQLQuery.setTabText(self.tabSQLQuery.indexOf(self.Query1), QCoreApplication.translate("MainWindow", u"Query1", None))
         self.menuFile.setTitle(QCoreApplication.translate("MainWindow", u"File", None))
+        self.toolBar.setWindowTitle(QCoreApplication.translate("MainWindow", u"toolBar", None))
     # retranslateUi
 
