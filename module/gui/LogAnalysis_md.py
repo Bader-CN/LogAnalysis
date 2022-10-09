@@ -122,7 +122,7 @@ class LogAnalysisMain(QMainWindow):
         AppMainLogger.info("Current select DB is {}".format(dbname))
         self.statusBar().showMessage("Current DB is {}".format(dbname))
 
-    def set_sql_statement(self, query = None, type=None, tabname=None, *args, **kwargs):
+    def set_sql_statement(self, query = "", type=None, tabname=None, *args, **kwargs):
         """
         根据输入的内容自动生成 SQL 语句
         :param query: str, 来自 QLineEdit 中的内容
@@ -135,18 +135,24 @@ class LogAnalysisMain(QMainWindow):
         str_time = self.ui.date_start_time.text().replace("/", "-")
         end_time = self.ui.date_end_time.text().replace("/", "-")
         key_word = self.ui.line_search.text()
+        operater = "LIKE"
+        if self.ui.chk_regexp.isChecked():
+            operater = "REGEXP"
+            key_word = "'{}'".format(self.ui.line_search.text())
+        else:
+            key_word = "'%{}%'".format(self.ui.line_search.text())
 
         # 如果类型来自于 database
         if type == "database":
             # 如果表名为 filehash, 则生成特殊的 SQL 语句
-            if tabname == "filehash" and key_word == "":
+            if tabname == "filehash" and query == "":
                 return "SELECT * FROM {};".format(tabname)
-            elif tabname == "filehash" and key_word != "":
-                return "SELECT * FROM {}\nWHERE filepath LIKE '%{}%';".format(tabname, key_word)
-            elif tabname != "filehash" and key_word == "":
+            elif tabname == "filehash" and query != "":
+                return "SELECT * FROM {}\nWHERE filepath LIKE {};".format(tabname, key_word)
+            elif tabname != "filehash" and query == "":
                 return "SELECT * FROM {}\nWHERE log_time >= '{}' AND log_time <= '{}'\nORDER BY log_time DESC;".format(tabname, str_time, end_time)
             else:
-                return "SELECT * FROM {}\nWHERE log_time >= '{}' AND log_time <= '{}' AND log_cont LIKE '%{}%'\nORDER BY log_time DESC;".format(tabname, str_time, end_time, key_word)
+                return "SELECT * FROM {}\nWHERE log_time >= '{}' AND log_time <= '{}' AND log_cont LIKE {}\nORDER BY log_time DESC;".format(tabname, str_time, end_time, key_word)
 
         # 如果类型来自于 template
         elif type == "template":
@@ -156,12 +162,12 @@ class LogAnalysisMain(QMainWindow):
         else:
             now_query = self.ui.tabSQLQuery.currentWidget().findChild(QTextEdit)
             sqlsource = now_query.toPlainText()
-            if self.current_tb == "filehash" and key_word != "":
-                now_query.setText("SELECT * FROM {}\nWHERE filepath LIKE '%{}%';".format(self.current_tb, key_word))
-            elif self.current_tb == "filehash" and key_word == "":
+            if self.current_tb == "filehash" and query != "":
+                now_query.setText("SELECT * FROM {}\nWHERE filepath {} {};".format(self.current_tb, operater, key_word))
+            elif self.current_tb == "filehash" and query == "":
                 now_query.setText("SELECT * FROM {};".format(self.current_tb))
-            elif key_word != "":
-                now_query.setText("SELECT * FROM {}\nWHERE log_time >= '{}' AND log_time <= '{}' AND log_cont LIKE '%{}%'\nORDER BY log_time DESC;".format(self.current_tb, str_time, end_time, key_word))
+            elif query != "":
+                now_query.setText("SELECT * FROM {}\nWHERE log_time >= '{}' AND log_time <= '{}' AND log_cont {} {}\nORDER BY log_time DESC;".format(self.current_tb, str_time, end_time, operater,key_word))
             else:
                 now_query.setText("SELECT * FROM {}\nWHERE log_time >= '{}' AND log_time <= '{}'\nORDER BY log_time DESC;".format(self.current_tb, str_time, end_time))
 
@@ -414,6 +420,10 @@ class LogAnalysisMain(QMainWindow):
         # 如果获取的内容长度非0, 并且当前 db 不是 None, 则继续执行查询
         if len(sqlText) != 0 and self.current_db != None:
             querydb = QSqlDatabase.addDatabase('QSQLITE')
+            # 启用正则表达式
+            # https://doc.qt.io/qtforpython/overviews/sql-driver.html#enable-regexp-operator
+            # https://doc.qt.io/qt-6/qsqldatabase.html#setConnectOptions
+            querydb.setConnectOptions("QSQLITE_ENABLE_REGEXP")
             querydb.setDatabaseName(self.current_db)
             querydb.open()
 
