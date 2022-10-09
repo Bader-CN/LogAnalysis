@@ -28,6 +28,7 @@ class LogAnalysisMain(QMainWindow):
     msg_export_no_query = "Please query first and then export function can work"
     msg_export_not_full = "Selected data must be a matrix"
     current_db = None
+    current_tb = None
     num_new_query = 1
     rmove_db_file = None
 
@@ -58,6 +59,7 @@ class LogAnalysisMain(QMainWindow):
             self.ui.btn_query.clicked.connect(self.slot_run_sql_query)
             self.ui.btn_export.clicked.connect(self.slot_export_to_csv)
             self.ui.treeWidget_db.clicked['QModelIndex'].connect(self.slot_set_remove_db_file)
+            self.ui.line_search.textChanged.connect(self.set_sql_statement)
             self.ui.actionDeleteDB.triggered.connect(self.slot_action_delete)
 
             # 定制信号连接槽函数
@@ -120,28 +122,48 @@ class LogAnalysisMain(QMainWindow):
         AppMainLogger.info("Current select DB is {}".format(dbname))
         self.statusBar().showMessage("Current DB is {}".format(dbname))
 
-    def set_sql_statement(self, type, tabname, **kwargs):
+    def set_sql_statement(self, query = None, type=None, tabname=None, *args, **kwargs):
         """
         根据输入的内容自动生成 SQL 语句
-        :param type: database / template
+        :param query: str, 来自 QLineEdit 中的内容
+        :param type: database
         :param tabname: str
+        :param args:
         :param kwargs:
         :return: str
         """
         str_time = self.ui.date_start_time.text().replace("/", "-")
         end_time = self.ui.date_end_time.text().replace("/", "-")
+        key_word = self.ui.line_search.text()
 
-        # 如果获取的表名来自于 database
+        # 如果类型来自于 database
         if type == "database":
             # 如果表名为 filehash, 则生成特殊的 SQL 语句
-            if tabname == "filehash":
-                return "select * from {};".format(tabname)
-            # 其余情况, 生成默认的 SQL 语句
+            if tabname == "filehash" and key_word == "":
+                return "SELECT * FROM {};".format(tabname)
+            elif tabname == "filehash" and key_word != "":
+                return "SELECT * FROM {}\nWHERE filepath LIKE '%{}%';".format(tabname, key_word)
+            elif tabname != "filehash" and key_word == "":
+                return "SELECT * FROM {}\nWHERE log_time >= '{}' AND log_time <= '{}'\nORDER BY log_time DESC;".format(tabname, str_time, end_time)
             else:
-                return "select * from {}\nwhere log_time >= '{}' and log_time <= '{}'\norder by log_time desc;".format(tabname, str_time, end_time)
-        # 其它情况
-        else:
+                return "SELECT * FROM {}\nWHERE log_time >= '{}' AND log_time <= '{}' AND log_cont LIKE '%{}%'\nORDER BY log_time DESC;".format(tabname, str_time, end_time, key_word)
+
+        # 如果类型来自于 template
+        elif type == "template":
             pass
+
+        # 如果是其它类型, 说明是被 QLineEdit 触发
+        else:
+            now_query = self.ui.tabSQLQuery.currentWidget().findChild(QTextEdit)
+            sqlsource = now_query.toPlainText()
+            if self.current_tb == "filehash" and key_word != "":
+                now_query.setText("SELECT * FROM {}\nWHERE filepath LIKE '%{}%';".format(self.current_tb, key_word))
+            elif self.current_tb == "filehash" and key_word == "":
+                now_query.setText("SELECT * FROM {};".format(self.current_tb))
+            elif key_word != "":
+                now_query.setText("SELECT * FROM {}\nWHERE log_time >= '{}' AND log_time <= '{}' AND log_cont LIKE '%{}%'\nORDER BY log_time DESC;".format(self.current_tb, str_time, end_time, key_word))
+            else:
+                now_query.setText("SELECT * FROM {}\nWHERE log_time >= '{}' AND log_time <= '{}'\nORDER BY log_time DESC;".format(self.current_tb, str_time, end_time))
 
     def check_taskdict(self, dict):
         """
@@ -330,6 +352,8 @@ class LogAnalysisMain(QMainWindow):
             sql_query_text = self.set_sql_statement(type = "database", tabname = tabname)
             SQLTextEdit = self.ui.tabSQLQuery.currentWidget().findChild(QTextEdit)
             SQLTextEdit.setText(sql_query_text)
+            # 确定一个全局变量
+            self.current_tb = tabname
 
     def slot_add_new_query(self):
         """
