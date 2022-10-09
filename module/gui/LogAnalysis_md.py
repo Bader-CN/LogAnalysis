@@ -101,7 +101,6 @@ class LogAnalysisMain(QMainWindow):
         self.ui.btn_help.setText(Language_zh_CN.get("Help"))
         self.ui.btn_query.setText(Language_zh_CN.get("Query"))
         self.ui.chk_regexp.setText(Language_zh_CN.get("Enable Regrxp"))
-        self.ui.chk_component.setText(Language_zh_CN.get("Inclube Component"))
         self.ui.tabLeft.setTabText(0, Language_zh_CN.get("Database"))
         self.ui.tabLeft.setTabText(1, Language_zh_CN.get("Template"))
         self.msg_no_file = Language_zh_CN.get("msg_no_file")

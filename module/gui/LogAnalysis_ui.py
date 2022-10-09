@@ -159,13 +159,6 @@ class Ui_MainWindow(object):
 
         self.layout_hor2.addWidget(self.chk_regexp)
 
-        self.chk_component = QCheckBox(self.widget_right)
-        self.chk_component.setObjectName(u"chk_component")
-        sizePolicy.setHeightForWidth(self.chk_component.sizePolicy().hasHeightForWidth())
-        self.chk_component.setSizePolicy(sizePolicy)
-
-        self.layout_hor2.addWidget(self.chk_component)
-
         self.line_search = QLineEdit(self.widget_right)
         self.line_search.setObjectName(u"line_search")
         self.line_search.setMinimumSize(QSize(0, 0))
@@ -264,7 +257,6 @@ class Ui_MainWindow(object):
         self.btn_export.setText(QCoreApplication.translate("MainWindow", u"Export", None))
         self.btn_help.setText(QCoreApplication.translate("MainWindow", u"Help", None))
         self.chk_regexp.setText(QCoreApplication.translate("MainWindow", u"Enable Regexp", None))
-        self.chk_component.setText(QCoreApplication.translate("MainWindow", u"Inclube Component", None))
         self.btn_query.setText(QCoreApplication.translate("MainWindow", u"Query", None))
         self.tabSQLQuery.setTabText(self.tabSQLQuery.indexOf(self.Query1), QCoreApplication.translate("MainWindow", u"Query1", None))
         self.menuFile.setTitle(QCoreApplication.translate("MainWindow", u"File", None))

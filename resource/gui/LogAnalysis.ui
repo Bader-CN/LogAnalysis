@@ -238,19 +238,6 @@
            </widget>
           </item>
           <item>
-           <widget class="QCheckBox" name="chk_component">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="text">
-             <string>Inclube Component</string>
-            </property>
-           </widget>
-          </item>
-          <item>
            <widget class="QLineEdit" name="line_search">
             <property name="minimumSize">
              <size>
