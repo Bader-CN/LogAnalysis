@@ -458,6 +458,8 @@ class LogAnalysisMain(QMainWindow):
             self.ui.tabSQLResult.setCurrentIndex(self.ui.tabSQLResult.count() - 1)
 
             # 展示表格并优化显示
+            ## QSplitter 内部有子窗口的布局时, setStretchFactor 会失效, 此时可以使用 setSizes 方法
+            self.ui.splitter_by_hor.setSizes([300, 700])
             self.tab_view.setModel(model)
             ## 水平方向标签拓展剩下的窗口部分
             self.tab_view.horizontalHeader().setStretchLastSection(True)
