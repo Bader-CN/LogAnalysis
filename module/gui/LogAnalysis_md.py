@@ -331,6 +331,9 @@ class LogAnalysisMain(QMainWindow):
                 self.ui.progressBar.hide()
                 break
 
+        # 更新 DB List UI
+        self.update_db_list()
+
     def slot_check_taskdict(self, dict):
         """
         利用槽函数来调用真正的 check_taskdict(), 写入部分将采用子线程
