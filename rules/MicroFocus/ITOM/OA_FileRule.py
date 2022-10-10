@@ -6,14 +6,6 @@ NeedFilesRule = [
     'system\.txt',
     # OA policy 相关文件
     '\w{8}-\w{4}-\w{4}-\w{4}-\w{12}_header\.xml',
-
-    # OA Trace 日志文件
-    'trace_\d+\.txt',
-    'ovcd_\d+\.txt',
-    'oacore_\d+\.txt',
-    'ovbbccb_\d+\.txt',
-    'opcmsga_\d+\.txt',
-    'opcmona_\d+\.txt',
 ]
 
 # 文件级别的反匹规则, 支持正则表达式

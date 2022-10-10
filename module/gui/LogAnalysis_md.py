@@ -123,10 +123,10 @@ class LogAnalysisMain(QMainWindow):
         AppMainLogger.info("Current select DB is {}".format(dbname))
         self.statusBar().showMessage("Current DB is {}".format(dbname))
 
-    def set_sql_statement(self, query = "", type=None, tabname=None, *args, **kwargs):
+    def set_sql_statement(self, input_keyword="", type=None, tabname=None, *args, **kwargs):
         """
         根据输入的内容自动生成 SQL 语句
-        :param query: str, 来自 QLineEdit 中的内容
+        :param input_keyword: str, 来自 QLineEdit 中的内容
         :param type: database
         :param tabname: str
         :param args:
@@ -145,15 +145,12 @@ class LogAnalysisMain(QMainWindow):
 
         # 如果类型来自于 database
         if type == "database":
-            # 如果表名为 filehash, 则生成特殊的 SQL 语句
-            if tabname == "filehash" and query == "":
+            # 表名字: filehash / oa_policy
+            if tabname == "filehash" or tabname == "oa_policy":
                 return "SELECT * FROM {};".format(tabname)
-            elif tabname == "filehash" and query != "":
-                return "SELECT * FROM {}\nWHERE filepath LIKE {};".format(tabname, key_word)
-            elif tabname != "filehash" and query == "":
-                return "SELECT * FROM {}\nWHERE log_time >= '{}' AND log_time <= '{}'\nORDER BY log_time DESC;".format(tabname, str_time, end_time)
+            # 表名字: Others
             else:
-                return "SELECT * FROM {}\nWHERE log_time >= '{}' AND log_time <= '{}' AND log_cont LIKE {}\nORDER BY log_time DESC;".format(tabname, str_time, end_time, key_word)
+                return "SELECT * FROM {}\nWHERE log_time >= '{}' AND log_time <= '{}'\nORDER BY log_time DESC;".format(tabname, str_time, end_time)
 
         # 如果类型来自于 template
         elif type == "template":
@@ -163,12 +160,22 @@ class LogAnalysisMain(QMainWindow):
         else:
             now_query = self.ui.tabSQLQuery.currentWidget().findChild(QTextEdit)
             sqlsource = now_query.toPlainText()
-            if self.current_tb == "filehash" and query != "":
+            # 表名字: filehsh 并且有 input_keyword
+            if self.current_tb == "filehash" and input_keyword != "":
                 now_query.setText("SELECT * FROM {}\nWHERE filepath {} {};".format(self.current_tb, operater, key_word))
-            elif self.current_tb == "filehash" and query == "":
+            # 表名字: filehsh 并且无 input_keyword
+            elif self.current_tb == "filehash" and input_keyword == "":
                 now_query.setText("SELECT * FROM {};".format(self.current_tb))
-            elif query != "":
+            # 表名字: oa_policy 并且有 input_keyword
+            elif self.current_tb == "oa_policy" and input_keyword != "":
+                now_query.setText("SELECT * FROM {}\nWHERE ply_name {} {};".format(self.current_tb, operater, key_word))
+            # 表名字: oa_policy 并且无 input_keyword
+            elif self.current_tb == "oa_policy" and input_keyword == "":
+                now_query.setText("SELECT * FROM {};".format(self.current_tb))
+            # 表名字: Other 并且有 input_keyword
+            elif input_keyword != "":
                 now_query.setText("SELECT * FROM {}\nWHERE log_time >= '{}' AND log_time <= '{}' AND log_cont {} {}\nORDER BY log_time DESC;".format(self.current_tb, str_time, end_time, operater,key_word))
+            # 表名字: Other 并且无 input_keyword
             else:
                 now_query.setText("SELECT * FROM {}\nWHERE log_time >= '{}' AND log_time <= '{}'\nORDER BY log_time DESC;".format(self.current_tb, str_time, end_time))
 

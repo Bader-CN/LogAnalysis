@@ -2,6 +2,7 @@
 
 import re
 from datetime import datetime
+from xml.etree import ElementTree as ET
 from module.tools.InsertTools import ReadFileTemplate
 from rules.MicroFocus.ITOM.OA_SQLTable import FileHash
 # 测试时注释掉 from module.tools.AppDebug import MultSQLLogger
@@ -38,9 +39,11 @@ class OAFiles(ReadFileTemplate):
         :return:
         """
         if re.findall("system\.txt", self.file, re.IGNORECASE):
-            return self.readfile_system()
+            return self.readlog_system()
+        elif re.findall("\w{8}-\w{4}-\w{4}-\w{4}-\w{12}_header\.xml", self.file, re.IGNORECASE):
+            return self.readcfg_policy()
 
-    def readfile_system(self):
+    def readlog_system(self):
         """
         OA System.txt 文件解析函数
         :return: TaskInfo["data"] = SList
@@ -96,8 +99,51 @@ class OAFiles(ReadFileTemplate):
         self.TaskInfo["data"] = SList
         return self.TaskInfo
 
+    def readcfg_policy(self):
+        """
+        OA System.txt 文件解析函数
+        :return: TaskInfo["data"] = SList
+        """
+        # https://python3-cookbook.readthedocs.io/zh_CN/latest/c06/p06_parse_modify_rewrite_xml.html
+        # https://python3-cookbook.readthedocs.io/zh_CN/latest/c06/p07_parse_xml_documents_with_namespaces.html
+        # https://www.cnblogs.com/bigtreei/p/13361578.html
+
+        SList = []
+        try:
+            tree = ET.parse(self.file)
+            root = tree.getroot()
+            namespace = re.findall('\{.*\}', root.tag)[0]
+            # 获取 Policy XML 文件中的数据
+            ply_name = root.find('{}policy'.format(namespace)).find("{}name".format(namespace)).text
+            ply_version = root.find('{}policy'.format(namespace)).find("{}version".format(namespace)).text
+            ply_status = root.find('{}policy'.format(namespace)).find("{}status".format(namespace)).text
+            ply_type = root.find('{}policytype'.format(namespace)).find("{}name".format(namespace)).text
+            try:
+                with open(self.file[:len(self.file) - len("header.xml")] + "data", "r", encoding="utf-8", errors="replace") as file:
+                    ply_data = file.read()
+            except:
+                ply_data = "Null"
+
+            # 将数据转换为 SQLAlchemy 类型的数据类型, 并保存在 SList 中
+            from rules.MicroFocus.ITOM.OA_SQLTable import Policy
+            file_id = self.get_file_id(targetdb=self.targetdb, file=self.file, FileHash=FileHash)
+            SList.append(
+                Policy(
+                    file_id = file_id,
+                    ply_name = ply_name,
+                    ply_version = ply_version,
+                    ply_status = ply_status,
+                    ply_type = ply_type,
+                    ply_data = ply_data))
+        except Exception as e:
+            MultSQLLogger.warning(e)
+
+        # 将结果数据返回
+        self.TaskInfo["data"] = SList
+        return self.TaskInfo
+
 if __name__ == '__main__':
     # 测试部分, 测试时请修改 file 的值
-    file = r"C:\oa_data\System.txt"
+    file = r"C:\oa_data\policies\le\bedbd00e-29a3-473b-9ce8-9306e195d69e_header.xml"
     TaskInfo = {"file": file, "targetdb": "demo", "company": "company", "productline": "productline", "product": "product"}
     oa = OAFiles(TaskInfo)
