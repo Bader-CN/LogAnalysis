@@ -9,6 +9,7 @@ from PySide6.QtSql import QSqlDatabase, QSqlQueryModel
 from module.gui.LogAnalysis_ui import Ui_MainWindow
 from module.tools.AppSettings import ReadConfig
 from module.tools.HashTools import HashTools
+from module.tools.SQLHLight import SQLHighLighter
 from module.tools.AppDebug import AppMainLogger
 from module.bridge.customSignals import allSignals
 from module.bridge.customQueues import QData
@@ -49,6 +50,7 @@ class LogAnalysisMain(QMainWindow):
             self.ui.toolBar.addAction(self.ui.actionDeleteDB)
             self.update_db_list()
             self.update_tp_list()
+            SQLHighLighter(self.ui.tabSQLQuery.currentWidget().findChild(QTextEdit))
 
             # 默认信号和槽函数
             self.ui.treeWidget_db.itemExpanded.connect(self.set_current_db)
@@ -390,6 +392,8 @@ class LogAnalysisMain(QMainWindow):
         font = QFont()
         font.setFamily("Consolas")
         self.tab_text.setFont(font)
+        # 设置高亮
+        SQLHighLighter(self.tab_text)
 
     def slot_tab_sqlquery_close(self, index):
         """
@@ -614,5 +618,3 @@ class LogAnalysisMain(QMainWindow):
         self.ui.treeView_template.setColumnHidden(2, True)
         self.ui.treeView_template.setColumnHidden(3, True)
         self.ui.treeView_template.doubleClicked.connect(self.slot_select_template)
-
-
