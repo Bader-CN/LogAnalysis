@@ -11,7 +11,6 @@ from module.tools.AppSettings import ReadConfig
 from module.tools.HashTools import HashTools
 from module.tools.AppDebug import AppMainLogger
 from module.bridge.customSignals import allSignals
-from module.bridge.customQueues import QTask
 from module.bridge.customQueues import QData
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
