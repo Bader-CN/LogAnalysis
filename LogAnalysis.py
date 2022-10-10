@@ -1,6 +1,14 @@
 # -*- coding: utf-8 -*-
 
 import os
+# 检查相关目录及文件是否存在
+if not os.path.exists("./log"):
+    os.mkdir("./log")
+if not os.path.exists("./data/database"):
+    os.makedirs("./data/database")
+if not os.path.exists("./data/template"):
+    os.makedirs("./data/template")
+
 from PySide6.QtWidgets import QApplication
 from module.gui.LogAnalysis_md import LogAnalysisMain
 from module.gui.LogImport_md import LogAnalysisImport
@@ -33,23 +41,12 @@ def logfile_to_sql(QTask, QData):
 if __name__ == '__main__':
     # 解决 Windows 多进程异常的问题
     freeze_support()
-
-    # 检查相关目录及文件是否存在
-    if not os.path.exists("./log"):
-        os.mkdir("./log")
-    if not os.path.exists("./data/database"):
-        os.makedirs("./data/database")
-    if not os.path.exists("./data/template"):
-        os.makedirs("./data/template")
-
     # 启动软件
     app = QApplication([])
-
     # 实例化 LogAnalysis 主界面
     logMain = LogAnalysisMain()
     # 实例化 LogAnalysis Import 界面
     logImport = LogAnalysisImport()
-
     # 当 LogAnalysis 主界面点击 Import 按钮时, 将会弹出 LogAnalysis Import 界面
     def showlogImportUI():
         logImport.show()
@@ -97,5 +94,4 @@ if __name__ == '__main__':
 
     # 显示主界面
     logMain.show()
-
     app.exec()
