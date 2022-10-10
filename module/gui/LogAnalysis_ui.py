@@ -48,12 +48,16 @@ class Ui_MainWindow(object):
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
         self.tabLeft = QTabWidget(self.widget_left)
         self.tabLeft.setObjectName(u"tabLeft")
+        font = QFont()
+        font.setFamilies([u"Consolas"])
+        self.tabLeft.setFont(font)
         self.tab_database = QWidget()
         self.tab_database.setObjectName(u"tab_database")
         self.verticalLayout_3 = QVBoxLayout(self.tab_database)
         self.verticalLayout_3.setObjectName(u"verticalLayout_3")
         self.treeWidget_db = QTreeWidget(self.tab_database)
         self.treeWidget_db.setObjectName(u"treeWidget_db")
+        self.treeWidget_db.setFont(font)
 
         self.verticalLayout_3.addWidget(self.treeWidget_db)
 
@@ -188,8 +192,6 @@ class Ui_MainWindow(object):
         self.verticalLayout_5.setObjectName(u"verticalLayout_5")
         self.SQLTextEdit = QTextEdit(self.Query1)
         self.SQLTextEdit.setObjectName(u"SQLTextEdit")
-        font = QFont()
-        font.setFamilies([u"Consolas"])
         self.SQLTextEdit.setFont(font)
 
         self.verticalLayout_5.addWidget(self.SQLTextEdit)

@@ -160,18 +160,21 @@ class LogAnalysisMain(QMainWindow):
         else:
             now_query = self.ui.tabSQLQuery.currentWidget().findChild(QTextEdit)
             sqlsource = now_query.toPlainText()
-            # 表名字: filehsh 并且有 input_keyword
-            if self.current_tb == "filehash" and input_keyword != "":
-                now_query.setText("SELECT * FROM {}\nWHERE filepath {} {};".format(self.current_tb, operater, key_word))
+
             # 表名字: filehsh 并且无 input_keyword
-            elif self.current_tb == "filehash" and input_keyword == "":
+            if self.current_tb == "filehash" and input_keyword == "":
+                now_query.setText("SELECT * FROM {};".format(self.current_tb))
+            # 表名字: filehsh 并且有 input_keyword
+            elif self.current_tb == "filehash" and input_keyword != "":
+                now_query.setText("SELECT * FROM {}\nWHERE filepath {} {};".format(self.current_tb, operater, key_word))
+
+            # 表名字: oa_policy 并且无 input_keyword
+            elif self.current_tb == "oa_policy" and input_keyword == "":
                 now_query.setText("SELECT * FROM {};".format(self.current_tb))
             # 表名字: oa_policy 并且有 input_keyword
             elif self.current_tb == "oa_policy" and input_keyword != "":
                 now_query.setText("SELECT * FROM {}\nWHERE ply_name {} {};".format(self.current_tb, operater, key_word))
-            # 表名字: oa_policy 并且无 input_keyword
-            elif self.current_tb == "oa_policy" and input_keyword == "":
-                now_query.setText("SELECT * FROM {};".format(self.current_tb))
+
             # 表名字: Other 并且有 input_keyword
             elif input_keyword != "":
                 now_query.setText("SELECT * FROM {}\nWHERE log_time >= '{}' AND log_time <= '{}' AND log_cont {} {}\nORDER BY log_time DESC;".format(self.current_tb, str_time, end_time, operater,key_word))
