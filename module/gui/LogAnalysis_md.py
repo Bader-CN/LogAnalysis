@@ -3,8 +3,8 @@
 import os, re, csv, copy
 from threading import Thread
 from PySide6.QtGui import QFont
-from PySide6.QtCore import QDateTime
-from PySide6.QtWidgets import QMainWindow, QMessageBox, QTreeWidgetItem, QTextEdit, QWidget, QTableView, QVBoxLayout, QFileDialog
+from PySide6.QtCore import QDateTime, QDir
+from PySide6.QtWidgets import QMainWindow, QMessageBox, QTreeWidgetItem, QTextEdit, QWidget, QTableView, QVBoxLayout, QFileDialog, QFileSystemModel
 from PySide6.QtSql import QSqlDatabase, QSqlQueryModel
 from module.gui.LogAnalysis_ui import Ui_MainWindow
 from module.tools.AppSettings import ReadConfig
@@ -49,6 +49,7 @@ class LogAnalysisMain(QMainWindow):
             self.ui.progressBar.hide()
             self.ui.toolBar.addAction(self.ui.actionDeleteDB)
             self.update_db_list()
+            self.update_tp_list()
 
             # 默认信号和槽函数
             self.ui.treeWidget_db.itemExpanded.connect(self.set_current_db)
@@ -155,7 +156,7 @@ class LogAnalysisMain(QMainWindow):
 
         # 如果类型来自于 template
         elif type == "template":
-            pass
+            self.ui.tabSQLQuery.currentWidget().findChild(QTextEdit).setText(kwargs.get("sqltext"))
 
         # 如果是其它类型, 说明是被 QLineEdit 触发
         else:
@@ -542,6 +543,19 @@ class LogAnalysisMain(QMainWindow):
         except:
             self.rmove_db_file = os.path.join('.\data\database', self.ui.treeWidget_db.currentItem().text(0) + '.db')
 
+    def slot_select_template(self, model_index):
+        """
+        检查选中的内容, 如果符合则执行 set_sql_statement 方法
+        :param model_index: QModelIndex
+        :return:
+        """
+        filepath = self.ui.treeView_template.selectionModel().model().filePath(model_index)
+        # 如果是文件, 则调用 set_sql_statement
+        if os.path.isfile(filepath):
+            with open(filepath, "r", encoding="utf-8", errors="replace") as f:
+                sqltext = f.read()
+            self.set_sql_statement(type="template", sqltext=sqltext)
+
     def slot_action_delete(self):
         """
         槽函数：删除指定的 SQLite 数据库
@@ -585,4 +599,21 @@ class LogAnalysisMain(QMainWindow):
         else:
             # 如果没有 SQLite DB 文件, 则直接清空内容
             self.ui.treeWidget_db.clear()
+
+    def update_tp_list(self):
+        """
+        更新模板列表
+        :return:
+        """
+        # 参考链接
+        # https://blog.csdn.net/danshiming/article/details/127035073
+        template_model = QFileSystemModel()
+        template_model.setRootPath(os.path.join(QDir.currentPath(), "./data/template"))
+        self.ui.treeView_template.setModel(template_model)
+        self.ui.treeView_template.setRootIndex(template_model.index(os.path.join(QDir.currentPath(), "./data/template")))
+        self.ui.treeView_template.setColumnHidden(1, True)
+        self.ui.treeView_template.setColumnHidden(2, True)
+        self.ui.treeView_template.setColumnHidden(3, True)
+        self.ui.treeView_template.doubleClicked.connect(self.slot_select_template)
+
 

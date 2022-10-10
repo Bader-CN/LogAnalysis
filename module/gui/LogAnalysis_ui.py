@@ -20,8 +20,8 @@ from PySide6.QtWidgets import (QApplication, QCheckBox, QDateTimeEdit, QHBoxLayo
     QHeaderView, QLabel, QLineEdit, QMainWindow,
     QMenu, QMenuBar, QProgressBar, QPushButton,
     QSizePolicy, QSpacerItem, QSplitter, QStatusBar,
-    QTabWidget, QTextEdit, QToolBar, QTreeWidget,
-    QTreeWidgetItem, QVBoxLayout, QWidget)
+    QTabWidget, QTextEdit, QToolBar, QTreeView,
+    QTreeWidget, QTreeWidgetItem, QVBoxLayout, QWidget)
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -62,10 +62,10 @@ class Ui_MainWindow(object):
         self.tab_template.setObjectName(u"tab_template")
         self.verticalLayout_4 = QVBoxLayout(self.tab_template)
         self.verticalLayout_4.setObjectName(u"verticalLayout_4")
-        self.treeWidget_temp = QTreeWidget(self.tab_template)
-        self.treeWidget_temp.setObjectName(u"treeWidget_temp")
+        self.treeView_template = QTreeView(self.tab_template)
+        self.treeView_template.setObjectName(u"treeView_template")
 
-        self.verticalLayout_4.addWidget(self.treeWidget_temp)
+        self.verticalLayout_4.addWidget(self.treeView_template)
 
         self.tabLeft.addTab(self.tab_template, "")
 
@@ -247,8 +247,6 @@ class Ui_MainWindow(object):
         ___qtreewidgetitem = self.treeWidget_db.headerItem()
         ___qtreewidgetitem.setText(0, QCoreApplication.translate("MainWindow", u"DB List", None));
         self.tabLeft.setTabText(self.tabLeft.indexOf(self.tab_database), QCoreApplication.translate("MainWindow", u"Database", None))
-        ___qtreewidgetitem1 = self.treeWidget_temp.headerItem()
-        ___qtreewidgetitem1.setText(0, QCoreApplication.translate("MainWindow", u"Template List", None));
         self.tabLeft.setTabText(self.tabLeft.indexOf(self.tab_template), QCoreApplication.translate("MainWindow", u"Template", None))
         self.label_start_time.setText(QCoreApplication.translate("MainWindow", u"Start Time", None))
         self.label_end_time.setText(QCoreApplication.translate("MainWindow", u"End Time", None))

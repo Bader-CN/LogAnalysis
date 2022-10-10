@@ -67,13 +67,7 @@
            </attribute>
            <layout class="QVBoxLayout" name="verticalLayout_4">
             <item>
-             <widget class="QTreeWidget" name="treeWidget_temp">
-              <column>
-               <property name="text">
-                <string>Template List</string>
-               </property>
-              </column>
-             </widget>
+             <widget class="QTreeView" name="treeView_template"/>
             </item>
            </layout>
           </widget>
