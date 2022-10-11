@@ -145,21 +145,30 @@ class OAFiles(ReadFileTemplate):
             elif "Cmd executed : /opt/OV/bin/ovconfget" == line:
                 idx_ovconfget_str = DList.index(line)
                 for conf_line in DList[idx_ovconfget_str:-1]:
-                    oa_confget = oa_confget+ "\n" + conf_line
+                    if oa_confget == "":
+                        oa_confget = conf_line
+                    else:
+                        oa_confget = oa_confget + "\n" + conf_line
                 TDict["oa_confget"] = oa_confget
 
             elif "Cmd executed : /opt/OV/bin/ovc -status -level 8" == line:
                 idx_oa_status_str = DList.index(line)
                 idx_oa_status_end = DList.index("Checksum and what string details of the agent and lcore binaries", idx_oa_status_str)
                 for status in DList[idx_oa_status_str : idx_oa_status_end]:
-                    oa_status = oa_status + "\n" + status
+                    if oa_status == "":
+                        oa_status = status
+                    else:
+                        oa_status = oa_status + "\n" + status
                 TDict["oa_status"] = oa_status
 
             elif "Cmd executed : /opt/OV/bin/ovdeploy -inv -inclbdl -includeupdates" == line:
                 idx_oa_hotfix_str = DList.index(line)
                 idx_oa_hotfix_end = DList.index("****************************************", idx_oa_hotfix_str + 2)
                 for hotfix in DList[idx_oa_hotfix_str : idx_oa_hotfix_end]:
-                    oa_hotfix = oa_hotfix + "\n" + hotfix
+                    if oa_hotfix == "":
+                        oa_hotfix = hotfix
+                    else:
+                        oa_hotfix = oa_hotfix + "\n" + hotfix
                 TDict["oa_hotfix"] = oa_hotfix
 
         # 将数据转换为 SQLAlchemy 类型的数据类型, 并保存在 SList 中
