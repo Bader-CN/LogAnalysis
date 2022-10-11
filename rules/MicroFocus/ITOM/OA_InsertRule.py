@@ -40,6 +40,10 @@ class OAFiles(ReadFileTemplate):
         """
         if re.findall("system\.txt", self.file, re.IGNORECASE):
             return self.readlog_system()
+
+        elif re.findall("", self.file, re.IGNORECASE):
+            return self.readlog_agentlog()
+
         elif re.findall("\w{8}-\w{4}-\w{4}-\w{4}-\w{12}_header\.xml", self.file, re.IGNORECASE):
             return self.readcfg_policy()
 
@@ -99,6 +103,79 @@ class OAFiles(ReadFileTemplate):
         self.TaskInfo["data"] = SList
         return self.TaskInfo
 
+    def readlog_agentlog(self):
+        """
+        OA agent.log_<日期> 文件
+        :return:
+        """
+        # 去掉不需要索引的行后的文件数据列表
+        DList = []
+        # 临时字典
+        TDict = {}
+        # 转换完 SQL 语句后的数据
+        SList = []
+        with open(self.file, mode="r", encoding="utf-8", errors="replace") as file:
+            for line in file.readlines():
+                line = line.strip()
+                if "==>" not in line and line != "":
+                    DList.append(line)
+
+        # 初始化需要获取的数据
+        os_name = ""
+        os_type = ""
+        oa_status = ""
+        oa_hotfix = ""
+        oa_version = ""
+        oa_confget = ""
+
+        # 获取所需要的数据段
+        for line in DList:
+            if "osname=" in line and os_name != "":
+                os_name = line
+                TDict["os_name"] = os_name
+
+            elif "ostype=" in line and os_type != "":
+                os_type = line
+                TDict["os_type"] = os_type
+
+            elif "agtversion=" in line and oa_version != "":
+                oa_version = line
+                TDict["oa_version"] = oa_version
+
+            elif "Cmd executed : /opt/OV/bin/ovconfget" == line:
+                idx_ovconfget_str = DList.index(line)
+                for conf_line in DList[idx_ovconfget_str:-1]:
+                    oa_confget = oa_confget+ "\n" + conf_line
+                TDict["oa_confget"] = oa_confget
+
+            elif "Cmd executed : /opt/OV/bin/ovc -status -level 8" == line:
+                idx_oa_status_str = DList.index(line)
+                idx_oa_status_end = DList.index("Checksum and what string details of the agent and lcore binaries", idx_oa_status_str)
+                for status in DList[idx_oa_status_str : idx_oa_status_end]:
+                    oa_status = oa_status + "\n" + status
+                TDict["oa_status"] = oa_status
+
+            elif "Cmd executed : /opt/OV/bin/ovdeploy -inv -inclbdl -includeupdates" == line:
+                idx_oa_hotfix_str = DList.index(line)
+                idx_oa_hotfix_end = DList.index("****************************************", idx_oa_hotfix_str + 2)
+                for hotfix in DList[idx_oa_hotfix_str : idx_oa_hotfix_end]:
+                    oa_hotfix = oa_hotfix + "\n" + hotfix
+                TDict["oa_hotfix"] = oa_hotfix
+
+        # 将数据转换为 SQLAlchemy 类型的数据类型, 并保存在 SList 中
+        from rules.MicroFocus.ITOM.OA_SQLTable import Summary
+        file_id = self.get_file_id(targetdb=self.targetdb, file=self.file, FileHash=FileHash)
+        for key, value in TDict.items():
+            SList.append(
+                Summary(
+                    file_id=file_id,
+                    key=key,
+                    value=value,))
+
+        # 将结果数据返回
+        self.TaskInfo["data"] = SList
+        return self.TaskInfo
+
     def readcfg_policy(self):
         """
         OA System.txt 文件解析函数
@@ -144,6 +221,6 @@ class OAFiles(ReadFileTemplate):
 
 if __name__ == '__main__':
     # 测试部分, 测试时请修改 file 的值
-    file = r"C:\oa_data\policies\le\bedbd00e-29a3-473b-9ce8-9306e195d69e_header.xml"
+    file = r"C:\oa_data\agent.log_2022-04-14_09.11"
     TaskInfo = {"file": file, "targetdb": "demo", "company": "company", "productline": "productline", "product": "product"}
     oa = OAFiles(TaskInfo)

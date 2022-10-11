@@ -145,8 +145,8 @@ class LogAnalysisMain(QMainWindow):
 
         # 如果类型来自于 database
         if type == "database":
-            # 表名字: filehash / oa_policy
-            if tabname == "filehash" or tabname == "oa_policy":
+            # 表名字: filehash / oa_policy / "oa_summary"
+            if tabname == "filehash" or tabname == "oa_policy" or "oa_summary":
                 return "SELECT * FROM {};".format(tabname)
             # 表名字: Others
             else:
@@ -174,6 +174,13 @@ class LogAnalysisMain(QMainWindow):
             # 表名字: oa_policy 并且有 input_keyword
             elif self.current_tb == "oa_policy" and input_keyword != "":
                 now_query.setText("SELECT * FROM {}\nWHERE ply_name {} {};".format(self.current_tb, operater, key_word))
+
+            # 表名字: oa_summary 并且无 input_keyword
+            elif self.current_tb == "oa_summary" and input_keyword == "":
+                now_query.setText("SELECT * FROM {};".format(self.current_tb))
+            # 表名字: oa_summary 并且有 input_keyword
+            elif self.current_tb == "oa_summary" and input_keyword != "":
+                now_query.setText("SELECT * FROM {}\nWHERE value {} {};".format(self.current_tb, operater, key_word))
 
             # 表名字: Other 并且有 input_keyword
             elif input_keyword != "":

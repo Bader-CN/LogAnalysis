@@ -29,7 +29,17 @@ class SQLHighLighter(QSyntaxHighlighter):
             ' JOIN ', ' join ', ' UNION' ,' union', ' UNION ALL',' union all', 'DISTINCT ','distinct ',
             # SQL 常用函数
             # 参考链接：https://www.runoob.com/sqlite/sqlite-functions.html
-            'SUM', 'sum', 'TOTAL', 'total', 'COUNT', 'count', 'MAX', 'max', 'MIN', 'min', 'AVG', 'avg', 'ABS', 'abs', 'RANDOM', 'random', 'UPPER' ,'upper', 'LOWER' ,'lower', 'LENGTH', 'length',
+            'SUM\(.*?\)', 'sum\(.*?\)',
+            'TOTAL\(.*?\)', 'total\(.*?\)',
+            'COUNT\(.*?\)', 'count\(.*?\)',
+            'MAX\(.*?\)', 'max\(.*?\)',
+            'MIN\(.*?\)', 'min\(.*?\)',
+            'AVG\(.*?\)', 'avg\(.*?\)',
+            'ABS\(.*?\)', 'abs\(.*?\)',
+            'RANDOM\(.*?\)', 'random\(.*?\)',
+            'UPPER\(.*?\)' ,'upper\(.*?\)',
+            'LOWER\(.*?\)' ,'lower\(.*?\)',
+            'LENGTH\(.*?\)', 'length\(.*?\)',
         ]
         # 根据前两个来生成高亮规则
         self.highlightRules = [(QRegularExpression(pattern), sql_keyword_format) for pattern in sql_keywords]
