@@ -22,11 +22,16 @@ class LogAnalysisImport(QWidget):
     # 所有软件的分类数据
     category_dict = {
         "MicroFocus": {
-            "IMG": ["Connected Backup(CBK)", "IDOL"],
-            "ITOM": ["Operations Agent(OA)", "Operations Bridge Manager(OBM)"], },
-
-        "Company1": {"ProductLine1": ["ProductName1", "ProductName2"], }
+            "ITOM": ["Operations Agent(OA)"], },
     }
+
+    # category_dict = {
+    #     "MicroFocus": {
+    #         "IMG": ["Connected Backup(CBK)", "IDOL"],
+    #         "ITOM": ["Operations Agent(OA)", "Operations Bridge Manager(OBM)"], },
+    #
+    #     "Company1": {"ProductLine1": ["ProductName1", "ProductName2"], }
+    # }
 
     def __init__(self):
         try:

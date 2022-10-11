@@ -28,7 +28,7 @@ class Ui_Form(object):
         self.lab_search = QLabel(Form)
         self.lab_search.setObjectName(u"lab_search")
         font = QFont()
-        font.setFamilies([u"Consolas"])
+        font.setFamilies([u"Microsoft YaHei UI"])
         self.lab_search.setFont(font)
         self.lab_search.setAlignment(Qt.AlignCenter)
 
@@ -36,13 +36,15 @@ class Ui_Form(object):
 
         self.line_search = QLineEdit(Form)
         self.line_search.setObjectName(u"line_search")
-        self.line_search.setFont(font)
+        font1 = QFont()
+        font1.setFamilies([u"Consolas"])
+        self.line_search.setFont(font1)
 
         self.gridLayout.addWidget(self.line_search, 0, 1, 1, 1)
 
         self.cell_content = QTextEdit(Form)
         self.cell_content.setObjectName(u"cell_content")
-        self.cell_content.setFont(font)
+        self.cell_content.setFont(font1)
 
         self.gridLayout.addWidget(self.cell_content, 1, 0, 1, 2)
 

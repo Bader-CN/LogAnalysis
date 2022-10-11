@@ -43,7 +43,7 @@ class LogAnalysisMain(QMainWindow):
             self.ui.setupUi(self)
 
             # 调整软件界面
-            self.setWindowTitle("LogAnalysis alpha")
+            self.setWindowTitle("LogAnalysis Beta v0.1")
             self.set_start_end_time()
             self.set_language_by_main()
             self.ui.progressBar.hide()
