@@ -41,7 +41,7 @@ class OAFiles(ReadFileTemplate):
         if re.findall("system\.txt", self.file, re.IGNORECASE):
             return self.readlog_system()
 
-        elif re.findall("", self.file, re.IGNORECASE):
+        elif re.findall("agent\.log_\d+-\d+-\d+_\d+\.\d+", self.file, re.IGNORECASE):
             return self.readlog_agentlog()
 
         elif re.findall("\w{8}-\w{4}-\w{4}-\w{4}-\w{12}_header\.xml", self.file, re.IGNORECASE):
@@ -130,16 +130,16 @@ class OAFiles(ReadFileTemplate):
 
         # 获取所需要的数据段
         for line in DList:
-            if "osname=" in line and os_name != "":
-                os_name = line
+            if "osname=" in line and os_name == "":
+                os_name = line.split('=')[-1]
                 TDict["os_name"] = os_name
 
-            elif "ostype=" in line and os_type != "":
-                os_type = line
+            elif "ostype=" in line and os_type == "":
+                os_type = line.split('=')[-1]
                 TDict["os_type"] = os_type
 
-            elif "agtversion=" in line and oa_version != "":
-                oa_version = line
+            elif "agtversion=" in line and oa_version == "":
+                oa_version = line.split('=')[-1]
                 TDict["oa_version"] = oa_version
 
             elif "Cmd executed : /opt/OV/bin/ovconfget" == line:
