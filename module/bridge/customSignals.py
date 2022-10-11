@@ -13,5 +13,8 @@ class CustomSignals(QObject):
     # 实际需要处理的数据, 里面包含需要处理的各个参数
     need_want_data = Signal(dict)
 
+    # 传递单元格内容的信息
+    select_cell_data = Signal(str)
+
 # 实例化定制的信号类
 allSignals = CustomSignals()

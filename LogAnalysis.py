@@ -12,6 +12,7 @@ if not os.path.exists("./data/template"):
 from PySide6.QtWidgets import QApplication
 from module.gui.LogAnalysis_md import LogAnalysisMain
 from module.gui.LogImport_md import LogAnalysisImport
+from module.gui.SelectCont_md import CellContUI
 from module.bridge.customSignals import allSignals
 from module.bridge.customQueues import QTask
 from module.bridge.customQueues import QData
@@ -47,10 +48,18 @@ if __name__ == '__main__':
     logMain = LogAnalysisMain()
     # 实例化 LogAnalysis Import 界面
     logImport = LogAnalysisImport()
+    # 实例化 LogAnalysis Select Content 界面
+    logSltCont = CellContUI()
+
     # 当 LogAnalysis 主界面点击 Import 按钮时, 将会弹出 LogAnalysis Import 界面
     def showlogImportUI():
         logImport.show()
     logMain.ui.btn_import.clicked.connect(showlogImportUI)
+
+    # # 当 LogAnalysis 主界面里双击查询结果的单元格时, 弹出 LogAnalysis Select Content 界面
+    def showlogSltContUI(content):
+        logSltCont.showContent(content)
+    allSignals.select_cell_data.connect(showlogSltContUI)
 
     # 多进程部分
     #########################################################################

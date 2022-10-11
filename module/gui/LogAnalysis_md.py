@@ -429,6 +429,14 @@ class LogAnalysisMain(QMainWindow):
         if self.ui.tabSQLResult.count() > 1:
             self.ui.tabSQLResult.removeTab(index)
 
+    def slot_show_cell(self, cell):
+        """
+        槽函数：展示双击选中时, 发射单元格中的内容信号
+        :param cell: 单元格对象
+        """
+        # cell.data() 的结果需要使用 str 转换一下, 否则如果是纯数字的话会出错
+        allSignals.select_cell_data.emit(str(cell.data()))
+
     def slot_run_sql_query(self):
         """
         槽函数：执行查询语句, 并且返回结果
@@ -496,7 +504,8 @@ class LogAnalysisMain(QMainWindow):
             ## 隐藏行号
             self.tab_view.verticalHeader().hide()
             ## 连接槽函数, 在双击单元格时触发
-            # self.tab_view.doubleClicked.connect(self.slot_show_cell)
+            self.tab_view.doubleClicked.connect(self.slot_show_cell)
+            ## 显示界面
             self.tab_view.show()
 
             # 关闭数据库连接
