@@ -146,7 +146,7 @@ class LogAnalysisMain(QMainWindow):
         # 如果类型来自于 database
         if type == "database":
             # 表名字: filehash / oa_policy / "oa_summary"
-            if tabname == "filehash" or tabname == "oa_policy" or "oa_summary":
+            if tabname == "filehash" or tabname == "oa_policy" or tabname == "oa_summary":
                 return "SELECT * FROM {};".format(tabname)
             # 表名字: Others
             else:
