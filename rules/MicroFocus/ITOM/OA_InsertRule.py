@@ -142,14 +142,37 @@ class OAFiles(ReadFileTemplate):
                 oa_version = line.split('=')[-1]
                 TDict["oa_version"] = oa_version
 
+            # 针对 ovconfget 需要处理 两部分数据
             elif "Cmd executed : /opt/OV/bin/ovconfget" == line:
                 idx_ovconfget_str = DList.index(line)
-                for conf_line in DList[idx_ovconfget_str:-1]:
+                try:
+                    idx_ovconfget_end = DList.index("****************************************", idx_ovconfget_str+2)
+                except:
+                    idx_ovconfget_end = -1
+                # 第一部分, ovconfget 的整理内容
+                for conf_line in DList[idx_ovconfget_str:idx_ovconfget_end]:
                     if oa_confget == "":
                         oa_confget = conf_line
                     else:
                         oa_confget = oa_confget + "\n" + conf_line
                 TDict["oa_confget"] = oa_confget
+
+                # 第二部分, ovconfget 的每项数值
+                from rules.MicroFocus.ITOM.OA_SQLTable import Config
+                file_id = self.get_file_id(targetdb=self.targetdb, file=self.file, FileHash=FileHash)
+                OAConfList = DList[idx_ovconfget_str+2:idx_ovconfget_end]
+                section = ""
+                for line in OAConfList:
+                    if line[0] == "[" and line[-1] == "]":
+                        section = line
+                    else:
+                        conf = "{}.{}".format(section, line)
+                        oaconf = conf.split("=", 1)
+                        SList.append(Config(
+                            file_id=file_id,
+                            key=oaconf[0],
+                            value=oaconf[-1],
+                        ))
 
             elif "Cmd executed : /opt/OV/bin/ovc -status -level 8" == line:
                 idx_oa_status_str = DList.index(line)
@@ -180,24 +203,6 @@ class OAFiles(ReadFileTemplate):
                     file_id=file_id,
                     key=key,
                     value=value,))
-
-        # 针对另一张表单独处理
-        from rules.MicroFocus.ITOM.OA_SQLTable import Config
-        OAConfList = TDict["oa_confget"][2:]
-        print(OAConfList)
-        # # 处理 OAConfList 数据
-        # section = ""
-        # for line in OAConfList:
-        #     if line[0] == "[" and line[-1] == "]":
-        #         section = line
-        #     else:
-        #         conf = "{}.{}".format(section, line)
-        #         oaconf = conf.split("=", 1)
-        #         SList.append(Config(
-        #             file_id=file_id,
-        #             key=oaconf[0],
-        #             value=oaconf[1],
-        #         ))
 
         # 将结果数据返回
         self.TaskInfo["data"] = SList
