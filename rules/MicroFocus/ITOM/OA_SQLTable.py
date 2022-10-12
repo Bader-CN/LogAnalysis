@@ -61,3 +61,15 @@ class Summary(BASE):
     file_id = Column(Integer, ForeignKey("filehash.id"))
     key = Column(String)
     value = Column(String)
+
+class Config(BASE):
+    """
+    OA ovconfget command
+    """
+    __tablename__ = "oa_config"
+
+    # 表定义
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    file_id = Column(Integer, ForeignKey("filehash.id"))
+    key = Column(String)
+    value = Column(String)

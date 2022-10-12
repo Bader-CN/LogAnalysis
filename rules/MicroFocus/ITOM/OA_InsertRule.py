@@ -181,6 +181,24 @@ class OAFiles(ReadFileTemplate):
                     key=key,
                     value=value,))
 
+        # 针对另一张表单独处理
+        from rules.MicroFocus.ITOM.OA_SQLTable import Config
+        OAConfList = TDict["oa_confget"][2:]
+        print(OAConfList)
+        # # 处理 OAConfList 数据
+        # section = ""
+        # for line in OAConfList:
+        #     if line[0] == "[" and line[-1] == "]":
+        #         section = line
+        #     else:
+        #         conf = "{}.{}".format(section, line)
+        #         oaconf = conf.split("=", 1)
+        #         SList.append(Config(
+        #             file_id=file_id,
+        #             key=oaconf[0],
+        #             value=oaconf[1],
+        #         ))
+
         # 将结果数据返回
         self.TaskInfo["data"] = SList
         return self.TaskInfo
