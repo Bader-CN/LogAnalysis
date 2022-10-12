@@ -58,6 +58,7 @@ if __name__ == '__main__':
 
     # # 当 LogAnalysis 主界面里双击查询结果的单元格时, 弹出 LogAnalysis Select Content 界面
     def showlogSltContUI(content):
+        logSltCont.ui.line_search.setText(logMain.ui.line_search.text())
         logSltCont.showContent(content)
     allSignals.select_cell_data.connect(showlogSltContUI)
 
