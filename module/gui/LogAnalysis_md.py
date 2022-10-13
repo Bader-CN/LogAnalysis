@@ -180,7 +180,7 @@ class LogAnalysisMain(QMainWindow):
                 now_query.setText("SELECT * FROM {};".format(self.current_tb))
             # 表名字: oa_summary/oa_config 并且有 input_keyword
             elif (self.current_tb == "oa_summary" or self.current_tb == "oa_config") and input_keyword != "":
-                now_query.setText("SELECT * FROM {}\nWHERE value {} {};".format(self.current_tb, operater, key_word))
+                now_query.setText("SELECT * FROM {}\nWHERE key {} {} OR value {} {};".format(self.current_tb, operater, key_word, operater, key_word))
 
             # 表名字: Other 并且有 input_keyword
             elif input_keyword != "":
