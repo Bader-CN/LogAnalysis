@@ -251,6 +251,9 @@ class OAFiles(ReadFileTemplate):
             ply_type = root.find('{}policytype'.format(namespace)).find("{}name".format(namespace)).text
             try:
                 with open(self.file[:len(self.file) - len("header.xml")] + "data", "r", encoding="utf-8", errors="replace") as file:
+                    # 模块模式下, 记录读取的文件名
+                    if __name__ != "__main__":
+                        MultSQLLogger.info("Reading File:[{}]".format(self.file))
                     ply_data = file.read()
             except:
                 ply_data = "Null"
