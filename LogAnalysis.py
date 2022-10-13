@@ -2,6 +2,27 @@
 
 import os
 # 检查相关目录及文件是否存在
+if not os.path.exists("config.cfg"):
+    with open("config.cfg", mode="w", encoding="utf-8") as f:
+        f.write("""[App_Display]
+# value: "Auto" or "zh_CN" or "en_US"
+App_Language = Auto
+
+[App_Optimiz]
+# Maximum number of processes that read files
+# value: must > 0 or "Auto"
+Max_Processes = Auto
+# Maximum number of bytes of data read every time for hash, default is 8192 bytes
+Max_Hashsizes = 8192
+# Hash algorithm used to verify files, value can md5, sha1, sha224, sha256, sha384, sha512
+Hash_Method = md5
+
+[App_Logging]
+# value: DEBUG, INFO, WARNING, ERROR, CRITICAL
+App_Console_Level = WARNING
+App_Main_Level = WARNING
+App_MultSQL_Level = WARNING
+        """)
 if not os.path.exists("./log"):
     os.mkdir("./log")
 if not os.path.exists("./data/database"):
