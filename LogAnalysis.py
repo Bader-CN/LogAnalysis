@@ -21,8 +21,7 @@ Hash_Method = md5
 # value: DEBUG, INFO, WARNING, ERROR, CRITICAL
 App_Console_Level = WARNING
 App_Main_Level = WARNING
-App_MultSQL_Level = WARNING
-        """)
+App_MultSQL_Level = WARNING""")
 if not os.path.exists("./log"):
     os.mkdir("./log")
 if not os.path.exists("./data/database"):
