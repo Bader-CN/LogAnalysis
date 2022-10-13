@@ -1,5 +1,5 @@
 SELECT * FROM oa_config
-WHERE id NOT IN (SELECT id FROM oa_config WHERE 
+WHERE id NOT IN (SELECT id FROM oa_config WHERE
 (key == '[agent.health].OPC_HB_MSG_INTERVAL' AND VALUE == '1800') OR
 (key == '[agent.health].OPC_SELFMON_ENABLE' AND VALUE == 'true') OR
 (key == '[agtrep].ACTION_TIMEOUT' AND VALUE == '3') OR
