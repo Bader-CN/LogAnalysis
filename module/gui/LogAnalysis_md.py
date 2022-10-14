@@ -43,7 +43,6 @@ class LogAnalysisMain(QMainWindow):
             self.ui.setupUi(self)
 
             # 调整软件界面
-            self.setWindowTitle("LogAnalysis Beta v0.1")
             self.set_start_end_time()
             self.set_language_by_main()
             self.ui.progressBar.hide()
@@ -263,12 +262,12 @@ class LogAnalysisMain(QMainWindow):
                         query = hash_session.query(SQLTable.FileHash).filter(SQLTable.FileHash.hash == filehash).first()
                         if query:
                             allfiles.remove(file)
-                            AppMainLogger.debug("Will not be ingest file:[{}]".format(file))
+                            AppMainLogger.info("Will not be ingest file:[{}]".format(file))
                         # 如果数据库里没有, 则将此文件的哈希值添加到数据库中
                         else:
                             sqldata = SQLTable.FileHash(filepath=file, hash=filehash)
                             hash_session.add(sqldata)
-                            AppMainLogger.debug("Will insert file:[{}], file hash is:[{}]".format(file, filehash))
+                            AppMainLogger.info("Will insert file:[{}], file hash is:[{}]".format(file, filehash))
                     # 提交并关闭会话连接
                     hash_session.commit()
                     hash_session.close()
@@ -296,7 +295,7 @@ class LogAnalysisMain(QMainWindow):
                         filehash = hash.filehash(file)
                         sqldata = SQLTable.FileHash(filepath=file, hash=filehash)
                         hash_session.add(sqldata)
-                        AppMainLogger.debug("Will insert file:[{}], file hash is:[{}]".format(file, filehash))
+                        AppMainLogger.info("Will insert file:[{}], file hash is:[{}]".format(file, filehash))
                     # 提交并关闭会话连接
                     hash_session.commit()
                     hash_session.close()
@@ -337,7 +336,7 @@ class LogAnalysisMain(QMainWindow):
             except Exception as e:
                 # 如果出现了异常, 为了程序能够正常结束, tasksnum 计数仍然 + 1
                 tasksnum += 1
-                AppMainLogger.warning("Write to SQLiteDB faild, file is [{}], result is:\n{}".format(dict.get("file"), e))
+                AppMainLogger.error("Write to SQLiteDB faild, file is [{}], result is:\n{}".format(dict.get("file"), e))
 
             # 追加 debug 日志
             AppMainLogger.debug("Successful write to SQLiteDB, finish {}%, targetdb is:[{}]".format(str(int((tasksnum/totalnum)*100)), dict.get("targetdb")))
@@ -379,7 +378,7 @@ class LogAnalysisMain(QMainWindow):
             sql_query_text = self.set_sql_statement(type = "database", tabname = tabname)
             SQLTextEdit = self.ui.tabSQLQuery.currentWidget().findChild(QTextEdit)
             SQLTextEdit.setText(sql_query_text)
-            # 确定一个全局变量
+            # 设置一个全局变量
             self.current_tb = tabname
 
     def slot_add_new_query(self):
