@@ -51,7 +51,7 @@ def logfile_to_sql(QTask, QData):
         TaskInfo = QTask.get()
         # 如果接收的信号是 Stop
         if TaskInfo.get("Signal") == "Stop":
-            MultSQLLogger.info("Received signal -> Stop, process will exit.")
+            MultSQLLogger.debug("Received signal -> Stop, process will exit.")
             exit(0)
         # 如果不是 Stop, 那么就开始处理数据
         else:
