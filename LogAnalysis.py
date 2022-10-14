@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import os
-# 检查相关目录及文件是否存在
+# 检查相关目录及文件是否存在, 如果不存在, 则创建相关目录和文件
 if not os.path.exists("config.cfg"):
     with open("config.cfg", mode="w", encoding="utf-8") as f:
         f.write("""[App_Display]
@@ -76,21 +76,20 @@ if __name__ == '__main__':
         logImport.show()
     logMain.ui.btn_import.clicked.connect(showlogImportUI)
 
-    # # 当 LogAnalysis 主界面里双击查询结果的单元格时, 弹出 LogAnalysis Select Content 界面
+    # 当 LogAnalysis 主界面里双击查询结果的单元格时, 弹出 LogAnalysis Select Content 界面
     def showlogSltContUI(content):
         logSltCont.ui.line_search.setText(logMain.ui.line_search.text())
         logSltCont.showContent(content)
     allSignals.select_cell_data.connect(showlogSltContUI)
 
-    # 多进程部分
-    #########################################################################
+    # 多进程部分 #########################################################################
     def taskImportlog(dict):
         """
         将预处理任务按照文件进一步拆分, 并将拆分的任务传递给多进程开始处理
         :param dict: {targetdb, path, pathtype, company, productline, product, processes, files}
         :return:
         """
-        AppMainLogger.debug("TaskDict: {}".format(str(dict)))
+        AppMainLogger.info("TaskDict: {}".format(str(dict)))
         fileslist = dict.get("files")
         processes = int(dict.get("processes"))
         # 如果文件数小于进程数, 则按照文件数启动多进程
@@ -119,8 +118,9 @@ if __name__ == '__main__':
         for p in range(processes):
             QTask.put({"Signal":"Stop"})
 
+    # 利用自定义的信号去执行槽函数 taskImportlog
     allSignals.need_want_data.connect(taskImportlog)
-    #########################################################################
+    #######################################################################################
 
     # 显示主界面
     logMain.show()
