@@ -248,7 +248,7 @@ class LogAnalysisMain(QMainWindow):
 
                 # 准备数据库会话
                 engine = create_engine("sqlite:///" + dict.get("targetdb"), future=True)
-                Session = sessionmaker(engine)
+                Session = sessionmaker(bind=engine)
                 hash_session = Session()
 
                 if os.path.exists(dict.get("targetdb")):

@@ -12,7 +12,7 @@ class FileHash(BASE):
 
     # 表定义
     id = Column(Integer, primary_key=True, autoincrement=True)
-    filepath = Column(String, unique=True)
+    filepath = Column(String)
     hash = Column(String, unique=True)
 
     # 外联关系, 此关系仅在 Python 中存在
