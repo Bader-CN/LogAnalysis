@@ -8,6 +8,8 @@ NeedFilesRule = [
     '\w{8}-\w{4}-\w{4}-\w{4}-\w{12}_header\.xml',
     # OA agent.log
     'agent\.log_\d+-\d+-\d+_\d+\.\d+',
+    # OA hpcstrace.log
+    "hpcstrace\.log",
 ]
 
 # 文件级别的反匹规则, 支持正则表达式
