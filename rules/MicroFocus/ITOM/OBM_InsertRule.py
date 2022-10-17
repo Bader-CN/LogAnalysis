@@ -36,4 +36,50 @@ class OBMFiles(ReadFileTemplate):
         针对 OBM 文件进行分类, 然后在做后续处理
         :return:
         """
-        pass
+        if re.findall("opr-gateway\.log", self.file, re.IGNORECASE):
+            return self.readlog_obm_type1()
+
+    def readlog_obm_type1(self):
+        """
+        OBM logs
+        # opr-gateway.log
+        :return: TaskInfo["data"] = SList --> [sqlalchemy obj1, sqlalchemy obj2, ...]
+        """
+        # 模块模式下, 记录读取的文件名
+        if __name__ != "__main__":
+            MultSQLLogger.info("Reading File:[{}]".format(self.file))
+        # 初始化变量
+        DList = []  # 原始文档的每一行数据
+        IList = []  # 日志开头的索引
+        FList = []  # 基于 IList 切分完成后的数据
+        SList = []
+        now_idx = 0
+
+        # 读取文件, 将文件的每一行保存在 DList 中
+        with open(self.file, mode="r", encoding="utf-8", errors="replace") as file:
+            for line in file:
+                DList.append(line.strip())
+        # 判断日志内容的开头, 并将开头所在的索引记录在 IList 中
+        for line in DList:
+            log_time = self.get_logtime(line.split("[", 1)[0].strip())
+            if log_time != "Null":
+                IList.append(DList.index(line, now_idx))
+            now_idx += 1
+        # 根据 DList 的数据和 IList 索引来切分日志条目
+        idx_list = []
+        for idx in IList:
+            idx_list.append(idx)
+            if len(idx_list) == 1:
+                pass
+            else:
+                FList.append({"log_line":idx_list[0]+1, "log_data":DList[idx_list[0]:idx_list[1]]})
+                idx_list.pop(0)
+
+        for data in FList:
+            print(data)
+
+
+if __name__ == "__main__":
+    # 读取测试文件
+    file = r"C:\opr-gateway.log"
+    test = OBMFiles({"file": file})
