@@ -205,6 +205,27 @@ class LogAnalysisMain(QMainWindow):
         # 输出待导入的文件
         if dict.get("pathtype") == "File":
             allfiles = [dict.get("path")]
+            isNeed = False
+            isBlck = False
+
+            # 检查该文件是否符合规则
+            for needfilerule in FileRule.NeedFilesRule:
+                # 如果符合匹配列表: FileRule.NeedFilesRule, 将标记位 isNeed 设置为 True
+                if re.search(needfilerule, allfiles[0], re.IGNORECASE):
+                    isNeed = True
+                # 如果符合反匹列表: FileRule.BlckFilesRule, 将标记位 isBlck 设置为 True
+                for blckfilerule in FileRule.BlckFilesRule:
+                    if re.search(blckfilerule, allfiles[0], re.IGNORECASE):
+                        isBlck = True
+            if isNeed == True and isBlck == False:
+                # 符合要求, 不做任何动作
+                pass
+            else:
+                # 不符合要求, 将此文件移除
+                allfiles.pop()
+            # 初始化标记位
+            isNeed = False
+            isBlck = False
         else:
             # 需要遍历目录, 找出所有的文件
             allfiles = []
@@ -234,79 +255,79 @@ class LogAnalysisMain(QMainWindow):
                         isNeed = False
                         isBlck = False
 
-            # 此时字典里存储的是所有符合条件的文件
-            dict["files"] = allfiles
+        # 此时字典里存储的是所有符合条件的文件
+        dict["files"] = allfiles
 
-            # 判断此时符合的文件是否为空, 非空才会继续处理
-            if allfiles == []:
-                self.statusBar().clearMessage()
-                AppMainLogger.warning("No file matching the rules")
-                QMessageBox.warning(self, "Warning", self.msg_no_file)
-                # 返回停止信号
-                return {"Signal": "Stop"}
+        # 判断此时符合的文件是否为空, 非空才会继续处理
+        if allfiles == []:
+            self.statusBar().clearMessage()
+            AppMainLogger.warning("No file matching the rules")
+            QMessageBox.warning(self, "Warning", self.msg_no_file)
+            # 返回停止信号
+            return {"Signal": "Stop"}
 
-            else:
-                # 实例化计算哈希工具, 准备后面进行文件哈希计算
-                hash = HashTools()
+        else:
+            # 实例化计算哈希工具, 准备后面进行文件哈希计算
+            hash = HashTools()
 
-                # 准备数据库会话
-                engine = create_engine("sqlite:///" + dict.get("targetdb"), future=True)
-                Session = sessionmaker(bind=engine)
-                hash_session = Session()
+            # 准备数据库会话
+            engine = create_engine("sqlite:///" + dict.get("targetdb"), future=True)
+            Session = sessionmaker(bind=engine)
+            hash_session = Session()
 
-                if os.path.exists(dict.get("targetdb")):
-                    AppMainLogger.info("Open the specified database:[{}]".format(dict.get("targetdb")))
-                    # 遍历所有符合的文件, 检查是否存在重复的文件
-                    # 需要复制一份字典, 否则会更改原数据
-                    indexdict = copy.deepcopy(allfiles)
-                    for file in indexdict:
-                        filehash = hash.filehash(file)
-                        # 如果数据库里有对应的数据, 则将对应的文件从 allfiles 中移除掉
-                        query = hash_session.query(SQLTable.FileHash).filter(SQLTable.FileHash.hash == filehash).first()
-                        if query:
-                            allfiles.remove(file)
-                            AppMainLogger.info("Will not be ingest file:[{}]".format(file))
-                        # 如果数据库里没有, 则将此文件的哈希值添加到数据库中
-                        else:
-                            sqldata = SQLTable.FileHash(filepath=file, hash=filehash)
-                            hash_session.add(sqldata)
-                            AppMainLogger.info("Will insert file:[{}], file hash is:[{}]".format(file, filehash))
-                    # 提交并关闭会话连接
-                    hash_session.commit()
-                    hash_session.close()
-
-                    # 如果所有allfiles 里面没有数据, 则说明没有数据需要导入
-                    if allfiles == []:
-                        self.statusBar().clearMessage()
-                        AppMainLogger.warning("No file needs to be imported because the file already exists")
-                        QMessageBox.warning(self, "Warning", self.msg_no_file)
-                        # 返回停止信号
-                        return {"Signal": "Stop"}
+            if os.path.exists(dict.get("targetdb")):
+                AppMainLogger.info("Open the specified database:[{}]".format(dict.get("targetdb")))
+                # 遍历所有符合的文件, 检查是否存在重复的文件
+                # 需要复制一份字典, 否则会更改原数据
+                indexdict = copy.deepcopy(allfiles)
+                for file in indexdict:
+                    filehash = hash.filehash(file)
+                    # 如果数据库里有对应的数据, 则将对应的文件从 allfiles 中移除掉
+                    query = hash_session.query(SQLTable.FileHash).filter(SQLTable.FileHash.hash == filehash).first()
+                    if query:
+                        allfiles.remove(file)
+                        AppMainLogger.info("Will not be ingest file:[{}]".format(file))
+                    # 如果数据库里没有, 则将此文件的哈希值添加到数据库中
                     else:
-                        # 发射信号, 将预处理的字典数据传递给日志分析进程
-                        allSignals.need_want_data.emit(dict)
-                        self.statusBar().clearMessage()
-                        # 返回开始信号
-                        return {"Signal": "Start"}
-
-                else:
-                    AppMainLogger.info("Create a new database:[{}]".format(dict.get("targetdb")))
-                    # 创建数据库
-                    SQLTable.BASE.metadata.create_all(engine)
-                    # 针对每个文件计算哈希值, 并将数据写入到数据库中
-                    for file in allfiles:
-                        filehash = hash.filehash(file)
                         sqldata = SQLTable.FileHash(filepath=file, hash=filehash)
                         hash_session.add(sqldata)
                         AppMainLogger.info("Will insert file:[{}], file hash is:[{}]".format(file, filehash))
-                    # 提交并关闭会话连接
-                    hash_session.commit()
-                    hash_session.close()
+                # 提交并关闭会话连接
+                hash_session.commit()
+                hash_session.close()
+
+                # 如果所有allfiles 里面没有数据, 则说明没有数据需要导入
+                if allfiles == []:
+                    self.statusBar().clearMessage()
+                    AppMainLogger.warning("No file needs to be imported because the file already exists")
+                    QMessageBox.warning(self, "Warning", self.msg_no_file)
+                    # 返回停止信号
+                    return {"Signal": "Stop"}
+                else:
                     # 发射信号, 将预处理的字典数据传递给日志分析进程
                     allSignals.need_want_data.emit(dict)
                     self.statusBar().clearMessage()
                     # 返回开始信号
                     return {"Signal": "Start"}
+
+            else:
+                AppMainLogger.info("Create a new database:[{}]".format(dict.get("targetdb")))
+                # 创建数据库
+                SQLTable.BASE.metadata.create_all(engine)
+                # 针对每个文件计算哈希值, 并将数据写入到数据库中
+                for file in allfiles:
+                    filehash = hash.filehash(file)
+                    sqldata = SQLTable.FileHash(filepath=file, hash=filehash)
+                    hash_session.add(sqldata)
+                    AppMainLogger.info("Will insert file:[{}], file hash is:[{}]".format(file, filehash))
+                # 提交并关闭会话连接
+                hash_session.commit()
+                hash_session.close()
+                # 发射信号, 将预处理的字典数据传递给日志分析进程
+                allSignals.need_want_data.emit(dict)
+                self.statusBar().clearMessage()
+                # 返回开始信号
+                return {"Signal": "Start"}
 
     def import_to_db(self):
         """
