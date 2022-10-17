@@ -8,10 +8,22 @@ class HashTools():
     """
     哈希工具类, 用于返回任何字符串的哈希值
     """
-
     def __init__(self):
         # 决定哈希方法
-        method = ReadConfig.get_hash_method()
+        self.method = ReadConfig.get_hash_method()
+        # 每次读取多大的数据
+        self.hash_rdsize = ReadConfig.get_max_hashsize()
+
+    def filehash(self, filepath):
+        """
+        指定文件路径, 读取文件内容并返回对应的哈希值
+        :param filepath:
+        :return:
+        """
+        method = self.method
+        hash_rdsize = self.hash_rdsize
+        # 注意: 不能将 hash 方法写在 init 中!
+        # 因为会导致计算的不是每一个文件内容的 hash, 而是所有文件内容的 hash 之和
         if method == "md5":
             self.hash_method = hashlib.md5()
         elif method == "sha1":
@@ -24,19 +36,12 @@ class HashTools():
             self.hash_method = hashlib.sha384()
         else:
             self.hash_method = hashlib.sha512()
-        # 每次读取多大的数据
-        self.hash_rdsize = ReadConfig.get_max_hashsize()
 
-    def filehash(self, filepath):
-        """
-        指定文件路径, 读取文件内容并返回对应的哈希值
-        :param filepath:
-        :return:
-        """
         with open(filepath, "rb") as f:
             # https://zhuanlan.zhihu.com/p/351140647
             # 海象运算符, 支持 Python 3.8+
-            while b := f.read(self.hash_rdsize):
+            while b := f.read(hash_rdsize):
                 self.hash_method.update(b)
 
-        return self.hash_method.hexdigest()
+        hash_value = self.hash_method.hexdigest()
+        return hash_value
