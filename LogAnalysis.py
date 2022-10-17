@@ -58,6 +58,9 @@ def logfile_to_sql(QTask, QData):
             if TaskInfo.get("company") == "MicroFocus" and TaskInfo.get("productline") == "ITOM" and TaskInfo.get("product") == "Operations Agent(OA)":
                 from rules.MicroFocus.ITOM import OA_InsertRule
                 OA_InsertRule.OAFiles(TaskInfo, QData)
+            elif TaskInfo.get("company") == "MicroFocus" and TaskInfo.get("productline") == "ITOM" and TaskInfo.get("product") == "Operations Bridge Manager(OBM)":
+                from rules.MicroFocus.ITOM import OBM_InsertRule
+                OBM_InsertRule.OBMFiles(TaskInfo, QData)
 
 if __name__ == '__main__':
     # 解决 Windows 多进程异常的问题

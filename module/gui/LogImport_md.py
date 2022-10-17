@@ -22,7 +22,7 @@ class LogAnalysisImport(QWidget):
     # 所有软件的分类数据
     category_dict = {
         "MicroFocus": {
-            "ITOM": ["Operations Agent(OA)"], },
+            "ITOM": ["Operations Agent(OA)", "Operations Bridge Manager(OBM)"], },
     }
 
     # category_dict = {

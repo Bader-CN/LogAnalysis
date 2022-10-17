@@ -198,6 +198,9 @@ class LogAnalysisMain(QMainWindow):
         if dict.get("company") == "MicroFocus" and dict.get("productline") == "ITOM" and dict.get("product") == "Operations Agent(OA)":
             from rules.MicroFocus.ITOM import OA_FileRule as FileRule
             from rules.MicroFocus.ITOM import OA_SQLTable as SQLTable
+        elif dict.get("company") == "MicroFocus" and dict.get("productline") == "ITOM" and dict.get("product") == "Operations Bridge Manager(OBM)":
+            from rules.MicroFocus.ITOM import OBM_FileRule as FileRule
+            from rules.MicroFocus.ITOM import OBM_SQLTable as SQLTable
 
         # 输出待导入的文件
         if dict.get("pathtype") == "File":
