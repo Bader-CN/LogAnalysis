@@ -9,6 +9,7 @@ NeedFilesRule = [
     "opr-configserver\.log",
     "opr-webapp\.log",
     "opr-ws-response\.log",
+    "user_stats_log_filter\.log",
 ]
 
 # 文件级别的反匹规则, 支持正则表达式
