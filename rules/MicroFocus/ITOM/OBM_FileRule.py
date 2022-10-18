@@ -18,6 +18,7 @@ NeedFilesRule = [
     "bvd\.log",
     "downtime\.log",
     "opr-clis\.log",
+    "opr-heartbeat\.log",
 ]
 
 # 文件级别的反匹规则, 支持正则表达式
