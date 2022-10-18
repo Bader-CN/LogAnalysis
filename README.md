@@ -7,8 +7,13 @@
 1. 安装 Python 3.8+
 2. 利用 pip install 命令安装第三方库
 ```commandline
-pip install pyside6
+# pyside6 6.4.0 有问题
+pip install pyside6==6.3.2
+
+# psutil 任意版本
 pip install psutil
+
+# sqlalchemy 任意版本
 pip install sqlalchemy
 ```
 3. 运行 LogAnalysis.py 即可启动软件
