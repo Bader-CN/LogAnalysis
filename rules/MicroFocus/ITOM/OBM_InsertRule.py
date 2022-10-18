@@ -35,7 +35,7 @@ class OBMFiles(ReadFileTemplate):
         针对 OBM 文件进行分类, 然后在做后续处理
         :return:
         """
-        if re.findall("opr-gateway\.log", self.file, re.IGNORECASE):
+        if re.findall("opr-gateway\.log|opr-scripting-host\.log", self.file, re.IGNORECASE):
             return self.readlog_obm_type1()
         elif re.findall("opr-gateway-flowtrace\.log", self.file, re.IGNORECASE):
             return self.readlog_obm_type2()
@@ -44,6 +44,7 @@ class OBMFiles(ReadFileTemplate):
         """
         OBM logs
         # opr-gateway.log
+        # opr-scripting-host.log
         :return: TaskInfo["data"] = SList --> [sqlalchemy obj1, sqlalchemy obj2, ...]
         """
         # 模块模式下, 记录读取的文件名
@@ -80,12 +81,12 @@ class OBMFiles(ReadFileTemplate):
                     idx_list.pop(0)
                     log_time = self.get_logtime(log_data[0].split("[")[0].strip())
                     log_level = log_data[0].split(" ", 4)[3]
-                    log_comp = log_data[0].split(" ", 4)[4].split("-", 1)[0]
+                    log_comp = log_data[0].split(" ", 4)[4].split("-", 1)[0].strip()
 
                     log_cont = ""
                     for line in log_data:
                         log_cont += line + "\n"
-                    log_cont = log_cont.split("-", 3)[-1].strip()
+                    log_cont = log_cont.split(" - ", 1)[-1].strip()
                     # 将字典数据加入到 FList 中
                     FList.append({
                         "log_line": log_line,
@@ -105,6 +106,8 @@ class OBMFiles(ReadFileTemplate):
             #
             if re.findall("opr-gateway\.log", self.file, re.IGNORECASE):
                 from rules.MicroFocus.ITOM.OBM_SQLTable import OPR_Gateway as OBMTable
+            elif re.findall("opr-scripting-host\.log", self.file, re.IGNORECASE):
+                from rules.MicroFocus.ITOM.OBM_SQLTable import OPR_Scripting_Host as OBMTable
 
             file_id = self.get_file_id(targetdb=self.targetdb, file=self.file, FileHash=FileHash)
             for data in FList:
@@ -216,5 +219,5 @@ class OBMFiles(ReadFileTemplate):
 
 if __name__ == "__main__":
     # 读取测试文件
-    file = r"C:\OBMLogs\opr-gateway-flowtrace.log"
+    file = r"C:\OBMLogs\opr-scripting-host.log"
     test = OBMFiles({"file": file})
