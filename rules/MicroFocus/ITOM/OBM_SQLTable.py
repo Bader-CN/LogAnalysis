@@ -30,3 +30,18 @@ class OPR_Gateway(BASE):
     log_level = Column(String)
     log_comp = Column(String)
     log_cont = Column(String)
+
+class OPR_Gateway_Flowtrace(BASE):
+    """
+    OBM opr-gateway-flowtrace.log
+    """
+    __tablename__ = "obm_opr_gateway_flowtrace"
+
+    # 表定义
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    file_id = Column(Integer, ForeignKey("filehash.id"))
+    log_line = Column(Integer)
+    log_time = Column(DateTime)
+    log_level = Column(String)
+    log_comp = Column(String)
+    log_cont = Column(String)
