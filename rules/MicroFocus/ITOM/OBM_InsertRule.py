@@ -47,7 +47,7 @@ class OBMFiles(ReadFileTemplate):
             return self.readlog_obm_type5()
         elif re.findall("opr-svcdiscserver-citrace\.log", self.file, re.IGNORECASE):
             return self.readlog_obm_type6()
-        elif re.findall("pmi\.log", self.file, re.IGNORECASE):
+        elif re.findall("pmi\.log|bvd\.log", self.file, re.IGNORECASE):
             return self.readlog_obm_type7()
         elif re.findall("UserActions.servlets\.log", self.file, re.IGNORECASE):
             return self.readlog_UserActions_Servlets()
@@ -591,6 +591,7 @@ class OBMFiles(ReadFileTemplate):
         """
         OBM logs
         # pmi.log
+        # bvd.log
         :return: TaskInfo["data"] = SList --> [sqlalchemy obj1, sqlalchemy obj2, ...]
         """
         # 模块模式下, 记录读取的文件名
@@ -655,6 +656,8 @@ class OBMFiles(ReadFileTemplate):
             #
             if re.findall("pmi\.log", self.file, re.IGNORECASE):
                 from rules.MicroFocus.ITOM.OBM_SQLTable import PMI as OBMTable
+            elif re.findall("bvd\.log", self.file, re.IGNORECASE):
+                from rules.MicroFocus.ITOM.OBM_SQLTable import BVD as OBMTable
 
             file_id = self.get_file_id(targetdb=self.targetdb, file=self.file, FileHash=FileHash)
             for data in FList:

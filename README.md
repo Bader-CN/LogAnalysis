@@ -13,8 +13,8 @@ pip install pyside6==6.3.2
 # psutil 任意版本
 pip install psutil
 
-# sqlalchemy 任意版本
-pip install sqlalchemy
+# sqlalchemy 1.4.42+
+pip install sqlalchemy==1.4.42
 ```
 3. 运行 LogAnalysis.py 即可启动软件
 4. 如果不想看到 console 界面, 可以将 LogAnalysis.py 重命名为 LogAnalysis.pyw
