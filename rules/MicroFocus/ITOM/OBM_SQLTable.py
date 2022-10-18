@@ -158,3 +158,19 @@ class UserActions_Servlets(BASE):
     log_level = Column(String)
     log_comp = Column(String)
     log_cont = Column(String)
+
+
+class OPR_SvcDiscserver(BASE):
+    """
+    OBM opr-svcdiscserver.log
+    """
+    __tablename__ = "obm_opr_svcdiscserver"
+
+    # 表定义
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    file_id = Column(Integer, ForeignKey("filehash.id"))
+    log_line = Column(Integer)
+    log_time = Column(DateTime)
+    log_level = Column(String)
+    log_comp = Column(String)
+    log_cont = Column(String)

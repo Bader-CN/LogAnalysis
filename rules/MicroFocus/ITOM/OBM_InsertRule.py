@@ -35,7 +35,7 @@ class OBMFiles(ReadFileTemplate):
         针对 OBM 文件进行分类, 然后在做后续处理
         :return:
         """
-        if re.findall("opr-gateway\.log|opr-scripting-host\.log|opr-configserver\.log", self.file, re.IGNORECASE):
+        if re.findall("opr-gateway\.log|opr-scripting-host\.log|opr-configserver\.log|opr-svcdiscserver\.log", self.file, re.IGNORECASE):
             return self.readlog_obm_type1()
         elif re.findall("opr-gateway-flowtrace\.log", self.file, re.IGNORECASE):
             return self.readlog_obm_type2()
@@ -54,6 +54,7 @@ class OBMFiles(ReadFileTemplate):
         # opr-gateway.log
         # opr-scripting-host.log
         # opr-configserver.log
+        # opr-svcdiscserver.log
         :return: TaskInfo["data"] = SList --> [sqlalchemy obj1, sqlalchemy obj2, ...]
         """
         # 模块模式下, 记录读取的文件名
@@ -119,6 +120,8 @@ class OBMFiles(ReadFileTemplate):
                 from rules.MicroFocus.ITOM.OBM_SQLTable import OPR_Scripting_Host as OBMTable
             elif re.findall("opr-configserver\.log", self.file, re.IGNORECASE):
                 from rules.MicroFocus.ITOM.OBM_SQLTable import OPR_ConfigServer as OBMTable
+            elif re.findall("opr-svcdiscserver\.log", self.file, re.IGNORECASE):
+                from rules.MicroFocus.ITOM.OBM_SQLTable import OPR_SvcDiscserver as OBMTable
 
             file_id = self.get_file_id(targetdb=self.targetdb, file=self.file, FileHash=FileHash)
             for data in FList:
@@ -585,5 +588,5 @@ class OBMFiles(ReadFileTemplate):
 
 if __name__ == "__main__":
     # 读取测试文件
-    file = r"C:\OBMLogs\UserActions.servlets.log"
+    file = r"C:\OBMLogs\opr-svcdiscserver.log"
     test = OBMFiles({"file": file})
