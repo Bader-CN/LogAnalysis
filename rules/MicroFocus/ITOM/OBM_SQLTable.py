@@ -142,3 +142,19 @@ class Login(BASE):
     log_level = Column(String)
     log_comp = Column(String)
     log_cont = Column(String)
+
+
+class UserActions_Servlets(BASE):
+    """
+    OBM login.log
+    """
+    __tablename__ = "obm_user_actions_servlets"
+
+    # 表定义
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    file_id = Column(Integer, ForeignKey("filehash.id"))
+    log_line = Column(Integer)
+    log_time = Column(DateTime)
+    log_level = Column(String)
+    log_comp = Column(String)
+    log_cont = Column(String)

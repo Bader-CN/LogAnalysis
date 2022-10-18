@@ -33,6 +33,7 @@ class ReadFileTemplate(metaclass=ABCMeta):
             "%y/%m/%d %H:%M:%S",
             "%Y %b %d %H:%M:%S",
             "%d-%b-%Y %H:%M:%S",
+            "%m/%d/%Y %H:%M:%S",
         ]
 
         for datetime_format in datetime_formats:
