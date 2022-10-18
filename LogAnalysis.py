@@ -131,4 +131,4 @@ if __name__ == '__main__':
         logMain.show()
         app.exec()
     except Exception as e:
-        print(e)
+        AppMainLogger.error(e)
