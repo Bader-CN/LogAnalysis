@@ -8,6 +8,7 @@ NeedFilesRule = [
     "opr-scripting-host\.log",
     "opr-configserver\.log",
     "opr-webapp\.log",
+    "opr-ws-response\.log",
 ]
 
 # 文件级别的反匹规则, 支持正则表达式
