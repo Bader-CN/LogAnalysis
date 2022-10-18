@@ -13,6 +13,7 @@ NeedFilesRule = [
     "login\.log",
     "UserActions.servlets\.log",
     "opr-svcdiscserver\.log",
+    "opr-svcdiscserver-citrace\.log",
 ]
 
 # 文件级别的反匹规则, 支持正则表达式
