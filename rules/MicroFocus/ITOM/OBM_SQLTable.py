@@ -222,3 +222,19 @@ class BVD(BASE):
     log_level = Column(String)
     log_comp = Column(String)
     log_cont = Column(String)
+
+
+class DownTime(BASE):
+    """
+    OBM downtime.log
+    """
+    __tablename__ = "obm_downtime"
+
+    # 表定义
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    file_id = Column(Integer, ForeignKey("filehash.id"))
+    log_line = Column(Integer)
+    log_time = Column(DateTime)
+    log_level = Column(String)
+    log_comp = Column(String)
+    log_cont = Column(String)
