@@ -116,7 +116,23 @@ class User_Stats_Log_Filter(BASE):
     """
     OBM opr-ws-response.log
     """
-    __tablename__ = "user_stats_log_filter"
+    __tablename__ = "obm_user_stats_log_filter"
+
+    # 表定义
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    file_id = Column(Integer, ForeignKey("filehash.id"))
+    log_line = Column(Integer)
+    log_time = Column(DateTime)
+    log_level = Column(String)
+    log_comp = Column(String)
+    log_cont = Column(String)
+
+
+class Login(BASE):
+    """
+    OBM login.log
+    """
+    __tablename__ = "obm_login"
 
     # 表定义
     id = Column(Integer, primary_key=True, autoincrement=True)
