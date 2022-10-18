@@ -63,69 +63,72 @@ def logfile_to_sql(QTask, QData):
                 OBM_InsertRule.OBMFiles(TaskInfo, QData)
 
 if __name__ == '__main__':
-    # 解决 Windows 多进程异常的问题
-    freeze_support()
-    # 启动软件
-    app = QApplication([])
-    # 实例化 LogAnalysis 主界面并设置标题
-    logMain = LogAnalysisMain()
-    logMain.setWindowTitle("LogAnalysis Beta v0.2")
-    # 实例化 LogAnalysis Import 界面
-    logImport = LogAnalysisImport()
-    # 实例化 LogAnalysis Select Content 界面
-    logSltCont = CellContUI()
+    try:
+        # 解决 Windows 多进程异常的问题
+        freeze_support()
+        # 启动软件
+        app = QApplication([])
+        # 实例化 LogAnalysis 主界面并设置标题
+        logMain = LogAnalysisMain()
+        logMain.setWindowTitle("LogAnalysis Beta v0.2")
+        # 实例化 LogAnalysis Import 界面
+        logImport = LogAnalysisImport()
+        # 实例化 LogAnalysis Select Content 界面
+        logSltCont = CellContUI()
 
-    # 当 LogAnalysis 主界面点击 Import 按钮时, 将会弹出 LogAnalysis Import 界面
-    def showlogImportUI():
-        logImport.show()
-    logMain.ui.btn_import.clicked.connect(showlogImportUI)
+        # 当 LogAnalysis 主界面点击 Import 按钮时, 将会弹出 LogAnalysis Import 界面
+        def showlogImportUI():
+            logImport.show()
+        logMain.ui.btn_import.clicked.connect(showlogImportUI)
 
-    # 当 LogAnalysis 主界面里双击查询结果的单元格时, 弹出 LogAnalysis Select Content 界面
-    def showlogSltContUI(content):
-        logSltCont.ui.line_search.setText(logMain.ui.line_search.text())
-        logSltCont.showContent(content)
-    allSignals.select_cell_data.connect(showlogSltContUI)
+        # 当 LogAnalysis 主界面里双击查询结果的单元格时, 弹出 LogAnalysis Select Content 界面
+        def showlogSltContUI(content):
+            logSltCont.ui.line_search.setText(logMain.ui.line_search.text())
+            logSltCont.showContent(content)
+        allSignals.select_cell_data.connect(showlogSltContUI)
 
-    # 多进程部分 #########################################################################
-    def taskImportlog(dict):
-        """
-        将预处理任务按照文件进一步拆分, 并将拆分的任务传递给多进程开始处理
-        :param dict: {targetdb, path, pathtype, company, productline, product, processes, files}
-        :return:
-        """
-        AppMainLogger.info("TaskDict: {}".format(str(dict)))
-        fileslist = dict.get("files")
-        processes = int(dict.get("processes"))
-        # 如果文件数小于进程数, 则按照文件数启动多进程
-        if processes > len(fileslist):
-            processes = len(fileslist)
-        # 基于文件生成多进程的任务列表, 每一个任务都是一个字典, 包含具体的任务信息
-        tasks = []
-        for file in fileslist:
-            task = {
-                "file": file,
-                "targetdb": dict.get("targetdb"),
-                "company": dict.get("company"),
-                "productline": dict.get("productline"),
-                "product": dict.get("product"),
-                "total": len(fileslist),
-            }
-            tasks.append(task)
-        # 将任务信息放入 QTask 中
-        for task in tasks:
-            QTask.put(task)
-        # 启动多进程
-        for p in range(processes):
-            p = Process(target=logfile_to_sql, args=(QTask, QData), daemon=True)
-            p.start()
-        # 输入结束信号
-        for p in range(processes):
-            QTask.put({"Signal":"Stop"})
+        # 多进程部分 #########################################################################
+        def taskImportlog(dict):
+            """
+            将预处理任务按照文件进一步拆分, 并将拆分的任务传递给多进程开始处理
+            :param dict: {targetdb, path, pathtype, company, productline, product, processes, files}
+            :return:
+            """
+            AppMainLogger.info("TaskDict: {}".format(str(dict)))
+            fileslist = dict.get("files")
+            processes = int(dict.get("processes"))
+            # 如果文件数小于进程数, 则按照文件数启动多进程
+            if processes > len(fileslist):
+                processes = len(fileslist)
+            # 基于文件生成多进程的任务列表, 每一个任务都是一个字典, 包含具体的任务信息
+            tasks = []
+            for file in fileslist:
+                task = {
+                    "file": file,
+                    "targetdb": dict.get("targetdb"),
+                    "company": dict.get("company"),
+                    "productline": dict.get("productline"),
+                    "product": dict.get("product"),
+                    "total": len(fileslist),
+                }
+                tasks.append(task)
+            # 将任务信息放入 QTask 中
+            for task in tasks:
+                QTask.put(task)
+            # 启动多进程
+            for p in range(processes):
+                p = Process(target=logfile_to_sql, args=(QTask, QData), daemon=True)
+                p.start()
+            # 输入结束信号
+            for p in range(processes):
+                QTask.put({"Signal":"Stop"})
 
-    # 利用自定义的信号去执行槽函数 taskImportlog
-    allSignals.need_want_data.connect(taskImportlog)
-    #######################################################################################
+        # 利用自定义的信号去执行槽函数 taskImportlog
+        allSignals.need_want_data.connect(taskImportlog)
+        #######################################################################################
 
-    # 显示主界面
-    logMain.show()
-    app.exec()
+        # 显示主界面
+        logMain.show()
+        app.exec()
+    except Exception as e:
+        print(e)
