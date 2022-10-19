@@ -248,9 +248,10 @@ class LogAnalysisMain(QMainWindow):
                         for blckfilerule in FileRule.BlckFilesRule:
                             if re.search(blckfilerule, filepath, re.IGNORECASE):
                                 isBlck = True
-                        # 如果符合匹配列表, 并且不在反匹列表, 则将此目录加入到 allfiles 列表里
+                        # 如果符合匹配列表, 并且不在反匹列表, 而且大小不为0, 则将此目录加入到 allfiles 列表里
                         if isNeed == True and isBlck == False:
-                            allfiles.append(filepath)
+                            if os.stat(filepath).st_size != 0:
+                                allfiles.append(filepath)
                         # 初始化标记位
                         isNeed = False
                         isBlck = False
