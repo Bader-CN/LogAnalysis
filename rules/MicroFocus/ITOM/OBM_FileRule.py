@@ -20,6 +20,7 @@ NeedFilesRule = [
     "opr-clis\.log",
     "opr-heartbeat\.log",
     "opr-backend\.log",
+    "opr-flowtrace-backend\.log",
 ]
 
 # 文件级别的反匹规则, 支持正则表达式

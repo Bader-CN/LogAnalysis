@@ -37,7 +37,7 @@ class OBMFiles(ReadFileTemplate):
         """
         if re.findall("opr-gateway\.log|opr-scripting-host\.log|opr-configserver\.log|opr-svcdiscserver\.log|opr-heartbeat\.log|opr-backend\.log", self.file, re.IGNORECASE):
             return self.readlog_obm_type1()
-        elif re.findall("opr-gateway-flowtrace\.log", self.file, re.IGNORECASE):
+        elif re.findall("opr-gateway-flowtrace\.log|opr-flowtrace-backend\.log", self.file, re.IGNORECASE):
             return self.readlog_obm_type2()
         elif re.findall("opr-webapp\.log", self.file, re.IGNORECASE):
             return self.readlog_obm_type3()
@@ -64,6 +64,7 @@ class OBMFiles(ReadFileTemplate):
         # opr-configserver.log
         # opr-svcdiscserver.log
         # opr-heartbeat.log
+        # opr-backend.log
         :return: TaskInfo["data"] = SList --> [sqlalchemy obj1, sqlalchemy obj2, ...]
         """
         # 模块模式下, 记录读取的文件名
@@ -163,6 +164,7 @@ class OBMFiles(ReadFileTemplate):
         """
         OBM logs
         # opr-gateway-flowtrace.log
+        # opr-flowtrace-backend.log
         :return: TaskInfo["data"] = SList --> [sqlalchemy obj1, sqlalchemy obj2, ...]
         """
         # 模块模式下, 记录读取的文件名
@@ -225,9 +227,11 @@ class OBMFiles(ReadFileTemplate):
                         print(e)
         # 基于 FList 转换为 SQLAlchemy 类型的数据类型, 保存在 SList 中
         if __name__ != "__main__":
-            #
+
             if re.findall("opr-gateway-flowtrace\.log", self.file, re.IGNORECASE):
                 from rules.MicroFocus.ITOM.OBM_SQLTable import OPR_Gateway_Flowtrace as OBMTable
+            if re.findall("opr-flowtrace-backend\.log", self.file, re.IGNORECASE):
+                from rules.MicroFocus.ITOM.OBM_SQLTable import OPR_Backend_Flowtrace as OBMTable
 
             file_id = self.get_file_id(targetdb=self.targetdb, file=self.file, FileHash=FileHash)
             for data in FList:
@@ -958,5 +962,5 @@ class OBMFiles(ReadFileTemplate):
                 print(data)
 if __name__ == "__main__":
     # 读取测试文件
-    file = r"C:\OBMLogs\opr-backend.log"
+    file = r"C:\OBMLogs\opr-flowtrace-backend.log"
     test = OBMFiles({"file": file})
