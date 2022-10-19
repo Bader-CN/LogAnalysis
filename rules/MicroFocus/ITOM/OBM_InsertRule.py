@@ -35,7 +35,7 @@ class OBMFiles(ReadFileTemplate):
         针对 OBM 文件进行分类, 然后在做后续处理
         :return:
         """
-        if re.findall("opr-gateway\.log|opr-scripting-host\.log|opr-configserver\.log|opr-svcdiscserver\.log|opr-heartbeat\.log", self.file, re.IGNORECASE):
+        if re.findall("opr-gateway\.log|opr-scripting-host\.log|opr-configserver\.log|opr-svcdiscserver\.log|opr-heartbeat\.log|opr-backend\.log", self.file, re.IGNORECASE):
             return self.readlog_obm_type1()
         elif re.findall("opr-gateway-flowtrace\.log", self.file, re.IGNORECASE):
             return self.readlog_obm_type2()
@@ -101,6 +101,10 @@ class OBMFiles(ReadFileTemplate):
                     log_time = self.get_logtime(log_data[0].split("[")[0].strip())
                     log_level = log_data[0].split(" ", 4)[3]
                     log_comp = log_data[0].split(" ", 4)[4].split("-", 1)[0].strip()
+                    # 针对 opr-backend.log 的额外处理
+                    if log_level not in ["TRACE", "DEBUG", "INFO", "WARN", "WARNING", "ERROR", "CRITICAL"]:
+                        log_level = log_data[0].split("] ", 1)[-1].strip().split(" ", 1)[0]
+                        log_comp = log_data[0].split("] ", 1)[-1].strip().split(" - ", 1)[0].strip().split(" ", 1)[-1]
 
                     log_cont = ""
                     for line in log_data:
@@ -133,6 +137,8 @@ class OBMFiles(ReadFileTemplate):
                 from rules.MicroFocus.ITOM.OBM_SQLTable import OPR_SvcDiscserver as OBMTable
             elif re.findall("opr-heartbeat\.log", self.file, re.IGNORECASE):
                 from rules.MicroFocus.ITOM.OBM_SQLTable import OPR_HeartBeat as OBMTable
+            elif re.findall("opr-backend\.log", self.file, re.IGNORECASE):
+                from rules.MicroFocus.ITOM.OBM_SQLTable import OPR_Backend as OBMTable
 
             file_id = self.get_file_id(targetdb=self.targetdb, file=self.file, FileHash=FileHash)
             for data in FList:
@@ -952,5 +958,5 @@ class OBMFiles(ReadFileTemplate):
                 print(data)
 if __name__ == "__main__":
     # 读取测试文件
-    file = r"C:\OBMLogs\opr-heartbeat.log"
+    file = r"C:\OBMLogs\opr-backend.log"
     test = OBMFiles({"file": file})
