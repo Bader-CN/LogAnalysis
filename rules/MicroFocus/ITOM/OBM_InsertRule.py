@@ -43,7 +43,7 @@ class OBMFiles(ReadFileTemplate):
             return self.readlog_obm_type3()
         elif re.findall("opr-ws-response\.log", self.file, re.IGNORECASE):
             return self.readlog_obm_type4()
-        elif re.findall("user_stats_log_filter\.log|login\.log", self.file, re.IGNORECASE):
+        elif re.findall("user_stats_log_filter\.log|login\.log|nanny_all\.log", self.file, re.IGNORECASE):
             return self.readlog_obm_type5()
         elif re.findall("opr-svcdiscserver-citrace\.log", self.file, re.IGNORECASE):
             return self.readlog_obm_type6()
@@ -436,6 +436,7 @@ class OBMFiles(ReadFileTemplate):
         OBM logs
         # user_stats_log_filter.log
         # login.log
+        # nanny_all.log
         :return: TaskInfo["data"] = SList --> [sqlalchemy obj1, sqlalchemy obj2, ...]
         """
         # 模块模式下, 记录读取的文件名
@@ -475,7 +476,7 @@ class OBMFiles(ReadFileTemplate):
                     idx_list.pop(0)
                     log_time = self.get_logtime(log_data[0].split(" ", 3)[0].strip() + " " + log_data[0].split(" ", 3)[1].strip())
                     log_level = log_data[0].split(" - ", 1)[0].strip().split(" ")[-1]
-                    log_comp = log_data[0].split(" [", 1)[-1].split(") ", 1)[0] + ")"
+                    log_comp = "[" + log_data[0].split(" [", 1)[-1].split(") ", 1)[0] + ")"
 
                     log_cont = ""
                     for line in log_data:
@@ -497,11 +498,13 @@ class OBMFiles(ReadFileTemplate):
                         print(e)
         # 基于 FList 转换为 SQLAlchemy 类型的数据类型, 保存在 SList 中
         if __name__ != "__main__":
-            #
+
             if re.findall("user_stats_log_filter\.log", self.file, re.IGNORECASE):
                 from rules.MicroFocus.ITOM.OBM_SQLTable import User_Stats_Log_Filter as OBMTable
             elif re.findall("login\.log", self.file, re.IGNORECASE):
                 from rules.MicroFocus.ITOM.OBM_SQLTable import Login as OBMTable
+            elif re.findall("nanny_all\.log", self.file, re.IGNORECASE):
+                from rules.MicroFocus.ITOM.OBM_SQLTable import Nanny_All as OBMTable
 
             file_id = self.get_file_id(targetdb=self.targetdb, file=self.file, FileHash=FileHash)
             for data in FList:
@@ -973,5 +976,5 @@ class OBMFiles(ReadFileTemplate):
 
 if __name__ == "__main__":
     # 读取测试文件
-    file = r"C:\OBMLogs\scripts.log"
+    file = r"C:\OBMLogs\nanny_all.log"
     test = OBMFiles({"file": file})

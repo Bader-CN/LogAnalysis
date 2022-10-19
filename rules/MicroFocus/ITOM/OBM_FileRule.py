@@ -2,7 +2,7 @@
 
 # 文件级别的匹配规则, 支持正则表达式
 NeedFilesRule = [
-    # OBM Gateway logs
+    # OBM logs
     "opr-gateway\.log",
     "opr-gateway-flowtrace\.log",
     "opr-scripting-host\.log",
@@ -24,6 +24,7 @@ NeedFilesRule = [
     "bus\.log",
     "opr-ciresolver\.log",
     "scripts\.log",
+    "nanny_all\.log",
 ]
 
 # 文件级别的反匹规则, 支持正则表达式
