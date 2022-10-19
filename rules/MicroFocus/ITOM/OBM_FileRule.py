@@ -25,6 +25,7 @@ NeedFilesRule = [
     "opr-ciresolver\.log",
     "scripts\.log",
     "nanny_all\.log",
+    "wrapper\.log",
 ]
 
 # 文件级别的反匹规则, 支持正则表达式
