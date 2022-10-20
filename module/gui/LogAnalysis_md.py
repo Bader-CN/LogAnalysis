@@ -348,7 +348,7 @@ class LogAnalysisMain(QMainWindow):
                 if path == r"sqlite:///":
                     path = r"sqlite:///" + os.path.abspath(dict.get("targetdb"))
                     engine = create_engine(path, future=True)
-                    Session = sessionmaker(bind=engine)
+                    Session = sessionmaker(bind=engine, autoflush=False)
                     session = Session()
                     session.add_all(dict.get("data"))
                     session.commit()
@@ -372,6 +372,8 @@ class LogAnalysisMain(QMainWindow):
             # 判断条件, 如果进度达到 100%, 则退出循环
             if int((tasksnum/totalnum)*100) == 100:
                 self.ui.progressBar.hide()
+                session.close()
+                AppMainLogger.debug("SQLAlchemy Session has be close.")
                 break
 
         # 更新 DB List UI
