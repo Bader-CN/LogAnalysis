@@ -373,7 +373,7 @@ class LogAnalysisMain(QMainWindow):
             if int((tasksnum/totalnum)*100) == 100:
                 self.ui.progressBar.hide()
                 session.close()
-                AppMainLogger.debug("SQLAlchemy Session has be close.")
+                AppMainLogger.debug("SQLAlchemy write db session has be close.")
                 break
 
         # 更新 DB List UI
