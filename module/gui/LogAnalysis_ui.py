@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'LogAnalysis.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.3.1
+## Created by: Qt User Interface Compiler version 6.4.0
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -16,19 +16,20 @@ from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient,
     QIcon, QImage, QKeySequence, QLinearGradient,
     QPainter, QPalette, QPixmap, QRadialGradient,
     QTransform)
-from PySide6.QtWidgets import (QApplication, QCheckBox, QDateTimeEdit, QHBoxLayout,
-    QHeaderView, QLabel, QLineEdit, QMainWindow,
-    QMenu, QMenuBar, QProgressBar, QPushButton,
-    QSizePolicy, QSpacerItem, QSplitter, QStatusBar,
-    QTabWidget, QTextEdit, QToolBar, QTreeView,
-    QTreeWidget, QTreeWidgetItem, QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (QApplication, QCheckBox, QComboBox, QDateTimeEdit,
+    QHBoxLayout, QHeaderView, QLabel, QLineEdit,
+    QMainWindow, QMenu, QMenuBar, QProgressBar,
+    QPushButton, QSizePolicy, QSpacerItem, QSplitter,
+    QStatusBar, QTabWidget, QTextEdit, QToolBar,
+    QTreeView, QTreeWidget, QTreeWidgetItem, QVBoxLayout,
+    QWidget)
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
-        MainWindow.resize(965, 600)
-        MainWindow.setMinimumSize(QSize(965, 600))
+        MainWindow.resize(1100, 600)
+        MainWindow.setMinimumSize(QSize(1100, 600))
         self.actionDeleteDB = QAction(MainWindow)
         self.actionDeleteDB.setObjectName(u"actionDeleteDB")
         self.action2 = QAction(MainWindow)
@@ -122,6 +123,22 @@ class Ui_MainWindow(object):
         self.date_end_time.setCalendarPopup(True)
 
         self.layout_hor1.addWidget(self.date_end_time)
+
+        self.combox_interval_time = QComboBox(self.widget_right)
+        self.combox_interval_time.addItem("")
+        self.combox_interval_time.addItem("")
+        self.combox_interval_time.addItem("")
+        self.combox_interval_time.addItem("")
+        self.combox_interval_time.addItem("")
+        self.combox_interval_time.addItem("")
+        self.combox_interval_time.setObjectName(u"combox_interval_time")
+        sizePolicy.setHeightForWidth(self.combox_interval_time.sizePolicy().hasHeightForWidth())
+        self.combox_interval_time.setSizePolicy(sizePolicy)
+        self.combox_interval_time.setAutoFillBackground(False)
+        self.combox_interval_time.setSizeAdjustPolicy(QComboBox.AdjustToContents)
+        self.combox_interval_time.setMinimumContentsLength(6)
+
+        self.layout_hor1.addWidget(self.combox_interval_time)
 
         self.btn_new = QPushButton(self.widget_right)
         self.btn_new.setObjectName(u"btn_new")
@@ -219,7 +236,7 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName(u"menubar")
-        self.menubar.setGeometry(QRect(0, 0, 965, 22))
+        self.menubar.setGeometry(QRect(0, 0, 1100, 22))
         self.menuFile = QMenu(self.menubar)
         self.menuFile.setObjectName(u"menuFile")
         MainWindow.setMenuBar(self.menubar)
@@ -252,6 +269,13 @@ class Ui_MainWindow(object):
         self.tabLeft.setTabText(self.tabLeft.indexOf(self.tab_template), QCoreApplication.translate("MainWindow", u"Template", None))
         self.label_start_time.setText(QCoreApplication.translate("MainWindow", u"Start Time", None))
         self.label_end_time.setText(QCoreApplication.translate("MainWindow", u"End Time", None))
+        self.combox_interval_time.setItemText(0, QCoreApplication.translate("MainWindow", u"1 Day", None))
+        self.combox_interval_time.setItemText(1, QCoreApplication.translate("MainWindow", u"3 Day", None))
+        self.combox_interval_time.setItemText(2, QCoreApplication.translate("MainWindow", u"5 Day", None))
+        self.combox_interval_time.setItemText(3, QCoreApplication.translate("MainWindow", u"7 Day", None))
+        self.combox_interval_time.setItemText(4, QCoreApplication.translate("MainWindow", u"30 Day", None))
+        self.combox_interval_time.setItemText(5, QCoreApplication.translate("MainWindow", u"1 Year", None))
+
         self.btn_new.setText(QCoreApplication.translate("MainWindow", u"New", None))
         self.btn_import.setText(QCoreApplication.translate("MainWindow", u"Import", None))
         self.btn_export.setText(QCoreApplication.translate("MainWindow", u"Export", None))
