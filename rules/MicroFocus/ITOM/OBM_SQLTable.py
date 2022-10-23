@@ -1,5 +1,4 @@
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
-from sqlalchemy.orm import relationship
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, FLOAT
 from sqlalchemy.ext.declarative import declarative_base
 
 BASE = declarative_base()
@@ -382,3 +381,24 @@ class Wrapper(BASE):
     log_level = Column(String)
     log_comp = Column(String)
     log_cont = Column(String)
+
+
+class JVM_Statistics(BASE):
+    """
+    OBM jvm_statistics.log
+    """
+    __tablename__ = "obm_jvm_statistics"
+
+    # 表定义
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    file_id = Column(Integer, ForeignKey("filehash.id"))
+    log_line = Column(Integer)
+    log_time = Column(DateTime)
+    heap_used = Column(FLOAT)
+    heap_commit = Column(FLOAT)
+    heap_max = Column(FLOAT)
+    heap_free = Column(FLOAT)
+    non_heap_used = Column(FLOAT)
+    non_heap_commit = Column(FLOAT)
+    non_heap_max = Column(FLOAT)
+    non_heap_free = Column(FLOAT)

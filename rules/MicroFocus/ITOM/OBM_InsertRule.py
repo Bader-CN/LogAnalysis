@@ -57,6 +57,8 @@ class OBMFiles(ReadFileTemplate):
             return self.readlog_UserActions_Servlets()
         elif re.findall("wrapper\.log", self.file, re.IGNORECASE):
             return self.readlog_wrapper()
+        elif re.findall("jvm_statistics\.log", self.file, re.IGNORECASE):
+            return self.readlog_jvm_statistics()
 
     def readlog_obm_type1(self):
         """
@@ -1063,7 +1065,107 @@ class OBMFiles(ReadFileTemplate):
             for data in FList:
                 print(data)
 
+    def readlog_jvm_statistics(self):
+        """
+        OBM jvm_statistics.log
+        :return: TaskInfo["data"] = SList --> [sqlalchemy obj1, sqlalchemy obj2, ...]
+        """
+        # 模块模式下, 记录读取的文件名
+        if __name__ != "__main__":
+            MultSQLLogger.info("Reading File:[{}]".format(self.file))
+        # 初始化变量
+        DList = []  # 原始文档的每一行数据
+        IList = []  # 日志开头的索引
+        FList = []  # 切分完并处理完成的数据
+        SList = []  # 转换为 SQL 语句的数据
+        now_idx = 0
+
+        # 读取文件, 将文件的每一行保存在 DList 中
+        with open(self.file, mode="r", encoding="utf-8", errors="replace") as file:
+            for line in file:
+                DList.append(line.strip())
+        # 判断日志内容的开头, 并将开头所在的索引记录在 IList 中
+        for line in DList:
+            try:
+                log_time = self.get_logtime(line.split(" - ", 1)[0].strip().split(" ")[0] + " " + line.split(" - ", 1)[0].strip().split(" ")[1])
+            except:
+                log_time = "Null"
+            if log_time != "Null":
+                IList.append(DList.index(line, now_idx))
+            now_idx += 1
+        # 根据 DList 的数据和 IList 索引来切分日志条目
+        idx_list = []
+        for idx in IList:
+            idx_list.append(idx)
+            if len(idx_list) == 1:
+                pass
+            else:
+                try:
+                    # 针对切分出来的每一份数据, 获取数据的每一部分
+                    log_line = idx_list[0] + 1
+                    log_data = DList[idx_list[0]:idx_list[1]]
+                    idx_list.pop(0)
+                    log_time = self.get_logtime(log_data[0].split(" - ", 1)[0].strip().split(" ")[0] + " " + log_data[0].split(" - ", 1)[0].strip().split(" ")[1])
+                    heap_info = log_data[0].split("- HEAP -", 1)[-1].split(";", 1)[0].strip()
+                    heap_used = heap_info.split(",")[0].split(":")[-1].strip()
+                    heap_commit = heap_info.split(",")[1].split(":")[-1].strip()
+                    heap_max = heap_info.split(",")[2].split(":")[-1].strip()
+                    heap_free = heap_info.split(":")[-1].split("]")[0].strip()
+                    non_heap_info = log_data[0].split("NON-HEAP -", 1)[-1].split(";", 1)[0].strip()
+                    non_heap_used = non_heap_info.split(",")[0].split(":")[-1].strip()
+                    non_heap_commit = non_heap_info.split(",")[1].split(":")[-1].strip()
+                    non_heap_max = non_heap_info.split(",")[2].split(":")[-1].strip()
+                    non_heap_free = non_heap_info.split(":")[-1].split("]")[0].strip()
+
+                    # 将字典数据加入到 FList 中
+                    FList.append({
+                        "log_line": log_line,
+                        "log_time": log_time,
+                        "heap_used": heap_used,
+                        "heap_commit": heap_commit,
+                        "heap_max": heap_max,
+                        "heap_free": heap_free,
+                        "non_heap_used": non_heap_used,
+                        "non_heap_commit": non_heap_commit,
+                        "non_heap_max": non_heap_max,
+                        "non_heap_free": non_heap_free,
+                    })
+                except Exception as e:
+                    # 模块模式
+                    if __name__ != "__main__":
+                        MultSQLLogger.error(e)
+                    # 测试模式
+                    else:
+                        print(e)
+        # 基于 FList 转换为 SQLAlchemy 类型的数据类型, 保存在 SList 中
+        if __name__ != "__main__":
+            from rules.MicroFocus.ITOM.OBM_SQLTable import JVM_Statistics as OBMTable
+            file_id = self.get_file_id(targetdb=self.targetdb, file=self.file, FileHash=FileHash)
+            for data in FList:
+                SList.append(OBMTable(
+                    file_id=file_id,
+                    log_line=data.get("log_line"),
+                    log_time=datetime.strptime(data.get("log_time"), "%Y-%m-%d %H:%M:%S.%f"),
+                    heap_used=data.get("heap_used"),
+                    heap_commit=data.get("heap_commit"),
+                    heap_max=data.get("heap_max"),
+                    heap_free=data.get("heap_free"),
+                    non_heap_used=data.get("non_heap_used"),
+                    non_heap_commit=data.get("non_heap_commit"),
+                    non_heap_max=data.get("non_heap_max"),
+                    non_heap_free=data.get("non_heap_free"),
+                ))
+
+        # 模块模式下, 将结果数据返回
+        if __name__ != "__main__":
+            self.TaskInfo["data"] = SList
+            return self.TaskInfo
+        # 测试模式下, 打印 FList 数据
+        else:
+            for data in FList:
+                print(data)
+
 if __name__ == "__main__":
     # 读取测试文件
-    file = r"C:\OBMLogs\wrapper.log"
+    file = r"C:\OBMLogs\jvm_statistics.log"
     test = OBMFiles({"file": file})
