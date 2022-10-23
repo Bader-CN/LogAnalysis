@@ -62,6 +62,7 @@ class LogAnalysisMain(QMainWindow):
             self.ui.treeWidget_db.clicked['QModelIndex'].connect(self.slot_set_remove_db_file)
             self.ui.line_search.textChanged.connect(self.set_sql_statement)
             self.ui.actionDeleteDB.triggered.connect(self.slot_action_delete)
+            self.ui.combox_interval_time.activated.connect(self.slot_set_interval_time)
 
             # 定制信号连接槽函数
             allSignals.user_want_data.connect(self.slot_check_taskdict)
@@ -70,13 +71,28 @@ class LogAnalysisMain(QMainWindow):
             AppMainLogger.error(e)
 
     # 调整软件界面
-    def set_start_end_time(self):
+    def set_start_end_time(self, internal=None):
         """
         软件启动时, 设置 Start/End Time 的显示时间
+        :param internal:
         :return:
         """
-        self.ui.date_start_time.setDateTime(QDateTime.addDays(QDateTime.currentDateTime(), -30))
-        self.ui.date_end_time.setDateTime(QDateTime.currentDateTime())
+        # 默认的间隔时间, 默认为一个月
+        if internal == None:
+            self.ui.date_start_time.setDateTime(QDateTime.addMonths(QDateTime.currentDateTime(), -1))
+            self.ui.date_end_time.setDateTime(QDateTime.currentDateTime())
+        elif internal == "1 Day":
+            self.ui.date_start_time.setDateTime(QDateTime.addDays(QDateTime.currentDateTime(), -1))
+        elif internal == "3 Day":
+            self.ui.date_start_time.setDateTime(QDateTime.addDays(QDateTime.currentDateTime(), -3))
+        elif internal == "5 Day":
+            self.ui.date_start_time.setDateTime(QDateTime.addDays(QDateTime.currentDateTime(), -5))
+        elif internal == "7 Day":
+            self.ui.date_start_time.setDateTime(QDateTime.addDays(QDateTime.currentDateTime(), -7))
+        elif internal == "30 Day":
+            self.ui.date_start_time.setDateTime(QDateTime.addDays(QDateTime.currentDateTime(), -30))
+        elif internal == "1 Year":
+            self.ui.date_start_time.setDateTime(QDateTime.addYears(QDateTime.currentDateTime(), -1))
 
     # 调整显示语言
     def set_language_by_main(self):
@@ -621,6 +637,14 @@ class LogAnalysisMain(QMainWindow):
                 self.update_db_list()
             except Exception as e:
                 AppMainLogger.error(e)
+
+    def slot_set_interval_time(self):
+        """
+        根据选择的值来设置开始时间
+        :return:
+        """
+        current_value = self.ui.combox_interval_time.currentText()
+        self.set_start_end_time(current_value)
 
     def update_db_list(self):
         """
