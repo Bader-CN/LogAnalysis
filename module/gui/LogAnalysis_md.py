@@ -47,6 +47,7 @@ class LogAnalysisMain(QMainWindow):
             self.set_language_by_main()
             self.ui.progressBar.hide()
             self.ui.toolBar.addAction(self.ui.actionDeleteDB)
+            self.ui.combox_interval_time.setCurrentIndex(4)
             self.update_db_list()
             self.update_tp_list()
             SQLHighLighter(self.ui.tabSQLQuery.currentWidget().findChild(QTextEdit))
@@ -89,8 +90,8 @@ class LogAnalysisMain(QMainWindow):
             self.ui.date_start_time.setDateTime(QDateTime.addDays(QDateTime.currentDateTime(), -5))
         elif internal == "7 Day":
             self.ui.date_start_time.setDateTime(QDateTime.addDays(QDateTime.currentDateTime(), -7))
-        elif internal == "30 Day":
-            self.ui.date_start_time.setDateTime(QDateTime.addDays(QDateTime.currentDateTime(), -30))
+        elif internal == "1 Month":
+            self.ui.date_start_time.setDateTime(QDateTime.addMonths(QDateTime.currentDateTime(), -1))
         elif internal == "1 Year":
             self.ui.date_start_time.setDateTime(QDateTime.addYears(QDateTime.currentDateTime(), -1))
 

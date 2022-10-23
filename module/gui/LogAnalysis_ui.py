@@ -273,7 +273,7 @@ class Ui_MainWindow(object):
         self.combox_interval_time.setItemText(1, QCoreApplication.translate("MainWindow", u"3 Day", None))
         self.combox_interval_time.setItemText(2, QCoreApplication.translate("MainWindow", u"5 Day", None))
         self.combox_interval_time.setItemText(3, QCoreApplication.translate("MainWindow", u"7 Day", None))
-        self.combox_interval_time.setItemText(4, QCoreApplication.translate("MainWindow", u"30 Day", None))
+        self.combox_interval_time.setItemText(4, QCoreApplication.translate("MainWindow", u"1 Month", None))
         self.combox_interval_time.setItemText(5, QCoreApplication.translate("MainWindow", u"1 Year", None))
 
         self.btn_new.setText(QCoreApplication.translate("MainWindow", u"New", None))
