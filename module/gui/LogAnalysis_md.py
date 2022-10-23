@@ -198,6 +198,13 @@ class LogAnalysisMain(QMainWindow):
             elif (self.current_tb == "oa_summary" or self.current_tb == "oa_config") and input_keyword != "":
                 now_query.setText("SELECT * FROM {}\nWHERE key {} {} OR value {} {};".format(self.current_tb, operater, key_word, operater, key_word))
 
+            # 表名字: obm_jvm_statistics 并且无 input_keyword
+            elif self.current_tb == "obm_jvm_statistics" and input_keyword == "":
+                now_query.setText("SELECT * FROM {}\nWHERE log_time >= '{}' AND log_time <= '{}'\nORDER BY log_time DESC;".format(self.current_tb, str_time, end_time))
+            # 表名字: oa_jvm_statistics 并且有 input_keyword
+            elif self.current_tb == "obm_jvm_statistics" and input_keyword != "":
+                now_query.setText("SELECT * FROM {}\nWHERE log_time >= '{}' AND log_time <= '{}'\nORDER BY log_time DESC;".format(self.current_tb, str_time, end_time))
+
             # 表名字: Other 并且有 input_keyword
             elif input_keyword != "":
                 now_query.setText("SELECT * FROM {}\nWHERE log_time >= '{}' AND log_time <= '{}' AND log_cont {} {}\nORDER BY log_time DESC;".format(self.current_tb, str_time, end_time, operater,key_word))
