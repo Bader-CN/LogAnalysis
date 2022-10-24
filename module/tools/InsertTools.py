@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import time
 import os.path
 from datetime import datetime
 # 类似 java 的抽象类, 这里子类必须要实现带有 @abstractmethod 的方法
@@ -8,6 +9,7 @@ from abc import ABCMeta, abstractmethod
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm import declarative_base
+from module.tools.AppDebug import AppMainLogger
 
 class ReadFileTemplate(metaclass=ABCMeta):
     """
@@ -57,11 +59,26 @@ class ReadFileTemplate(metaclass=ABCMeta):
         :param FileHash:
         :return: int
         """
+        # 状态变量
+        success = False
+        attempt = 0
+        # 连接数据库查询数据
         path = r"sqlite:///" + os.path.abspath(targetdb)
         engine = create_engine(path, future=True)
         Session = sessionmaker(bind=engine)
         session = Session()
-        query = session.query(FileHash).filter(FileHash.filepath == file).first()
+        while not success:
+            try:
+                query = session.query(FileHash).filter(FileHash.filepath == file).first()
+                success = True
+                attempt = 0
+            except:
+                # 如果遇到 DB locked, 尝试 3 次, 失败则退出
+                attempt += 1
+                AppMainLogger.warning("DB is locked, waiting 10s and try again, now attempts {}".format(str(attempt)))
+                if attempt == 3:
+                    break
+                time.sleep(10)
         session.close()
         file_id = query.id
         return file_id
