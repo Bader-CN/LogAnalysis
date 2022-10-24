@@ -340,14 +340,25 @@ class LogAnalysisMain(QMainWindow):
                 # 创建数据库
                 SQLTable.BASE.metadata.create_all(engine)
                 # 针对每个文件计算哈希值, 并将数据写入到数据库中
+                temphash = []
+                tempfile = []
                 for file in allfiles:
                     filehash = hash.filehash(file)
-                    sqldata = SQLTable.FileHash(filepath=file, hash=filehash)
-                    hash_session.add(sqldata)
-                    AppMainLogger.info("Will insert file:[{}], file hash is:[{}]".format(file, filehash))
+                    if filehash not in temphash:
+                        temphash.append(filehash)
+                        sqldata = SQLTable.FileHash(filepath=file, hash=filehash)
+                        hash_session.add(sqldata)
+                        hash_session.commit()
+                        AppMainLogger.info("Will insert file:[{}], file hash is:[{}]".format(file, filehash))
+                    else:
+                        tempfile.append(file)
+                        AppMainLogger.warning("Duplicate hashed file:[{}], file hash is:[{}]".format(file, filehash))
                 # 提交并关闭会话连接
                 hash_session.commit()
                 hash_session.close()
+                # 抹掉不需要的文件
+                for file in tempfile:
+                    allfiles.remove(file)
                 # 发射信号, 将预处理的字典数据传递给日志分析进程
                 allSignals.need_want_data.emit(dict)
                 self.statusBar().clearMessage()
