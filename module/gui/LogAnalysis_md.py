@@ -393,13 +393,12 @@ class LogAnalysisMain(QMainWindow):
                     session.add_all(dict.get("data"))
                     session.commit()
                     tasksnum += 1
+                # 追加 debug 日志
+                AppMainLogger.debug("Successful write to SQLiteDB, finish {}%, targetdb is:[{}]".format(str(int((tasksnum / totalnum) * 100)), dict.get("targetdb")))
             except Exception as e:
                 # 如果出现了异常, 为了程序能够正常结束, tasksnum 计数仍然 + 1
                 tasksnum += 1
                 AppMainLogger.error("Write to SQLiteDB faild, file is [{}], result is:\n{}".format(dict.get("file"), e))
-
-            # 追加 debug 日志
-            AppMainLogger.debug("Successful write to SQLiteDB, finish {}%, targetdb is:[{}]".format(str(int((tasksnum/totalnum)*100)), dict.get("targetdb")))
 
             # 更新进度条
             self.ui.progressBar.setValue(int((tasksnum/totalnum)*100))
