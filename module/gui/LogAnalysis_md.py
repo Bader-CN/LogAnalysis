@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import os, re, csv, copy
+import os, re, csv, copy, time
 from threading import Thread
 from PySide6.QtGui import QFont
 from PySide6.QtCore import QDateTime, QDir
@@ -411,7 +411,9 @@ class LogAnalysisMain(QMainWindow):
                 break
 
         # 更新 DB List UI
+        time.sleep(1)
         self.update_db_list()
+        exit(0)
 
     def slot_check_taskdict(self, dict):
         """
