@@ -67,6 +67,7 @@ class LogAnalysisMain(QMainWindow):
 
             # 定制信号连接槽函数
             allSignals.user_want_data.connect(self.slot_check_taskdict)
+            allSignals.import_process.connect(self.slot_update_process)
 
         except Exception as e:
             AppMainLogger.error(e)
@@ -401,19 +402,12 @@ class LogAnalysisMain(QMainWindow):
                 AppMainLogger.error("Write to SQLiteDB faild, file is [{}], result is:\n{}".format(dict.get("file"), e))
 
             # 更新进度条
-            self.ui.progressBar.setValue(int((tasksnum/totalnum)*100))
-            self.ui.progressBar.text()
+            allSignals.import_process.emit(int((tasksnum/totalnum)*100))
             # 判断条件, 如果进度达到 100%, 则退出循环
             if int((tasksnum/totalnum)*100) == 100:
-                self.ui.progressBar.hide()
                 session.close()
                 AppMainLogger.debug("SQLAlchemy write db session has be close.")
                 break
-
-        # 更新 DB List UI
-        time.sleep(1)
-        self.update_db_list()
-        exit(0)
 
     def slot_check_taskdict(self, dict):
         """
@@ -665,6 +659,19 @@ class LogAnalysisMain(QMainWindow):
         """
         current_value = self.ui.combox_interval_time.currentText()
         self.set_start_end_time(current_value)
+
+    def slot_update_process(self, percent_number):
+        """
+        更新进度百分比
+        :param percent_number:int
+        :return:
+        """
+        self.ui.progressBar.setValue(percent_number)
+        self.ui.progressBar.text()
+        if percent_number == 100:
+            self.ui.progressBar.hide()
+
+        self.update_db_list()
 
     def update_db_list(self):
         """

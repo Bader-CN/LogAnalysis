@@ -70,7 +70,7 @@ if __name__ == '__main__':
         app = QApplication([])
         # 实例化 LogAnalysis 主界面并设置标题
         logMain = LogAnalysisMain()
-        logMain.setWindowTitle("LogAnalysis Beta v0.2.1")
+        logMain.setWindowTitle("LogAnalysis Beta v0.2.2")
         # 实例化 LogAnalysis Import 界面
         logImport = LogAnalysisImport()
         # 实例化 LogAnalysis Select Content 界面

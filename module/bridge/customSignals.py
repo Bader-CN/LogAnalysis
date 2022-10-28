@@ -16,5 +16,8 @@ class CustomSignals(QObject):
     # 传递单元格内容的信息
     select_cell_data = Signal(str)
 
+    # 传递进度百分比信号
+    import_process = Signal(int)
+
 # 实例化定制的信号类
 allSignals = CustomSignals()
