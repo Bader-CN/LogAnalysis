@@ -59,6 +59,8 @@ class OBMFiles(ReadFileTemplate):
             return self.readlog_wrapper()
         elif re.findall("jvm_statistics\.log", self.file, re.IGNORECASE):
             return self.readlog_jvm_statistics()
+        elif re.findall("opr-checker-xml\.txt", self.file, re.IGNORECASE):
+            return self.readcfg_opr_checker()
 
     def readlog_obm_type1(self):
         """
@@ -1165,7 +1167,105 @@ class OBMFiles(ReadFileTemplate):
             for data in FList:
                 print(data)
 
+    def readcfg_opr_checker(self):
+        """
+        OBM opr-checker-xml.txt 文件解析函数
+        :return: TaskInfo["data"] = SList --> [sqlalchemy obj1, sqlalchemy obj2, ...]
+        """
+        SList = []
+        hostname = "Null"
+        domain = "Null"
+        os = "Null"
+        memory = "Null"
+        obm_version = "Null"
+        obm_ipaddress = "Null"
+        obm_install_patch = "Null"
+        obm_install_hotfix = "Null"
+        ipaddress = []
+        obm_patch = []
+        obm_hotfx = []
+        try:
+            # 读取相关数据
+            with open(self.file, mode="r", encoding="utf-8", errors="replace") as f:
+                for line in f:
+                    line = line.strip()
+                    if re.findall("<hostname>(.*?)</hostname>", line):
+                        hostname = re.findall("<hostname>(.*?)</hostname>", line)[0]
+                    elif re.findall("<domain>(.*?)</domain>", line):
+                        domain = re.findall("<domain>(.*?)</domain>", line)[0]
+                    elif re.findall("<os>(.*?)</os>", line):
+                        os = re.findall("<os>(.*?)</os>", line)[0]
+                    elif re.findall("<physical_memory>(.*?)</physical_memory>", line):
+                        memory = str(re.findall("<physical_memory>(.*?)</physical_memory>", line)[0])
+                    elif re.findall("<ip_address>(.*?)</ip_address>", line):
+                        ipaddress.append(re.findall("<ip_address>(.*?)</ip_address>", line)[0])
+                    elif re.findall("<OfficialRelease>(.*?)</OfficialRelease>", line):
+                        obm_version = re.findall("<OfficialRelease>(.*?)</OfficialRelease>", line)[0]
+                    elif re.findall("<Patch>(.*?)</Patch>", line):
+                        obm_patch.append(re.findall("<Patch>(.*?)</Patch>", line)[0])
+                    elif re.findall("<Hotfix>(.*?)</Hotfix>", line):
+                        obm_hotfx.append(re.findall("<Hotfix>(.*?)</Hotfix>", line)[0])
+
+            # 整理相关数据
+            if len(ipaddress) != 0:
+                obm_ipaddress = ""
+                for ip in ipaddress:
+                    obm_ipaddress += ip + "\n"
+                obm_ipaddress = obm_ipaddress[:-1]
+
+            if len(obm_patch) != 0:
+                obm_install_patch = ""
+                for patch in obm_patch:
+                    obm_install_patch += patch + "\n"
+                obm_install_patch = obm_install_patch[:-1]
+
+            if len(obm_hotfx) != 0:
+                obm_install_hotfix = ""
+                for hotfix in obm_hotfx:
+                    obm_install_hotfix += hotfix + "\n"
+                obm_install_hotfix = obm_install_hotfix[:-1]
+
+
+            # 模块模式下, 将数据转换为 SQLAlchemy 类型的数据类型, 并保存在 SList 中
+            if __name__ != "__main__":
+                from rules.MicroFocus.ITOM.OBM_SQLTable import OBM_Summary
+                file_id = self.get_file_id(targetdb=self.targetdb, file=self.file, FileHash=FileHash)
+                SList.append(OBM_Summary(file_id=file_id, key=hostname + "." + "OS", value=os))
+                SList.append(OBM_Summary(file_id=file_id, key=hostname + "." + "Version", value=obm_version))
+                SList.append(OBM_Summary(file_id=file_id, key=hostname + "." + "Memory", value = memory))
+                SList.append(OBM_Summary(file_id=file_id, key=hostname + "." + "IPs", value = obm_ipaddress))
+                SList.append(OBM_Summary(file_id=file_id, key=hostname + "." + "Patchs", value=obm_install_patch))
+                SList.append(OBM_Summary(file_id=file_id, key=hostname + "." + "Hotfix", value=obm_install_hotfix))
+        except Exception as e:
+            # 模块模式
+            if __name__ != "__main__":
+                MultSQLLogger.error(e)
+            # 测试模式
+            else:
+                print(e)
+
+        # 模块模式下, 将结果数据返回
+        if __name__ != "__main__":
+            self.TaskInfo["data"] = SList
+            return self.TaskInfo
+        # 测试模式下, 打印获取的数据
+        else:
+            print("====== FQDN ======")
+            print(hostname + domain)
+            print("====== OS ======")
+            print(os)
+            print("====== Memory ======")
+            print(memory)
+            print("====== IPs ======")
+            print(obm_ipaddress)
+            print("====== OBM Version ======")
+            print(obm_version)
+            print("====== OBM Patchs ======")
+            print(obm_install_patch)
+            print("====== OBM Hotfix ======")
+            print(obm_install_hotfix)
+
 if __name__ == "__main__":
     # 读取测试文件
-    file = r"C:\OBMLogs\jvm_statistics.log"
+    file = r"D:\opr-checker-xml.txt"
     test = OBMFiles({"file": file})

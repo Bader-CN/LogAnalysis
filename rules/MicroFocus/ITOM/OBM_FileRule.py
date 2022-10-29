@@ -27,6 +27,8 @@ NeedFilesRule = [
     "nanny_all\.log",
     "wrapper\.log",
     "jvm_statistics\.log",
+    # OBM Config file
+    "opr-checker-xml\.txt",
 ]
 
 # 文件级别的反匹规则, 支持正则表达式

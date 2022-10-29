@@ -402,3 +402,14 @@ class JVM_Statistics(BASE):
     non_heap_commit = Column(FLOAT)
     non_heap_max = Column(FLOAT)
     non_heap_free = Column(FLOAT)
+
+class OBM_Summary(BASE):
+    """
+    OBM opr-checker-xml.txt
+    """
+    __tablename__ = "obm_summary"
+    # 表定义
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    file_id = Column(Integer, ForeignKey("filehash.id"))
+    key = Column(String)
+    value = Column(String)
