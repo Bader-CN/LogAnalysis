@@ -9,8 +9,7 @@ from abc import ABCMeta, abstractmethod
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm import declarative_base
-if __name__ == "__main__":
-    from module.tools.AppDebug import AppMainLogger
+from module.tools.AppDebug import AppMainLogger
 
 class ReadFileTemplate(metaclass=ABCMeta):
     """
