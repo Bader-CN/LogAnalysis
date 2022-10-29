@@ -27,6 +27,7 @@ NeedFilesRule = [
     "nanny_all\.log",
     "wrapper\.log",
     "jvm_statistics\.log",
+    "OvSvcDiscServer\.log",
     # OBM Config file
     "opr-checker-xml\.txt",
 ]

@@ -9,7 +9,10 @@ from abc import ABCMeta, abstractmethod
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm import declarative_base
-from module.tools.AppDebug import AppMainLogger
+try:
+    from module.tools.AppDebug import AppMainLogger
+except:
+    pass
 
 class ReadFileTemplate(metaclass=ABCMeta):
     """
@@ -36,6 +39,7 @@ class ReadFileTemplate(metaclass=ABCMeta):
             "%Y %b %d %H:%M:%S",
             "%d-%b-%Y %H:%M:%S",
             "%m/%d/%Y %H:%M:%S",
+            "%a %b %d %H:%M:%S %Z %Y",
         ]
 
         for datetime_format in datetime_formats:
