@@ -30,6 +30,10 @@ NeedFilesRule = [
     "OvSvcDiscServer\.log",
     # OBM Config file
     "opr-checker-xml\.txt",
+    # OBM RTSM.sql log
+    "cmdb\.reconciliation\.error.*log",
+    "cmdb\.reconciliation\.datain\.merged.*log",
+    "cmdb\.reconciliation\.datain\.ignored.*log",
 ]
 
 # 文件级别的反匹规则, 支持正则表达式

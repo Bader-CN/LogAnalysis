@@ -382,6 +382,7 @@ class Wrapper(BASE):
     log_comp = Column(String)
     log_cont = Column(String)
 
+
 class OvSvcDiscServer(BASE):
     """
     OBM OvSvcDiscServer.log
@@ -418,6 +419,7 @@ class JVM_Statistics(BASE):
     non_heap_max = Column(FLOAT)
     non_heap_free = Column(FLOAT)
 
+
 class OBM_Summary(BASE):
     """
     OBM opr-checker-xml.txt
@@ -428,3 +430,51 @@ class OBM_Summary(BASE):
     file_id = Column(Integer, ForeignKey("filehash.id"))
     key = Column(String)
     value = Column(String)
+
+
+class CMDB_Reconciliation_Error(BASE):
+    """
+    OBM RTSM.sql cmdb.reconciliation.error.log
+    """
+    __tablename__ = "obm_cmdb_reconciliation_error"
+
+    # 表定义
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    file_id = Column(Integer, ForeignKey("filehash.id"))
+    log_line = Column(Integer)
+    log_time = Column(DateTime)
+    log_level = Column(String)
+    log_comp = Column(String)
+    log_cont = Column(String)
+
+
+class CMDB_Reconciliation_Datain_Merged(BASE):
+    """
+    OBM RTSM.sql cmdb.reconciliation.datain.merged.log
+    """
+    __tablename__ = "obm_cmdb_reconciliation_datain_merged"
+
+    # 表定义
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    file_id = Column(Integer, ForeignKey("filehash.id"))
+    log_line = Column(Integer)
+    log_time = Column(DateTime)
+    log_level = Column(String)
+    log_comp = Column(String)
+    log_cont = Column(String)
+
+
+class CMDB_Reconciliation_Datain_Ignored(BASE):
+    """
+    OBM RTSM.sql cmdb.reconciliation.datain.ignored.log
+    """
+    __tablename__ = "obm_cmdb_reconciliation_datain_ignored"
+
+    # 表定义
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    file_id = Column(Integer, ForeignKey("filehash.id"))
+    log_line = Column(Integer)
+    log_time = Column(DateTime)
+    log_level = Column(String)
+    log_comp = Column(String)
+    log_cont = Column(String)

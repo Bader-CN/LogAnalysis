@@ -53,6 +53,12 @@ class OBMFiles(ReadFileTemplate):
             return self.readlog_obm_type8()
         elif re.findall("opr-clis\.log|bus\.log", self.file, re.IGNORECASE):
             return self.readlog_obm_type9()
+        elif re.findall("cmdb\.reconciliation\.datain\.merged.*log", self.file, re.IGNORECASE):
+            return self.readlog_obm_rtsm1()
+        elif re.findall("cmdb\.reconciliation\.datain\.ignored.*log", self.file, re.IGNORECASE):
+            return self.readlog_obm_rtsm2()
+        elif re.findall("cmdb\.reconciliation\.error.*log", self.file, re.IGNORECASE):
+            return self.readlog_obm_rtsm3()
         elif re.findall("UserActions.servlets\.log", self.file, re.IGNORECASE):
             return self.readlog_UserActions_Servlets()
         elif re.findall("wrapper\.log", self.file, re.IGNORECASE):
@@ -891,6 +897,267 @@ class OBMFiles(ReadFileTemplate):
             for data in FList:
                 print(data)
 
+    def readlog_obm_rtsm1(self):
+        """
+        OBM RTSM.sql Logs
+        # cmdb.reconciliation.datain.merged.log
+        :return: TaskInfo["data"] = SList --> [sqlalchemy obj1, sqlalchemy obj2, ...]
+        """
+        # 模块模式下, 记录读取的文件名
+        if __name__ != "__main__":
+            MultSQLLogger.info("Reading File:[{}]".format(self.file))
+        # 初始化变量
+        DList = []  # 原始文档的每一行数据
+        IList = []  # 日志开头的索引
+        FList = []  # 切分完并处理完成的数据
+        SList = []  # 转换为 SQL 语句的数据
+        now_idx = 0
+
+        # 读取文件, 将文件的每一行保存在 DList 中
+        with open(self.file, mode="r", encoding="utf-8", errors="replace") as file:
+            for line in file:
+                DList.append(line.strip())
+        # 判断日志内容的开头, 并将开头所在的索引记录在 IList 中
+        for line in DList:
+            try:
+                log_time = self.get_logtime(line.split(" ", 3)[0] + " " + line.split(" ", 3)[1])
+            except:
+                log_time = "Null"
+            if log_time != "Null":
+                IList.append(DList.index(line, now_idx))
+            now_idx += 1
+        # 根据 DList 的数据和 IList 索引来切分日志条目
+        idx_list = []
+        for idx in IList:
+            idx_list.append(idx)
+            if len(idx_list) == 1:
+                pass
+            else:
+                try:
+                    # 针对切分出来的每一份数据, 获取数据的每一部分
+                    log_line = idx_list[0] + 1
+                    log_data = DList[idx_list[0]:idx_list[1]]
+                    idx_list.pop(0)
+                    log_time = self.get_logtime(log_data[0].split(" ", 3)[0] + " " + log_data[0].split(" ", 3)[1])
+                    log_level = log_data[0].split(" ", 4)[3].strip()
+                    log_comp = re.findall("\[.*\]", log_data[0], re.IGNORECASE)[0]
+
+                    log_cont = ""
+                    for line in log_data:
+                        log_cont += line + "\n"
+                    log_cont = log_cont.split(" - ", 2)[-1].strip()
+                    # 将字典数据加入到 FList 中
+                    FList.append({
+                        "log_line": log_line,
+                        "log_time": log_time,
+                        "log_level": log_level,
+                        "log_comp": log_comp,
+                        "log_cont": log_cont, })
+                except Exception as e:
+                    # 模块模式
+                    if __name__ != "__main__":
+                        MultSQLLogger.error(e)
+                    # 测试模式
+                    else:
+                        print(e)
+        # 基于 FList 转换为 SQLAlchemy 类型的数据类型, 保存在 SList 中
+        if __name__ != "__main__":
+            if re.findall("cmdb\.reconciliation\.datain\.merged.*log", self.file, re.IGNORECASE):
+                from rules.MicroFocus.ITOM.OBM_SQLTable import CMDB_Reconciliation_Datain_Merged as OBMTable
+
+            file_id = self.get_file_id(targetdb=self.targetdb, file=self.file, FileHash=FileHash)
+            for data in FList:
+                SList.append(OBMTable(
+                    file_id=file_id,
+                    log_line=data.get("log_line"),
+                    log_time=datetime.strptime(data.get("log_time"), "%Y-%m-%d %H:%M:%S.%f"),
+                    log_level=data.get("log_level"),
+                    log_comp=data.get("log_comp"),
+                    log_cont=data.get("log_cont")))
+
+        # 模块模式下, 将结果数据返回
+        if __name__ != "__main__":
+            self.TaskInfo["data"] = SList
+            return self.TaskInfo
+        # 测试模式下, 打印 FList 数据
+        else:
+            for data in FList:
+                print(data)
+
+    def readlog_obm_rtsm2(self):
+        """
+        OBM RTSM.sql Logs
+        # cmdb.reconciliation.datain.ignored.log
+        :return: TaskInfo["data"] = SList --> [sqlalchemy obj1, sqlalchemy obj2, ...]
+        """
+        # 模块模式下, 记录读取的文件名
+        if __name__ != "__main__":
+            MultSQLLogger.info("Reading File:[{}]".format(self.file))
+        # 初始化变量
+        DList = []  # 原始文档的每一行数据
+        IList = []  # 日志开头的索引
+        FList = []  # 切分完并处理完成的数据
+        SList = []  # 转换为 SQL 语句的数据
+        now_idx = 0
+
+        # 读取文件, 将文件的每一行保存在 DList 中
+        with open(self.file, mode="r", encoding="utf-8", errors="replace") as file:
+            for line in file:
+                DList.append(line.strip())
+        # 判断日志内容的开头, 并将开头所在的索引记录在 IList 中
+        for line in DList:
+            try:
+                log_time = self.get_logtime(line.split(" ", 3)[0] + " " + line.split(" ", 3)[1])
+            except:
+                log_time = "Null"
+            if log_time != "Null":
+                IList.append(DList.index(line, now_idx))
+            now_idx += 1
+        # 根据 DList 的数据和 IList 索引来切分日志条目
+        idx_list = []
+        for idx in IList:
+            idx_list.append(idx)
+            if len(idx_list) == 1:
+                pass
+            else:
+                try:
+                    # 针对切分出来的每一份数据, 获取数据的每一部分
+                    log_line = idx_list[0] + 1
+                    log_data = DList[idx_list[0]:idx_list[1]]
+                    idx_list.pop(0)
+                    log_time = self.get_logtime(log_data[0].split(" ", 3)[0] + " " + log_data[0].split(" ", 3)[1])
+                    log_level = log_data[0].split(" ", 4)[3].strip()
+                    log_comp = re.findall("\[.*\]", log_data[0], re.IGNORECASE)[0]
+
+                    log_cont = ""
+                    for line in log_data:
+                        log_cont += line + "\n"
+                    log_cont = log_cont.split(" - ", 1)[-1].strip()
+                    # 将字典数据加入到 FList 中
+                    FList.append({
+                        "log_line": log_line,
+                        "log_time": log_time,
+                        "log_level": log_level,
+                        "log_comp": log_comp,
+                        "log_cont": log_cont, })
+                except Exception as e:
+                    # 模块模式
+                    if __name__ != "__main__":
+                        MultSQLLogger.error(e)
+                    # 测试模式
+                    else:
+                        print(e)
+        # 基于 FList 转换为 SQLAlchemy 类型的数据类型, 保存在 SList 中
+        if __name__ != "__main__":
+            if re.findall("cmdb\.reconciliation\.datain\.ignored.*log", self.file, re.IGNORECASE):
+                from rules.MicroFocus.ITOM.OBM_SQLTable import CMDB_Reconciliation_Datain_Ignored as OBMTable
+
+            file_id = self.get_file_id(targetdb=self.targetdb, file=self.file, FileHash=FileHash)
+            for data in FList:
+                SList.append(OBMTable(
+                    file_id=file_id,
+                    log_line=data.get("log_line"),
+                    log_time=datetime.strptime(data.get("log_time"), "%Y-%m-%d %H:%M:%S.%f"),
+                    log_level=data.get("log_level"),
+                    log_comp=data.get("log_comp"),
+                    log_cont=data.get("log_cont")))
+
+        # 模块模式下, 将结果数据返回
+        if __name__ != "__main__":
+            self.TaskInfo["data"] = SList
+            return self.TaskInfo
+        # 测试模式下, 打印 FList 数据
+        else:
+            for data in FList:
+                print(data)
+
+    def readlog_obm_rtsm3(self):
+        """
+        OBM RTSM.sql Logs
+        # cmdb.reconciliation.error.log
+        :return: TaskInfo["data"] = SList --> [sqlalchemy obj1, sqlalchemy obj2, ...]
+        """
+        # 模块模式下, 记录读取的文件名
+        if __name__ != "__main__":
+            MultSQLLogger.info("Reading File:[{}]".format(self.file))
+        # 初始化变量
+        DList = []  # 原始文档的每一行数据
+        IList = []  # 日志开头的索引
+        FList = []  # 切分完并处理完成的数据
+        SList = []  # 转换为 SQL 语句的数据
+        now_idx = 0
+
+        # 读取文件, 将文件的每一行保存在 DList 中
+        with open(self.file, mode="r", encoding="utf-8", errors="replace") as file:
+            for line in file:
+                DList.append(line.strip())
+        # 判断日志内容的开头, 并将开头所在的索引记录在 IList 中
+        for line in DList:
+            try:
+                log_time = self.get_logtime(line.split(" ", 3)[0] + " " + line.split(" ", 3)[1])
+            except:
+                log_time = "Null"
+            if log_time != "Null":
+                IList.append(DList.index(line, now_idx))
+            now_idx += 1
+        # 根据 DList 的数据和 IList 索引来切分日志条目
+        idx_list = []
+        for idx in IList:
+            idx_list.append(idx)
+            if len(idx_list) == 1:
+                pass
+            else:
+                try:
+                    # 针对切分出来的每一份数据, 获取数据的每一部分
+                    log_line = idx_list[0] + 1
+                    log_data = DList[idx_list[0]:idx_list[1]]
+                    idx_list.pop(0)
+                    log_time = self.get_logtime(log_data[0].split(" ", 3)[0] + " " + log_data[0].split(" ", 3)[1])
+                    log_level = log_data[0].split(" ", 4)[3].strip()
+                    log_comp = "[" + log_data[0].split(": ", 1)[0].split("[", 1)[-1]
+
+                    log_cont = ""
+                    for line in log_data:
+                        log_cont += line + "\n"
+                    log_cont = log_cont.split(": ", 1)[-1].strip()
+                    # 将字典数据加入到 FList 中
+                    FList.append({
+                        "log_line": log_line,
+                        "log_time": log_time,
+                        "log_level": log_level,
+                        "log_comp": log_comp,
+                        "log_cont": log_cont, })
+                except Exception as e:
+                    # 模块模式
+                    if __name__ != "__main__":
+                        MultSQLLogger.error(e)
+                    # 测试模式
+                    else:
+                        print(e)
+        # 基于 FList 转换为 SQLAlchemy 类型的数据类型, 保存在 SList 中
+        if __name__ != "__main__":
+            if re.findall("cmdb\.reconciliation\.error.*log", self.file, re.IGNORECASE):
+                from rules.MicroFocus.ITOM.OBM_SQLTable import CMDB_Reconciliation_Error as OBMTable
+
+            file_id = self.get_file_id(targetdb=self.targetdb, file=self.file, FileHash=FileHash)
+            for data in FList:
+                SList.append(OBMTable(
+                    file_id=file_id,
+                    log_line=data.get("log_line"),
+                    log_time=datetime.strptime(data.get("log_time"), "%Y-%m-%d %H:%M:%S.%f"),
+                    log_level=data.get("log_level"),
+                    log_comp=data.get("log_comp"),
+                    log_cont=data.get("log_cont")))
+
+        # 模块模式下, 将结果数据返回
+        if __name__ != "__main__":
+            self.TaskInfo["data"] = SList
+            return self.TaskInfo
+        # 测试模式下, 打印 FList 数据
+        else:
+            for data in FList:
+                print(data)
+
     def readlog_UserActions_Servlets(self):
         """
         OBM UserActions.servlets.log
@@ -1358,5 +1625,5 @@ class OBMFiles(ReadFileTemplate):
 
 if __name__ == "__main__":
     # 读取测试文件
-    file = r"D:\OvSvcDiscServer.log"
+    file = r"D:\ucmdb\runtime\log\cmdb.reconciliation.error.log"
     test = OBMFiles({"file": file})
