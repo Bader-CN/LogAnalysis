@@ -15,91 +15,44 @@ class FileHash(BASE):
     hash = Column(String, unique=True)
 
 
-class OPR_Gateway(BASE):
+class OBM_Summary(BASE):
     """
-    OBM opr-gateway.log
+    OBM opr-checker-xml.txt
     """
-    __tablename__ = "obm_opr_gateway"
+    __tablename__ = "obm_summary"
+    # 表定义
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    file_id = Column(Integer, ForeignKey("filehash.id"))
+    key = Column(String)
+    value = Column(String)
+
+
+class JVM_Statistics(BASE):
+    """
+    OBM jvm_statistics.log
+    """
+    __tablename__ = "obm_jvm_statistics"
 
     # 表定义
     id = Column(Integer, primary_key=True, autoincrement=True)
     file_id = Column(Integer, ForeignKey("filehash.id"))
     log_line = Column(Integer)
     log_time = Column(DateTime)
-    log_level = Column(String)
-    log_comp = Column(String)
-    log_cont = Column(String)
+    heap_used = Column(FLOAT)
+    heap_commit = Column(FLOAT)
+    heap_max = Column(FLOAT)
+    heap_free = Column(FLOAT)
+    non_heap_used = Column(FLOAT)
+    non_heap_commit = Column(FLOAT)
+    non_heap_max = Column(FLOAT)
+    non_heap_free = Column(FLOAT)
 
 
-class OPR_Backend(BASE):
+class BUS(BASE):
     """
-    OBM opr-backend.log
+    OBM bus.log
     """
-    __tablename__ = "obm_opr_backend"
-
-    # 表定义
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    file_id = Column(Integer, ForeignKey("filehash.id"))
-    log_line = Column(Integer)
-    log_time = Column(DateTime)
-    log_level = Column(String)
-    log_comp = Column(String)
-    log_cont = Column(String)
-
-
-class OPR_Gateway_Flowtrace(BASE):
-    """
-    OBM opr-gateway-flowtrace.log
-    """
-    __tablename__ = "obm_opr_gateway_flowtrace"
-
-    # 表定义
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    file_id = Column(Integer, ForeignKey("filehash.id"))
-    log_line = Column(Integer)
-    log_time = Column(DateTime)
-    log_level = Column(String)
-    log_comp = Column(String)
-    log_cont = Column(String)
-
-
-class OPR_Backend_Flowtrace(BASE):
-    """
-    OBM opr-flowtrace-backend.log (名字没写错……)
-    """
-    __tablename__ = "obm_opr_backend_flowtrace"
-
-    # 表定义
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    file_id = Column(Integer, ForeignKey("filehash.id"))
-    log_line = Column(Integer)
-    log_time = Column(DateTime)
-    log_level = Column(String)
-    log_comp = Column(String)
-    log_cont = Column(String)
-
-
-class OPR_Scripting_Host(BASE):
-    """
-    OBM opr-scripting-host.log
-    """
-    __tablename__ = "obm_opr_scripting_host"
-
-    # 表定义
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    file_id = Column(Integer, ForeignKey("filehash.id"))
-    log_line = Column(Integer)
-    log_time = Column(DateTime)
-    log_level = Column(String)
-    log_comp = Column(String)
-    log_cont = Column(String)
-
-
-class OPR_ConfigServer(BASE):
-    """
-    OBM opr-configserver.log
-    """
-    __tablename__ = "obm_opr_configserver"
+    __tablename__ = "obm_bus"
 
     # 表定义
     id = Column(Integer, primary_key=True, autoincrement=True)
@@ -143,11 +96,171 @@ class OPR_WS_Response(BASE):
     log_cont = Column(String)
 
 
-class User_Stats_Log_Filter(BASE):
+class OPR_Gateway(BASE):
     """
-    OBM opr-ws-response.log
+    OBM opr-gateway.log
     """
-    __tablename__ = "obm_user_stats_log_filter"
+    __tablename__ = "obm_opr_gateway"
+
+    # 表定义
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    file_id = Column(Integer, ForeignKey("filehash.id"))
+    log_line = Column(Integer)
+    log_time = Column(DateTime)
+    log_level = Column(String)
+    log_comp = Column(String)
+    log_cont = Column(String)
+
+
+class OPR_Gateway_Flowtrace(BASE):
+    """
+    OBM opr-gateway-flowtrace.log
+    """
+    __tablename__ = "obm_opr_gateway_flowtrace"
+
+    # 表定义
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    file_id = Column(Integer, ForeignKey("filehash.id"))
+    log_line = Column(Integer)
+    log_time = Column(DateTime)
+    log_level = Column(String)
+    log_comp = Column(String)
+    log_cont = Column(String)
+
+
+class OPR_HeartBeat(BASE):
+    """
+    OBM opr-heartbeat.log
+    """
+    __tablename__ = "obm_opr_heartbeat"
+
+    # 表定义
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    file_id = Column(Integer, ForeignKey("filehash.id"))
+    log_line = Column(Integer)
+    log_time = Column(DateTime)
+    log_level = Column(String)
+    log_comp = Column(String)
+    log_cont = Column(String)
+
+
+class OPR_Backend(BASE):
+    """
+    OBM opr-backend.log
+    """
+    __tablename__ = "obm_opr_backend"
+
+    # 表定义
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    file_id = Column(Integer, ForeignKey("filehash.id"))
+    log_line = Column(Integer)
+    log_time = Column(DateTime)
+    log_level = Column(String)
+    log_comp = Column(String)
+    log_cont = Column(String)
+
+
+class OPR_Backend_Flowtrace(BASE):
+    """
+    OBM opr-flowtrace-backend.log (名字没写错……)
+    """
+    __tablename__ = "obm_opr_backend_flowtrace"
+
+    # 表定义
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    file_id = Column(Integer, ForeignKey("filehash.id"))
+    log_line = Column(Integer)
+    log_time = Column(DateTime)
+    log_level = Column(String)
+    log_comp = Column(String)
+    log_cont = Column(String)
+
+
+class OPR_Scripting_Host(BASE):
+    """
+    OBM opr-scripting-host.log
+    """
+    __tablename__ = "obm_opr_scripting_host"
+
+    # 表定义
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    file_id = Column(Integer, ForeignKey("filehash.id"))
+    log_line = Column(Integer)
+    log_time = Column(DateTime)
+    log_level = Column(String)
+    log_comp = Column(String)
+    log_cont = Column(String)
+
+
+class OPR_CLIS(BASE):
+    """
+    OBM opr-clis.log
+    """
+    __tablename__ = "obm_opr_clis"
+
+    # 表定义
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    file_id = Column(Integer, ForeignKey("filehash.id"))
+    log_line = Column(Integer)
+    log_time = Column(DateTime)
+    log_level = Column(String)
+    log_comp = Column(String)
+    log_cont = Column(String)
+
+
+class OPR_ConfigServer(BASE):
+    """
+    OBM opr-configserver.log
+    """
+    __tablename__ = "obm_opr_configserver"
+
+    # 表定义
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    file_id = Column(Integer, ForeignKey("filehash.id"))
+    log_line = Column(Integer)
+    log_time = Column(DateTime)
+    log_level = Column(String)
+    log_comp = Column(String)
+    log_cont = Column(String)
+
+
+class OPR_SvcDiscserver(BASE):
+    """
+    OBM opr-svcdiscserver.log
+    """
+    __tablename__ = "obm_opr_svcdiscserver"
+
+    # 表定义
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    file_id = Column(Integer, ForeignKey("filehash.id"))
+    log_line = Column(Integer)
+    log_time = Column(DateTime)
+    log_level = Column(String)
+    log_comp = Column(String)
+    log_cont = Column(String)
+
+
+class OPR_SvcDiscserver_CITrace(BASE):
+    """
+    OBM opr-svcdiscserver-citrace.log
+    """
+    __tablename__ = "obm_opr_svcdiscserver_citrace"
+
+    # 表定义
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    file_id = Column(Integer, ForeignKey("filehash.id"))
+    log_line = Column(Integer)
+    log_time = Column(DateTime)
+    log_level = Column(String)
+    log_comp = Column(String)
+    log_cont = Column(String)
+
+
+class OPR_CIResolver(BASE):
+    """
+    OBM opr-ciresolver.log
+    """
+    __tablename__ = "obm_opr_ciresolver"
 
     # 表定义
     id = Column(Integer, primary_key=True, autoincrement=True)
@@ -191,27 +304,11 @@ class UserActions_Servlets(BASE):
     log_cont = Column(String)
 
 
-class OPR_SvcDiscserver(BASE):
+class User_Stats_Log_Filter(BASE):
     """
-    OBM opr-svcdiscserver.log
+    OBM opr-ws-response.log
     """
-    __tablename__ = "obm_opr_svcdiscserver"
-
-    # 表定义
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    file_id = Column(Integer, ForeignKey("filehash.id"))
-    log_line = Column(Integer)
-    log_time = Column(DateTime)
-    log_level = Column(String)
-    log_comp = Column(String)
-    log_cont = Column(String)
-
-
-class OPR_SvcDiscserver_CITrace(BASE):
-    """
-    OBM opr-svcdiscserver-citrace.log
-    """
-    __tablename__ = "obm_opr_svcdiscserver_citrace"
+    __tablename__ = "obm_user_stats_log_filter"
 
     # 表定义
     id = Column(Integer, primary_key=True, autoincrement=True)
@@ -260,70 +357,6 @@ class DownTime(BASE):
     OBM downtime.log
     """
     __tablename__ = "obm_downtime"
-
-    # 表定义
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    file_id = Column(Integer, ForeignKey("filehash.id"))
-    log_line = Column(Integer)
-    log_time = Column(DateTime)
-    log_level = Column(String)
-    log_comp = Column(String)
-    log_cont = Column(String)
-
-
-class OPR_CLIS(BASE):
-    """
-    OBM opr-clis.log
-    """
-    __tablename__ = "obm_opr_clis"
-
-    # 表定义
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    file_id = Column(Integer, ForeignKey("filehash.id"))
-    log_line = Column(Integer)
-    log_time = Column(DateTime)
-    log_level = Column(String)
-    log_comp = Column(String)
-    log_cont = Column(String)
-
-
-class OPR_HeartBeat(BASE):
-    """
-    OBM opr-heartbeat.log
-    """
-    __tablename__ = "obm_opr_heartbeat"
-
-    # 表定义
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    file_id = Column(Integer, ForeignKey("filehash.id"))
-    log_line = Column(Integer)
-    log_time = Column(DateTime)
-    log_level = Column(String)
-    log_comp = Column(String)
-    log_cont = Column(String)
-
-
-class BUS(BASE):
-    """
-    OBM bus.log
-    """
-    __tablename__ = "obm_bus"
-
-    # 表定义
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    file_id = Column(Integer, ForeignKey("filehash.id"))
-    log_line = Column(Integer)
-    log_time = Column(DateTime)
-    log_level = Column(String)
-    log_comp = Column(String)
-    log_cont = Column(String)
-
-
-class OPR_CIResolver(BASE):
-    """
-    OBM opr-ciresolver.log
-    """
-    __tablename__ = "obm_opr_ciresolver"
 
     # 表定义
     id = Column(Integer, primary_key=True, autoincrement=True)
@@ -397,39 +430,6 @@ class OvSvcDiscServer(BASE):
     log_level = Column(String)
     log_comp = Column(String)
     log_cont = Column(String)
-
-
-class JVM_Statistics(BASE):
-    """
-    OBM jvm_statistics.log
-    """
-    __tablename__ = "obm_jvm_statistics"
-
-    # 表定义
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    file_id = Column(Integer, ForeignKey("filehash.id"))
-    log_line = Column(Integer)
-    log_time = Column(DateTime)
-    heap_used = Column(FLOAT)
-    heap_commit = Column(FLOAT)
-    heap_max = Column(FLOAT)
-    heap_free = Column(FLOAT)
-    non_heap_used = Column(FLOAT)
-    non_heap_commit = Column(FLOAT)
-    non_heap_max = Column(FLOAT)
-    non_heap_free = Column(FLOAT)
-
-
-class OBM_Summary(BASE):
-    """
-    OBM opr-checker-xml.txt
-    """
-    __tablename__ = "obm_summary"
-    # 表定义
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    file_id = Column(Integer, ForeignKey("filehash.id"))
-    key = Column(String)
-    value = Column(String)
 
 
 class CMDB_Reconciliation_Error(BASE):

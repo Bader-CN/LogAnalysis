@@ -19,6 +19,32 @@ class FileHash(BASE):
     OASystem = relationship("System")
 
 
+class Summary(BASE):
+    """
+    OA agent.log Summary
+    """
+    __tablename__ = "oa_summary"
+
+    # 表定义
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    file_id = Column(Integer, ForeignKey("filehash.id"))
+    key = Column(String)
+    value = Column(String)
+
+
+class Config(BASE):
+    """
+    OA ovconfget command
+    """
+    __tablename__ = "oa_config"
+
+    # 表定义
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    file_id = Column(Integer, ForeignKey("filehash.id"))
+    key = Column(String)
+    value = Column(String)
+
+
 class System(BASE):
     """
     OA System.txt
@@ -65,27 +91,3 @@ class Policy(BASE):
     ply_status = Column(String)
     ply_type = Column(String)
     ply_data = Column(String)
-
-class Summary(BASE):
-    """
-    OA agent.log Summary
-    """
-    __tablename__ = "oa_summary"
-
-    # 表定义
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    file_id = Column(Integer, ForeignKey("filehash.id"))
-    key = Column(String)
-    value = Column(String)
-
-class Config(BASE):
-    """
-    OA ovconfget command
-    """
-    __tablename__ = "oa_config"
-
-    # 表定义
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    file_id = Column(Integer, ForeignKey("filehash.id"))
-    key = Column(String)
-    value = Column(String)
