@@ -24,6 +24,7 @@ class LogAnalysisMain(QMainWindow):
 
     # 类变量
     msg_no_file = "No file needs to be insert"
+    msg_no_help_file = "No help file"
     msg_export_no_select = "Plese select the data you want to export"
     msg_export_no_query = "Please query first and then export function can work"
     msg_export_not_full = "Selected data must be a matrix"
@@ -60,6 +61,7 @@ class LogAnalysisMain(QMainWindow):
             self.ui.btn_new.clicked.connect(self.slot_add_new_query)
             self.ui.btn_query.clicked.connect(self.slot_run_sql_query)
             self.ui.btn_export.clicked.connect(self.slot_export_to_csv)
+            self.ui.btn_help.clicked.connect(self.slot_open_helpfile)
             self.ui.treeWidget_db.clicked['QModelIndex'].connect(self.slot_set_remove_db_file)
             self.ui.line_search.textChanged.connect(self.set_sql_statement)
             self.ui.actionDeleteDB.triggered.connect(self.slot_action_delete)
@@ -123,6 +125,7 @@ class LogAnalysisMain(QMainWindow):
         self.ui.tabLeft.setTabText(0, Language_zh_CN.get("Database"))
         self.ui.tabLeft.setTabText(1, Language_zh_CN.get("Template"))
         self.msg_no_file = Language_zh_CN.get("msg_no_file")
+        self.msg_no_help_file = Language_zh_CN.get("msg_no_help_file")
         self.msg_export_no_select = Language_zh_CN.get("msg_export_no_select")
         self.msg_export_no_query = Language_zh_CN.get("msg_export_no_query")
         self.msg_export_not_full = Language_zh_CN.get("msg_export_not_full")
@@ -672,6 +675,21 @@ class LogAnalysisMain(QMainWindow):
             self.ui.progressBar.hide()
 
         self.update_db_list()
+
+    def slot_open_helpfile(self):
+        """
+        打开帮助文件
+        :return:
+        """
+        exec='hh.exe'
+        url='./LogAnalysis.chm'
+        full_url = exec + ' ' + url
+        # 参考链接：https://stackoverflow.com/questions/3814892/how-to-open-an-specific-section-of-a-chm-file-in-python
+        print(os.path.exists(url))
+        if os.path.exists(url):
+            os.popen(full_url)
+        else:
+            QMessageBox.warning(self, "Warning", self.msg_no_help_file)
 
     def update_db_list(self):
         """
