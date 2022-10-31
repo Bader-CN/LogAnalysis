@@ -4,24 +4,27 @@ import os
 # 检查相关目录及文件是否存在, 如果不存在, 则创建相关目录和文件
 if not os.path.exists("config.cfg"):
     with open("config.cfg", mode="w", encoding="utf-8") as f:
-        f.write("""[App_Display]
-# value: "Auto" or "zh_CN" or "en_US"
-App_Language = Auto
+        f.write((
+            "[App_Display]"
+            "# value: 'Auto' or 'zh_CN' or 'en_US'\n"
+            "App_Language = Auto\n\n"
 
-[App_Optimiz]
-# Maximum number of processes that read files
-# value: must > 0 or "Auto"
-Max_Processes = Auto
-# Maximum number of bytes of data read every time for hash, default is 8192 bytes
-Max_Hashsizes = 8192
-# Hash algorithm used to verify files, value can md5, sha1, sha224, sha256, sha384, sha512
-Hash_Method = md5
+            "[App_Optimiz]\n"
+            "# Maximum number of processes that read files\n"
+            "# value: must > 0 or 'Auto'\n"
+            "Max_Processes = Auto\n"
+            "# Maximum number of bytes of data read every time for hash, default is 8192 bytes\n"
+            "Max_Hashsizes = 8192\n"
+            "# Hash algorithm used to verify files, value can md5, sha1, sha224, sha256, sha384, sha512\n"
+            "Hash_Method = md5\n\n"
 
-[App_Logging]
-# value: DEBUG, INFO, WARNING, ERROR, CRITICAL
-App_Console_Level = WARNING
-App_Main_Level = WARNING
-App_MultSQL_Level = WARNING""")
+            "[App_Logging]\n"
+            "# value: DEBUG, INFO, WARNING, ERROR, CRITICAL\n"
+            "App_Console_Level = WARNING\n"
+            "App_Main_Level = WARNING\n"
+            "App_MultSQL_Level = WARNING\n"
+        ))
+
 if not os.path.exists("./log"):
     os.mkdir("./log")
 if not os.path.exists("./data/database"):
@@ -70,7 +73,7 @@ if __name__ == '__main__':
         app = QApplication([])
         # 实例化 LogAnalysis 主界面并设置标题
         logMain = LogAnalysisMain()
-        logMain.setWindowTitle("LogAnalysis Beta v0.2.4")
+        logMain.setWindowTitle("LogAnalysis v1.0.0")
         # 实例化 LogAnalysis Import 界面
         logImport = LogAnalysisImport()
         # 实例化 LogAnalysis Select Content 界面
