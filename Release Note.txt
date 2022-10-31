@@ -1,0 +1,2 @@
+2020-10-31 LogAnalysis v1.0.0
+# 首次发布, 支持 MicroFocus ITOM OA 和 OBM 的相关日志
