@@ -3,3 +3,4 @@
 
 2023-01-** LogAnalysis v1.0.1
 # optimal - LogAnalysis 目前可以尝试侦测文件的编码, 如果失败则使用 UTF-8
+# bug - 修复自动生成 SQL 语句时, 时间字符串格式的问题
