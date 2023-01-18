@@ -2,6 +2,8 @@
 # 首次发布, 支持 MicroFocus ITOM OA 和 OBM 的相关日志
 
 2023-01-18 LogAnalysis v1.0.1
-# Optimal - LogAnalysis 目前可以尝试侦测文件的编码, 如果失败则使用 UTF-8
-# Bug - 修复自动生成 SQL 语句时, 时间字符串格式的问题
-# Bug - 修复 SQL Template 中 MicroFocus OBM JVM 百分比显示不正确的错误
+# Optimal
+  - LogAnalysis 目前可以尝试侦测文件的编码, 如果失败则使用 UTF-8
+# Bug
+  - 修复自动生成 SQL 语句时, 时间字符串格式的问题
+  - 修复 SQL Template 中 MicroFocus OBM JVM 百分比显示不正确的错误
