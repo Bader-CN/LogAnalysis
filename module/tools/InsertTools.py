@@ -87,6 +87,28 @@ class ReadFileTemplate(metaclass=ABCMeta):
         file_id = query.id
         return file_id
 
+    def get_file_encoding(self, file):
+        """
+        检测并返回文件编码, 如果预设的编码都有问题则默认返回 utf-8
+        """
+        ok_code = ""
+        encodes = ["utf-8", "big5", "shift_jis"]
+        # 尝试使用指定的文件编码打开文件
+        for encoding in encodes:
+            try:
+                with open(file, mode="r", encoding=encoding) as f:
+                    f.read()
+                    ok_code = encoding
+                    break
+            # 预期错误
+            except UnicodeDecodeError:
+                pass
+            # 其余错误
+            except Exception as e:
+                print(e)
+        # 返回文件的编码
+        return ok_code if ok_code != "" else "utf-8"
+
     @abstractmethod
     def classifiles(self):
         """
