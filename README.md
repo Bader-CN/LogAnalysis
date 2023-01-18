@@ -22,6 +22,21 @@ pip install sqlalchemy==1.4.42
 3. 运行 LogAnalysis.py 即可启动软件
 4. 如果不想看到 console 界面, 可以将 LogAnalysis.py 重命名为 LogAnalysis.pyw
 
+## 编译方法
+可以使用 PyInstaller 来进行编译, 注意修改相关参数的路径
+```shell
+# PowerShell
+pyinstaller -w .\LogAnalysis.py --distpath "C:\LogAnalysis" --workpath "C:\LogAnalysis\build" `
+--add-data ".\data\template;.\data\template" `
+--add-data ".\config.cfg;." `
+--add-data ".\LogAnalysis.chm;."
+# CMD
+pyinstaller -w .\LogAnalysis.py --distpath "C:\LogAnalysis" --workpath "C:\LogAnalysis\build" ^
+--add-data ".\data\template;.\data\template" ^
+--add-data ".\config.cfg;." ^
+--add-data ".\LogAnalysis.chm;."
+```
+
 ## 支持产品
 * MicroFocus
   * ITOM
