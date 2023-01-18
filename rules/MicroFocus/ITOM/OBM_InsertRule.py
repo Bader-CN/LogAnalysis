@@ -24,6 +24,7 @@ class OBMFiles(ReadFileTemplate):
             self.productline = self.TaskInfo.get("productline")
             self.product = self.TaskInfo.get("product")
             self.total = self.TaskInfo.get("total")
+            self.encoding = self.get_file_encoding(self.file)
         # 处理的实际逻辑
         data = self.classifiles()
         # 将处理完成的数据放到队列中
@@ -94,7 +95,7 @@ class OBMFiles(ReadFileTemplate):
         now_idx = 0
 
         # 读取文件, 将文件的每一行保存在 DList 中
-        with open(self.file, mode="r", encoding="utf-8", errors="replace") as file:
+        with open(self.file, mode="r", encoding=self.encoding, errors="replace") as file:
             for line in file:
                 DList.append(line.strip())
         # 判断日志内容的开头, 并将开头所在的索引记录在 IList 中
@@ -198,7 +199,7 @@ class OBMFiles(ReadFileTemplate):
         now_idx = 0
 
         # 读取文件, 将文件的每一行保存在 DList 中
-        with open(self.file, mode="r", encoding="utf-8", errors="replace") as file:
+        with open(self.file, mode="r", encoding=self.encoding, errors="replace") as file:
             for line in file:
                 DList.append(line.strip())
         # 判断日志内容的开头, 并将开头所在的索引记录在 IList 中
@@ -289,7 +290,7 @@ class OBMFiles(ReadFileTemplate):
         now_idx = 0
 
         # 读取文件, 将文件的每一行保存在 DList 中
-        with open(self.file, mode="r", encoding="utf-8", errors="replace") as file:
+        with open(self.file, mode="r", encoding=self.encoding, errors="replace") as file:
             for line in file:
                 DList.append(line.strip())
         # 判断日志内容的开头, 并将开头所在的索引记录在 IList 中
@@ -374,7 +375,7 @@ class OBMFiles(ReadFileTemplate):
         now_idx = 0
 
         # 读取文件, 将文件的每一行保存在 DList 中
-        with open(self.file, mode="r", encoding="utf-8", errors="replace") as file:
+        with open(self.file, mode="r", encoding=self.encoding, errors="replace") as file:
             for line in file:
                 DList.append(line.strip())
         # 判断日志内容的开头, 并将开头所在的索引记录在 IList 中
@@ -464,7 +465,7 @@ class OBMFiles(ReadFileTemplate):
         now_idx = 0
 
         # 读取文件, 将文件的每一行保存在 DList 中
-        with open(self.file, mode="r", encoding="utf-8", errors="replace") as file:
+        with open(self.file, mode="r", encoding=self.encoding, errors="replace") as file:
             for line in file:
                 DList.append(line.strip())
         # 判断日志内容的开头, 并将开头所在的索引记录在 IList 中
@@ -556,7 +557,7 @@ class OBMFiles(ReadFileTemplate):
         now_idx = 0
 
         # 读取文件, 将文件的每一行保存在 DList 中
-        with open(self.file, mode="r", encoding="utf-8", errors="replace") as file:
+        with open(self.file, mode="r", encoding=self.encoding, errors="replace") as file:
             for line in file:
                 DList.append(line.strip())
         # 判断日志内容的开头, 并将开头所在的索引记录在 IList 中
@@ -645,7 +646,7 @@ class OBMFiles(ReadFileTemplate):
         now_idx = 0
 
         # 读取文件, 将文件的每一行保存在 DList 中
-        with open(self.file, mode="r", encoding="utf-8", errors="replace") as file:
+        with open(self.file, mode="r", encoding=self.encoding, errors="replace") as file:
             for line in file:
                 DList.append(line.strip())
         # 判断日志内容的开头, 并将开头所在的索引记录在 IList 中
@@ -735,7 +736,7 @@ class OBMFiles(ReadFileTemplate):
         now_idx = 0
 
         # 读取文件, 将文件的每一行保存在 DList 中
-        with open(self.file, mode="r", encoding="utf-8", errors="replace") as file:
+        with open(self.file, mode="r", encoding=self.encoding, errors="replace") as file:
             for line in file:
                 DList.append(line.strip())
         # 判断日志内容的开头, 并将开头所在的索引记录在 IList 中
@@ -824,7 +825,7 @@ class OBMFiles(ReadFileTemplate):
         now_idx = 0
 
         # 读取文件, 将文件的每一行保存在 DList 中
-        with open(self.file, mode="r", encoding="utf-8", errors="replace") as file:
+        with open(self.file, mode="r", encoding=self.encoding, errors="replace") as file:
             for line in file:
                 DList.append(line.strip())
         # 判断日志内容的开头, 并将开头所在的索引记录在 IList 中
@@ -914,7 +915,7 @@ class OBMFiles(ReadFileTemplate):
         now_idx = 0
 
         # 读取文件, 将文件的每一行保存在 DList 中
-        with open(self.file, mode="r", encoding="utf-8", errors="replace") as file:
+        with open(self.file, mode="r", encoding=self.encoding, errors="replace") as file:
             for line in file:
                 DList.append(line.strip())
         # 判断日志内容的开头, 并将开头所在的索引记录在 IList 中
@@ -1001,7 +1002,7 @@ class OBMFiles(ReadFileTemplate):
         now_idx = 0
 
         # 读取文件, 将文件的每一行保存在 DList 中
-        with open(self.file, mode="r", encoding="utf-8", errors="replace") as file:
+        with open(self.file, mode="r", encoding=self.encoding, errors="replace") as file:
             for line in file:
                 DList.append(line.strip())
         # 判断日志内容的开头, 并将开头所在的索引记录在 IList 中
@@ -1088,7 +1089,7 @@ class OBMFiles(ReadFileTemplate):
         now_idx = 0
 
         # 读取文件, 将文件的每一行保存在 DList 中
-        with open(self.file, mode="r", encoding="utf-8", errors="replace") as file:
+        with open(self.file, mode="r", encoding=self.encoding, errors="replace") as file:
             for line in file:
                 DList.append(line.strip())
         # 判断日志内容的开头, 并将开头所在的索引记录在 IList 中
@@ -1174,7 +1175,7 @@ class OBMFiles(ReadFileTemplate):
         now_idx = 0
 
         # 读取文件, 将文件的每一行保存在 DList 中
-        with open(self.file, mode="r", encoding="utf-8", errors="replace") as file:
+        with open(self.file, mode="r", encoding=self.encoding, errors="replace") as file:
             for line in file:
                 DList.append(line.strip())
         # 判断日志内容的开头, 并将开头所在的索引记录在 IList 中
@@ -1265,7 +1266,7 @@ class OBMFiles(ReadFileTemplate):
         now_idx = 0
 
         # 读取文件, 将文件的每一行保存在 DList 中
-        with open(self.file, mode="r", encoding="utf-8", errors="replace") as file:
+        with open(self.file, mode="r", encoding=self.encoding, errors="replace") as file:
             for line in file:
                 DList.append(line.strip())
         # 判断日志内容的开头, 并将开头所在的索引记录在 IList 中
@@ -1352,7 +1353,7 @@ class OBMFiles(ReadFileTemplate):
         now_idx = 0
 
         # 读取文件, 将文件的每一行保存在 DList 中
-        with open(self.file, mode="r", encoding="utf-8", errors="replace") as file:
+        with open(self.file, mode="r", encoding=self.encoding, errors="replace") as file:
             for line in file:
                 DList.append(line.strip())
         # 判断日志内容的开头, 并将开头所在的索引记录在 IList 中
@@ -1453,7 +1454,7 @@ class OBMFiles(ReadFileTemplate):
         now_idx = 0
 
         # 读取文件, 将文件的每一行保存在 DList 中
-        with open(self.file, mode="r", encoding="utf-8", errors="replace") as file:
+        with open(self.file, mode="r", encoding=self.encoding, errors="replace") as file:
             for line in file:
                 DList.append(line.strip())
         # 判断日志内容的开头, 并将开头所在的索引记录在 IList 中
@@ -1544,7 +1545,7 @@ class OBMFiles(ReadFileTemplate):
         obm_hotfx = []
         try:
             # 读取相关数据
-            with open(self.file, mode="r", encoding="utf-8", errors="replace") as f:
+            with open(self.file, mode="r", encoding=self.encoding, errors="replace") as f:
                 for line in f:
                     line = line.strip()
                     if re.findall("<hostname>(.*?)</hostname>", line):

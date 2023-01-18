@@ -25,6 +25,7 @@ class OAFiles(ReadFileTemplate):
             self.productline = self.TaskInfo.get("productline")
             self.product = self.TaskInfo.get("product")
             self.total = self.TaskInfo.get("total")
+            self.encoding = self.get_file_encoding(self.file)
         # 如果匹配到此内容, 则改行不做任何处理
         self.blkline = [
             "<rolled=\d>",
@@ -58,7 +59,7 @@ class OAFiles(ReadFileTemplate):
         OA System.txt 文件解析函数
         :return: TaskInfo["data"] = SList --> [sqlalchemy obj1, sqlalchemy obj2, ...]
         """
-        with open(self.file, mode="r", encoding="utf-8", errors="replace") as file:
+        with open(self.file, mode="r", encoding=self.encoding, errors="replace") as file:
             # 模块模式下, 记录读取的文件名
             if __name__ != "__main__":
                 MultSQLLogger.info("Reading File:[{}]".format(self.file))
@@ -123,7 +124,7 @@ class OAFiles(ReadFileTemplate):
         OA hpcstrace 文件解析函数
         :return: TaskInfo["data"] = SList --> [sqlalchemy obj1, sqlalchemy obj2, ...]
         """
-        with open(self.file, mode="r", encoding="utf-8", errors="replace") as file:
+        with open(self.file, mode="r", encoding=self.encoding, errors="replace") as file:
             # 模块模式下, 记录读取的文件名
             if __name__ != "__main__":
                 MultSQLLogger.info("Reading File:[{}]".format(self.file))
@@ -193,7 +194,7 @@ class OAFiles(ReadFileTemplate):
         TDict = {}  # 临时字典
         SList = []  # 转换完 SQL 语句后的数据
 
-        with open(self.file, mode="r", encoding="utf-8", errors="replace") as file:
+        with open(self.file, mode="r", encoding=self.encoding, errors="replace") as file:
             # 模块模式下, 记录读取的文件名
             if __name__ != "__main__":
                 MultSQLLogger.info("Reading File:[{}]".format(self.file))
@@ -318,7 +319,7 @@ class OAFiles(ReadFileTemplate):
             ply_status = root.find('{}policy'.format(namespace)).find("{}status".format(namespace)).text
             ply_type = root.find('{}policytype'.format(namespace)).find("{}name".format(namespace)).text
             try:
-                with open(self.file[:len(self.file) - len("header.xml")] + "data", "r", encoding="utf-8", errors="replace") as file:
+                with open(self.file[:len(self.file) - len("header.xml")] + "data", "r", encoding=self.encoding, errors="replace") as file:
                     # 模块模式下, 记录读取的文件名
                     if __name__ != "__main__":
                         MultSQLLogger.info("Reading File:[{}]".format(self.file))
