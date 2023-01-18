@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import os, re, csv, copy
+from datetime import datetime
 from threading import Thread
 from PySide6.QtGui import QFont
 from PySide6.QtCore import QDateTime, QDir
@@ -153,8 +154,8 @@ class LogAnalysisMain(QMainWindow):
         :param kwargs:
         :return: str
         """
-        str_time = self.ui.date_start_time.text().replace("/", "-")
-        end_time = self.ui.date_end_time.text().replace("/", "-")
+        str_time = datetime.strptime(self.ui.date_start_time.text().replace("/", "-"), '%Y-%m-%d %H:%M')
+        end_time = datetime.strptime(self.ui.date_end_time.text().replace("/", "-"), '%Y-%m-%d %H:%M')
         key_word = self.ui.line_search.text()
         operater = "LIKE"
         if self.ui.chk_regexp.isChecked():
