@@ -28,12 +28,10 @@ pip install sqlalchemy==1.4.42
 # PowerShell
 pyinstaller -w .\LogAnalysis.py --distpath "C:\LogAnalysis" --workpath "C:\LogAnalysis\build" `
 --add-data ".\data\template;.\data\template" `
---add-data ".\config.cfg;." `
 --add-data ".\LogAnalysis.chm;."
 # CMD
 pyinstaller -w .\LogAnalysis.py --distpath "C:\LogAnalysis" --workpath "C:\LogAnalysis\build" ^
 --add-data ".\data\template;.\data\template" ^
---add-data ".\config.cfg;." ^
 --add-data ".\LogAnalysis.chm;."
 ```
 
