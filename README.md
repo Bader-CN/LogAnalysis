@@ -38,5 +38,6 @@ pyinstaller -w .\LogAnalysis.py --distpath "C:\LogAnalysis" --workpath "C:\LogAn
 ## 支持产品
 * MicroFocus
   * ITOM
-    * OA
-    * OBM
+    * Operations Agent(OA)
+    * Operations Bridge Manager(OBM)
+    * Operations Bridge Suite(OpsB)
