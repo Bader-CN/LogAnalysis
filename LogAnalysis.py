@@ -64,6 +64,9 @@ def logfile_to_sql(QTask, QData):
             elif TaskInfo.get("company") == "MicroFocus" and TaskInfo.get("productline") == "ITOM" and TaskInfo.get("product") == "Operations Bridge Manager(OBM)":
                 from rules.MicroFocus.ITOM import OBM_InsertRule
                 OBM_InsertRule.OBMFiles(TaskInfo, QData)
+            elif TaskInfo.get("company") == "MicroFocus" and TaskInfo.get("productline") == "ITOM" and TaskInfo.get("product") == "Operations Bridge Suite(OpsB)":
+                from rules.MicroFocus.ITOM import OpsB_InsertRule
+                OpsB_InsertRule.OpsBFiles(TaskInfo, QData)
 
 if __name__ == '__main__':
     try:
@@ -73,7 +76,7 @@ if __name__ == '__main__':
         app = QApplication([])
         # 实例化 LogAnalysis 主界面并设置标题
         logMain = LogAnalysisMain()
-        logMain.setWindowTitle("LogAnalysis v1.0.1")
+        logMain.setWindowTitle("LogAnalysis v1.1.0 Beta")
         # 实例化 LogAnalysis Import 界面
         logImport = LogAnalysisImport()
         # 实例化 LogAnalysis Select Content 界面

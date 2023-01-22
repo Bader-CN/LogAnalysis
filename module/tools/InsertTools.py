@@ -47,7 +47,7 @@ class ReadFileTemplate(metaclass=ABCMeta):
                 # 尝试生成 datetime_str, 如果失败, 则替换 datetime_format 重新执行一次
                 datetime_str = datetime.strptime(logdate, datetime_format)
                 # 如果上一条命令可以执行, 则再返回时间的字符串数据
-                return datetime_str.strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]
+                return datetime_str.strftime('%Y-%m-%d %H:%M:%S.%f')
 
             except Exception as e:
                 pass

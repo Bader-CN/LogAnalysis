@@ -7,3 +7,11 @@
 # Bug
   - 修复自动生成 SQL 语句时, 时间字符串格式的问题
   - 修复 SQL Template 中 MicroFocus OBM JVM 百分比显示不正确的错误
+
+2023-01-** LogAnalysis v1.1.0
+# Add
+  - 追加 MicroFocus ITOM OpsB 相关日志的支持
+# Bug
+  - 当 QData 队列里传递的值是 None 时, 会导致进度条卡住的问题
+# Optimal
+  - LogAnalysis 将会返回更加精确的时间

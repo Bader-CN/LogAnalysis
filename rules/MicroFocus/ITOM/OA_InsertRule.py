@@ -18,6 +18,7 @@ class OAFiles(ReadFileTemplate):
         # 从 TaskInfo 中获取相关数据
         self.TaskInfo = TaskInfo
         self.file = self.TaskInfo.get("file")
+        self.encoding = self.get_file_encoding(self.file)
         # 模块模式下, 继续获取下列信息
         if __name__ != "__main__":
             self.targetdb = self.TaskInfo.get("targetdb")
@@ -25,7 +26,6 @@ class OAFiles(ReadFileTemplate):
             self.productline = self.TaskInfo.get("productline")
             self.product = self.TaskInfo.get("product")
             self.total = self.TaskInfo.get("total")
-            self.encoding = self.get_file_encoding(self.file)
         # 如果匹配到此内容, 则改行不做任何处理
         self.blkline = [
             "<rolled=\d>",

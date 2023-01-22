@@ -230,6 +230,9 @@ class LogAnalysisMain(QMainWindow):
         elif dict.get("company") == "MicroFocus" and dict.get("productline") == "ITOM" and dict.get("product") == "Operations Bridge Manager(OBM)":
             from rules.MicroFocus.ITOM import OBM_FileRule as FileRule
             from rules.MicroFocus.ITOM import OBM_SQLTable as SQLTable
+        elif dict.get("company") == "MicroFocus" and dict.get("productline") == "ITOM" and dict.get("product") == "Operations Bridge Suite(OpsB)":
+            from rules.MicroFocus.ITOM import OpsB_FileRule as FileRule
+            from rules.MicroFocus.ITOM import OpsB_SQLTable as SQLTable
 
         # 输出待导入的文件
         if dict.get("pathtype") == "File":
@@ -382,36 +385,40 @@ class LogAnalysisMain(QMainWindow):
         # 从 QData 队列里获取数据, 并将获取到的数据写入到数据库中
         while True:
             dict = QData.get()
-            totalnum = dict.get("total")
-            try:
-                # 任务首次, 创建 SQLAlchemy 会话, 写入数据
-                if path == r"sqlite:///":
-                    path = r"sqlite:///" + os.path.abspath(dict.get("targetdb"))
-                    engine = create_engine(path, future=True)
-                    Session = sessionmaker(bind=engine, autoflush=False)
-                    session = Session()
-                    session.add_all(dict.get("data"))
-                    session.commit()
-                    tasksnum += 1
-                # 后续内容, 因为 SQLAlchemy 会话已经存在, 所以直接写入数据
-                else:
-                    session.add_all(dict.get("data"))
-                    session.commit()
-                    tasksnum += 1
-                # 追加 debug 日志
-                AppMainLogger.debug("Successful write to SQLiteDB, finish {}%, targetdb is:[{}]".format(str(int((tasksnum / totalnum) * 100)), dict.get("targetdb")))
-            except Exception as e:
-                # 如果出现了异常, 为了程序能够正常结束, tasksnum 计数仍然 + 1
+            if dict == None:
                 tasksnum += 1
-                AppMainLogger.error("Write to SQLiteDB faild, file is [{}], result is:\n{}".format(dict.get("file"), e))
+                AppMainLogger.warning("QData is None, please check InsertRule settings.")
+            else:
+                totalnum = dict.get("total")
+                try:
+                    # 任务首次, 创建 SQLAlchemy 会话, 写入数据
+                    if path == r"sqlite:///":
+                        path = r"sqlite:///" + os.path.abspath(dict.get("targetdb"))
+                        engine = create_engine(path, future=True)
+                        Session = sessionmaker(bind=engine, autoflush=False)
+                        session = Session()
+                        session.add_all(dict.get("data"))
+                        session.commit()
+                        tasksnum += 1
+                    # 后续内容, 因为 SQLAlchemy 会话已经存在, 所以直接写入数据
+                    else:
+                        session.add_all(dict.get("data"))
+                        session.commit()
+                        tasksnum += 1
+                    # 追加 debug 日志
+                    AppMainLogger.debug("Successful write to SQLiteDB, finish {}%, targetdb is:[{}]".format(str(int((tasksnum / totalnum) * 100)), dict.get("targetdb")))
+                except Exception as e:
+                    # 如果出现了异常, 为了程序能够正常结束, tasksnum 计数仍然 + 1
+                    tasksnum += 1
+                    AppMainLogger.error("Write to SQLiteDB faild, file is [{}], result is:\n{}".format(dict.get("file"), e))
 
-            # 更新进度条
-            allSignals.import_process.emit(int((tasksnum/totalnum)*100))
-            # 判断条件, 如果进度达到 100%, 则退出循环
-            if int((tasksnum/totalnum)*100) == 100:
-                session.close()
-                AppMainLogger.debug("SQLAlchemy write db session has be close.")
-                break
+                # 更新进度条
+                allSignals.import_process.emit(int((tasksnum/totalnum)*100))
+                # 判断条件, 如果进度达到 100%, 则退出循环
+                if int((tasksnum/totalnum)*100) == 100:
+                    session.close()
+                    AppMainLogger.debug("SQLAlchemy write db session has be close.")
+                    break
 
     def slot_check_taskdict(self, dict):
         """
