@@ -7,6 +7,9 @@ NeedFilesRule = [
     "itomdipulsar-zookeeper.*\.log",
     # OpsB deployments.apps
     "itomdipulsar-broker.*\.log",
+    "itomdipulsar-proxy.*\.log",
+    # OpsB Jobs
+    "itomdipulsar-minio-connector-post-upgrade-job.*\.log",
 ]
 
 # 文件级别的反匹规则, 支持正则表达式

@@ -41,12 +41,17 @@ class OpsBFiles(ReadFileTemplate):
         针对 OpsB 文件进行分类, 然后在做后续处理
         :return:
         """
-        if re.findall("itomdipulsar-bookkeeper.*\.log|itomdipulsar-zookeeper.*\.log|itomdipulsar-broker.*\.log", self.file, re.IGNORECASE):
+        if re.findall("itomdipulsar-bookkeeper.*\.log|itomdipulsar-zookeeper.*\.log|itomdipulsar-broker.*\.log|itomdipulsar-proxy.*\.log|itomdipulsar-minio-connector-post-upgrade-job.*\.log", self.file, re.IGNORECASE):
             return self.readlog_opsb_pulsar_type1()
 
     def readlog_opsb_pulsar_type1(self):
         """
         OpsB logs
+        # itomdipulsar-bookkeeper.*.log
+        # itomdipulsar-zookeeper.*.log
+        # itomdipulsar-broker.*.log
+        # itomdipulsar-proxy.*.log
+        # itomdipulsar-minio-connector-post-upgrade-job.*.log
         :return: TaskInfo["data"] = SList --> [sqlalchemy obj1, sqlalchemy obj2, ...]
         """
         # 模块模式下, 记录读取的文件名
@@ -168,6 +173,10 @@ class OpsBFiles(ReadFileTemplate):
                 from rules.MicroFocus.ITOM.OpsB_SQLTable import ITOM_DI_Pulsar_Zookeeper as OpsBTable
             elif re.findall("itomdipulsar-broker.*\.log", self.file, re.IGNORECASE):
                 from rules.MicroFocus.ITOM.OpsB_SQLTable import ITOM_DI_Pulsar_Broker as OpsBTable
+            elif re.findall("itomdipulsar-proxy.*\.log", self.file, re.IGNORECASE):
+                from rules.MicroFocus.ITOM.OpsB_SQLTable import ITOM_DI_Pulsar_Proxy as OpsBTable
+            elif re.findall("itomdipulsar-minio-connector-post-upgrade-job.*\.log", self.file, re.IGNORECASE):
+                from rules.MicroFocus.ITOM.OpsB_SQLTable import ITOM_DI_Pulsar_Jobs as OpsBTable
 
             file_id = self.get_file_id(targetdb=self.targetdb, file=self.file, FileHash=FileHash)
             for data in FList:
