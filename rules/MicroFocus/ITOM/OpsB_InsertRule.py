@@ -27,8 +27,8 @@ class OpsBFiles(ReadFileTemplate):
             self.total = self.TaskInfo.get("total")
         # 如果匹配到此内容, 则改行不做任何处理
         self.blkline = [
-            # 2023-01-20T20:18:58.322282487+0800,,vm-opsb.home.local,helm-opsb,itomdipulsar-bookkeeper-init-ctpvc4c-456hq,""
             '""',
+            '}\n',
         ]
         # 处理的实际逻辑
         data = self.classifiles()
@@ -86,7 +86,7 @@ class OpsBFiles(ReadFileTemplate):
             # 在非时间的内容中, 如果该行包括 "Exception", "at ", " more", "Caused by" 这类字段, 则判断为多行, 其余为单行
             if is_Start == False:
                 is_Match = False
-                for key in ["Exception", "at ", " more", "Caused by"]:
+                for key in ["Exception", "at ", " more", "Caused by", '"  ""', '"    ""', '"  },"']:
                     if key in log_content_str:
                             is_Start = False
                             is_Match = True
@@ -138,15 +138,18 @@ class OpsBFiles(ReadFileTemplate):
                     elif re.findall("\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3} \[(.*?)\]", log_cont, re.IGNORECASE):
                         log_cont = log_cont.split(re.findall("\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}", log_cont, re.IGNORECASE)[0], 1)[-1].strip()
                     # 检查黑名单, 如果不在, 则将数据放入 FList 中
+                    is_Black = False
                     for blk in self.blkline:
-                        if blk not in log_cont:
-                            # 将字典数据加入到 FList 中
-                            FList.append({
-                                "log_line": log_line,
-                                "log_time": log_time,
-                                "log_level": log_level,
-                                "log_comp": log_comp,
-                                "log_cont": log_cont,})
+                        if blk == log_cont:
+                            is_Black = True
+                    if is_Black == False:
+                        # 将字典数据加入到 FList 中
+                        FList.append({
+                            "log_line": log_line,
+                            "log_time": log_time,
+                            "log_level": log_level,
+                            "log_comp": log_comp,
+                            "log_cont": log_cont,})
                 except Exception as e:
                     # 模块模式
                     if __name__ != "__main__":
@@ -183,5 +186,5 @@ class OpsBFiles(ReadFileTemplate):
 
 if __name__ == "__main__":
     # 读取测试文件
-    file = r"D:\opsb_test_log\opsbfiles\itomdipulsar-bookkeeper-test-file.log"
+    file = r"D:\opsb_test_log\itomdipulsar-bookkeeper-test-file.log"
     test = OpsBFiles({"file": file})
