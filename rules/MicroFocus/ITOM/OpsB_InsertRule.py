@@ -41,10 +41,14 @@ class OpsBFiles(ReadFileTemplate):
         针对 OpsB 文件进行分类, 然后在做后续处理
         :return:
         """
-        if re.findall("itomdipulsar-bookkeeper.*\.log|itomdipulsar-zookeeper.*\.log|itomdipulsar-broker.*\.log|itomdipulsar-proxy.*\.log|itomdipulsar-minio-connector-post-upgrade-job.*\.log", self.file, re.IGNORECASE):
-            return self.readlog_opsb_pulsar_type1()
+        # itomdipulsar 相关日志
+        if re.findall("itomdipulsar-.*\.log", self.file, re.IGNORECASE):
+            return self.readlog_opsb_type1()
+        # itom-di 相关日志
+        elif re.findall("itom-di.*\.log", self.file, re.IGNORECASE):
+            return self.readlog_opsb_type1()
 
-    def readlog_opsb_pulsar_type1(self):
+    def readlog_opsb_type1(self):
         """
         OpsB logs
         # itomdipulsar-bookkeeper.*.log
@@ -52,6 +56,14 @@ class OpsBFiles(ReadFileTemplate):
         # itomdipulsar-broker.*.log
         # itomdipulsar-proxy.*.log
         # itomdipulsar-minio-connector-post-upgrade-job.*.log
+        # itom-di-administration.*.log
+        # itom-di-data-access-dpl.*.log
+        # itom-di-metadata-server.*.log
+        # itom-di-postload-taskcontroller.*.log
+        # itom-di-postload-taskexecutor.*.log
+        # itom-di-receiver-dpl.*.log
+        # itom-di-scheduler-udx.*.log
+        # itom-di-vertica-dpl.*.log
         :return: TaskInfo["data"] = SList --> [sqlalchemy obj1, sqlalchemy obj2, ...]
         """
         # 模块模式下, 记录读取的文件名
@@ -177,6 +189,22 @@ class OpsBFiles(ReadFileTemplate):
                 from rules.MicroFocus.ITOM.OpsB_SQLTable import ITOM_DI_Pulsar_Proxy as OpsBTable
             elif re.findall("itomdipulsar-minio-connector-post-upgrade-job.*\.log", self.file, re.IGNORECASE):
                 from rules.MicroFocus.ITOM.OpsB_SQLTable import ITOM_DI_Pulsar_Jobs as OpsBTable
+            elif re.findall("itom-di-administration.*\.log", self.file, re.IGNORECASE):
+                from rules.MicroFocus.ITOM.OpsB_SQLTable import ITOM_DI_Administration as OpsBTable
+            elif re.findall("itom-di-data-access-dpl.*\.log", self.file, re.IGNORECASE):
+                from rules.MicroFocus.ITOM.OpsB_SQLTable import ITOM_DI_Data_Access_DPL as OpsBTable
+            elif re.findall("itom-di-metadata-server.*\.log", self.file, re.IGNORECASE):
+                from rules.MicroFocus.ITOM.OpsB_SQLTable import ITOM_DI_MetaData_Server as OpsBTable
+            elif re.findall("itom-di-postload-taskcontroller.*\.log", self.file, re.IGNORECASE):
+                from rules.MicroFocus.ITOM.OpsB_SQLTable import ITOM_DI_Postload_TaskController as OpsBTable
+            elif re.findall("itom-di-postload-taskexecutor.*\.log", self.file, re.IGNORECASE):
+                from rules.MicroFocus.ITOM.OpsB_SQLTable import ITOM_DI_Postload_TaskExecutor as OpsBTable
+            elif re.findall("itom-di-receiver-dpl.*\.log", self.file, re.IGNORECASE):
+                from rules.MicroFocus.ITOM.OpsB_SQLTable import ITOM_DI_Receiver_DPL as OpsBTable
+            elif re.findall("itom-di-scheduler-udx.*\.log", self.file, re.IGNORECASE):
+                from rules.MicroFocus.ITOM.OpsB_SQLTable import ITOM_DI_Scheduler_UDX as OpsBTable
+            elif re.findall("itom-di-vertica-dpl.*\.log", self.file, re.IGNORECASE):
+                from rules.MicroFocus.ITOM.OpsB_SQLTable import ITOM_DI_Vertica_DPL as OpsBTable
 
             file_id = self.get_file_id(targetdb=self.targetdb, file=self.file, FileHash=FileHash)
             for data in FList:

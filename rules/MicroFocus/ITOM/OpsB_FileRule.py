@@ -8,6 +8,14 @@ NeedFilesRule = [
     # OpsB deployments.apps
     "itomdipulsar-broker.*\.log",
     "itomdipulsar-proxy.*\.log",
+    "itom-di-administration.*\.log",
+    "itom-di-data-access-dpl.*\.log",
+    "itom-di-metadata-server.*\.log",
+    "itom-di-postload-taskcontroller.*\.log",
+    "itom-di-postload-taskexecutor.*\.log",
+    "itom-di-receiver-dpl.*\.log",
+    "itom-di-scheduler-udx.*\.log",
+    "itom-di-vertica-dpl.*\.log",
     # OpsB Jobs
     "itomdipulsar-minio-connector-post-upgrade-job.*\.log",
 ]
