@@ -41,7 +41,7 @@ class OpsBFiles(ReadFileTemplate):
         针对 OpsB 文件进行分类, 然后在做后续处理
         :return:
         """
-        if re.findall("itomdipulsar-bookkeeper.*\.log|itomdipulsar-zookeeper.*\.log", self.file, re.IGNORECASE):
+        if re.findall("itomdipulsar-bookkeeper.*\.log|itomdipulsar-zookeeper.*\.log|itomdipulsar-broker.*\.log", self.file, re.IGNORECASE):
             return self.readlog_opsb_pulsar_type1()
 
     def readlog_opsb_pulsar_type1(self):
@@ -125,6 +125,8 @@ class OpsBFiles(ReadFileTemplate):
                         for key in keywords:
                             if key in log_data[0]:
                                 log_level = "ERROR"
+                    if log_level == "WARNING":
+                        log_level = "WARN"
                     # 日志组件
                     log_comp = log_data[0].split(",")[2] + "_" + log_data[0].split(",")[3] + "_" + log_data[0].split(",")[4]
                     # 日志内容
@@ -164,6 +166,8 @@ class OpsBFiles(ReadFileTemplate):
                 from rules.MicroFocus.ITOM.OpsB_SQLTable import ITOM_DI_Pulsar_BookKeeper as OpsBTable
             elif re.findall("itomdipulsar-zookeeper.*\.log", self.file, re.IGNORECASE):
                 from rules.MicroFocus.ITOM.OpsB_SQLTable import ITOM_DI_Pulsar_Zookeeper as OpsBTable
+            elif re.findall("itomdipulsar-broker.*\.log", self.file, re.IGNORECASE):
+                from rules.MicroFocus.ITOM.OpsB_SQLTable import ITOM_DI_Pulsar_Broker as OpsBTable
 
             file_id = self.get_file_id(targetdb=self.targetdb, file=self.file, FileHash=FileHash)
             for data in FList:
