@@ -419,7 +419,7 @@ class ITOM_OpsB_Content_Manager(BASE):
     """
     OpsB deployments itom-opsb-content-manager
     """
-    __tablename__ = "itom_opsb_content_manager"
+    __tablename__ = "opsb_itom_content_manager"
 
     # 表定义
     id = Column(Integer, primary_key=True, autoincrement=True)
