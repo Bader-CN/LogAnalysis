@@ -39,6 +39,7 @@ NeedFilesRule = [
     "frontend-ingress-controller-.*\.log",
     "portal-ingress-controller-.*\.log",
     "itom-frontend-ui-.*\.log",
+    "kube-registry-.*\.log",
 ]
 
 # 文件级别的反匹规则, 支持正则表达式

@@ -68,6 +68,9 @@ class OpsBFiles(ReadFileTemplate):
         # itom-frontend-ui 日志
         elif re.findall("itom-frontend-ui-.*\.log", self.file, re.IGNORECASE):
             return self.readlog_opsb_type1()
+        # kube-registry 日志
+        elif re.findall("kube-registry-.*\.log", self.file, re.IGNORECASE):
+            return self.readlog_opsb_type1()
 
     def readlog_opsb_type1(self):
         """
@@ -105,6 +108,7 @@ class OpsBFiles(ReadFileTemplate):
         # frontend-ingress-controller-.*.log
         # portal-ingress-controller-.*.log
         # itom-frontend-ui-.*.log
+        # kube-registry-.*.log
         :return: TaskInfo["data"] = SList --> [sqlalchemy obj1, sqlalchemy obj2, ...]
         """
         # 模块模式下, 记录读取的文件名
@@ -322,6 +326,8 @@ class OpsBFiles(ReadFileTemplate):
                 from rules.MicroFocus.ITOM.OpsB_SQLTable import ITOM_Core_Portal_Ingress_Controller as OpsBTable
             elif re.findall("itom-frontend-ui-.*\.log", self.file, re.IGNORECASE):
                 from rules.MicroFocus.ITOM.OpsB_SQLTable import ITOM_Core_Frontend_UI as OpsBTable
+            elif re.findall("kube-registry-.*\.log", self.file, re.IGNORECASE):
+                from rules.MicroFocus.ITOM.OpsB_SQLTable import ITOM_Core_Kube_Registry as OpsBTable
 
             file_id = self.get_file_id(targetdb=self.targetdb, file=self.file, FileHash=FileHash)
             for data in FList:
