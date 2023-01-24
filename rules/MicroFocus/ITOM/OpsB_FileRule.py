@@ -16,6 +16,13 @@ NeedFilesRule = [
     "itom-di-receiver-dpl.*\.log",
     "itom-di-scheduler-udx.*\.log",
     "itom-di-vertica-dpl.*\.log",
+    "bvd-ap-bridge-.*\.log",
+    "bvd-controller-deployment-.*\.log",
+    "bvd-explore-deployment-.*\.log",
+    "bvd-quexserv-.*\.log",
+    "bvd-receiver-deployment-.*\.log",
+    "bvd-redis-.*\.log",
+    "bvd-www-deployment-.*\.log",
     # OpsB Jobs
     "itomdipulsar-minio-connector-post-upgrade-job.*\.log",
 ]

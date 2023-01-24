@@ -47,6 +47,9 @@ class OpsBFiles(ReadFileTemplate):
         # itom-di 相关日志
         elif re.findall("itom-di.*\.log", self.file, re.IGNORECASE):
             return self.readlog_opsb_type1()
+        # bvd 相关日志
+        elif re.findall("bvd-.*\.log", self.file, re.IGNORECASE):
+            return self.readlog_opsb_type1()
 
     def readlog_opsb_type1(self):
         """
@@ -64,6 +67,13 @@ class OpsBFiles(ReadFileTemplate):
         # itom-di-receiver-dpl.*.log
         # itom-di-scheduler-udx.*.log
         # itom-di-vertica-dpl.*.log
+        # bvd-ap-bridge-.*.log
+        # bvd-controller-deployment-.*.log
+        # bvd-explore-deployment-.*.log
+        # bvd-quexserv-.*.log
+        # bvd-receiver-deployment-.*.log
+        # bvd-redis-.*.log
+        # bvd-www-deployment-.*.log
         :return: TaskInfo["data"] = SList --> [sqlalchemy obj1, sqlalchemy obj2, ...]
         """
         # 模块模式下, 记录读取的文件名
@@ -128,20 +138,25 @@ class OpsBFiles(ReadFileTemplate):
                     # 日志时间
                     log_time = self.get_logtime(log_data[0].split(",")[0][:-8].strip())
                     # 日志等级
+                    log_level = "Null"
                     if re.findall("Adding config|Applying config|Updating config", log_data[0], re.IGNORECASE):
                         log_level = "Config"
                     elif re.findall("level=.*msg=.*", log_data[0], re.IGNORECASE):
                         log_level = log_data[0].split(",", 5)[-1].split("level=")[-1].split(" msg=", 1)[0].upper().strip()
                     elif re.findall("- #.*: ", log_data[0], re.IGNORECASE):
                         log_level = log_data[0].split(",", 5)[-1].split("- #", 1)[-1].split(":", 1)[0].upper().strip()
+                    elif re.findall("\D+\s+\[.*?\] .*", log_data[0], re.IGNORECASE):
+                        log_level = log_data[0].split(",", 5)[-1].strip().split("[", 1)[0].strip()[1:]
                     elif re.findall("\[(.*?)\] .*", log_data[0], re.IGNORECASE):
                         log_level = log_data[0].split(",", 5)[-1].split("]", 1)[-1].strip().split(" ", 1)[0].strip()
-                    else:
-                        log_level = "INFO"
+                    # 日志等级, 如果上述条件都没有正确命中
+                    if log_level not in ["TRACE", "DEBUG", "INFO", "WARN", "WARNING", "ERROR", "CRITICAL", "Config"]:
                         keywords = ["Can't", "Cannot", "Warning", "Failed", "Exception"]
                         for key in keywords:
                             if key in log_data[0]:
                                 log_level = "ERROR"
+                        if log_level != "ERROR":
+                            log_level = "INFO"
                     if log_level == "WARNING":
                         log_level = "WARN"
                     # 日志组件
@@ -156,6 +171,10 @@ class OpsBFiles(ReadFileTemplate):
                         log_cont = log_cont.split(re.findall("\d{2}:\d{2}:\d{2}\.\d{3}", log_cont, re.IGNORECASE)[0], 1)[-1].strip()
                     elif re.findall("\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3} \[(.*?)\]", log_cont, re.IGNORECASE):
                         log_cont = log_cont.split(re.findall("\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}", log_cont, re.IGNORECASE)[0], 1)[-1].strip()
+                    elif re.findall("\D+\s+\[\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}.\d{3}\]", log_cont, re.IGNORECASE):
+                        log_cont = "[" + log_cont.split("[", 1)[-1]
+                    elif re.findall("\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}.*bvd:.*", log_cont, re.IGNORECASE):
+                        log_cont = "bvd:" + log_cont.split("bvd:", 1)[-1]
                     # 检查黑名单, 如果不在, 则将数据放入 FList 中
                     is_Black = False
                     for blk in self.blkline:
@@ -205,6 +224,20 @@ class OpsBFiles(ReadFileTemplate):
                 from rules.MicroFocus.ITOM.OpsB_SQLTable import ITOM_DI_Scheduler_UDX as OpsBTable
             elif re.findall("itom-di-vertica-dpl.*\.log", self.file, re.IGNORECASE):
                 from rules.MicroFocus.ITOM.OpsB_SQLTable import ITOM_DI_Vertica_DPL as OpsBTable
+            elif re.findall("bvd-ap-bridge-.*\.log", self.file, re.IGNORECASE):
+                from rules.MicroFocus.ITOM.OpsB_SQLTable import ITOM_BVD_AP_Bridge as OpsBTable
+            elif re.findall("bvd-controller-deployment-.*\.log", self.file, re.IGNORECASE):
+                from rules.MicroFocus.ITOM.OpsB_SQLTable import ITOM_BVD_Controller_Deployment as OpsBTable
+            elif re.findall("bvd-explore-deployment-.*\.log", self.file, re.IGNORECASE):
+                from rules.MicroFocus.ITOM.OpsB_SQLTable import ITOM_BVD_Explore_Deployment as OpsBTable
+            elif re.findall("bvd-quexserv-.*\.log", self.file, re.IGNORECASE):
+                from rules.MicroFocus.ITOM.OpsB_SQLTable import ITOM_BVD_Quexserv as OpsBTable
+            elif re.findall("bvd-receiver-deployment-.*\.log", self.file, re.IGNORECASE):
+                from rules.MicroFocus.ITOM.OpsB_SQLTable import ITOM_BVD_Receiver_Deployment as OpsBTable
+            elif re.findall("bvd-redis-.*\.log", self.file, re.IGNORECASE):
+                from rules.MicroFocus.ITOM.OpsB_SQLTable import ITOM_BVD_Redis as OpsBTable
+            elif re.findall("bvd-www-deployment-.*\.log", self.file, re.IGNORECASE):
+                from rules.MicroFocus.ITOM.OpsB_SQLTable import ITOM_BVD_WWW_Deployment as OpsBTable
 
             file_id = self.get_file_id(targetdb=self.targetdb, file=self.file, FileHash=FileHash)
             for data in FList:

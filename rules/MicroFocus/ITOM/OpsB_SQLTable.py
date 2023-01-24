@@ -207,6 +207,118 @@ class ITOM_DI_Vertica_DPL(BASE):
     log_cont = Column(String)
 
 
+class ITOM_BVD_AP_Bridge(BASE):
+    """
+    OpsB deployments bvd-ap-bridge
+    """
+    __tablename__ = "opsb_itom_bvd_ap_bridge"
+
+    # 表定义
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    file_id = Column(Integer, ForeignKey("filehash.id"))
+    log_line = Column(Integer)
+    log_time = Column(DateTime)
+    log_level = Column(String)
+    log_comp = Column(String)
+    log_cont = Column(String)
+
+
+class ITOM_BVD_Controller_Deployment(BASE):
+    """
+    OpsB deployments bvd-controller-deployment
+    """
+    __tablename__ = "opsb_itom_bvd_controller_deployment"
+
+    # 表定义
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    file_id = Column(Integer, ForeignKey("filehash.id"))
+    log_line = Column(Integer)
+    log_time = Column(DateTime)
+    log_level = Column(String)
+    log_comp = Column(String)
+    log_cont = Column(String)
+
+
+class ITOM_BVD_Explore_Deployment(BASE):
+    """
+    OpsB deployments bvd-explore-deployment
+    """
+    __tablename__ = "opsb_itom_bvd_explore_deployment"
+
+    # 表定义
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    file_id = Column(Integer, ForeignKey("filehash.id"))
+    log_line = Column(Integer)
+    log_time = Column(DateTime)
+    log_level = Column(String)
+    log_comp = Column(String)
+    log_cont = Column(String)
+
+
+class ITOM_BVD_Quexserv(BASE):
+    """
+    OpsB deployments bvd-quexserv
+    """
+    __tablename__ = "opsb_itom_bvd_quexserv"
+
+    # 表定义
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    file_id = Column(Integer, ForeignKey("filehash.id"))
+    log_line = Column(Integer)
+    log_time = Column(DateTime)
+    log_level = Column(String)
+    log_comp = Column(String)
+    log_cont = Column(String)
+
+
+class ITOM_BVD_Receiver_Deployment(BASE):
+    """
+    OpsB deployments bvd-receiver-deployment
+    """
+    __tablename__ = "opsb_itom_bvd_receiver_deployment"
+
+    # 表定义
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    file_id = Column(Integer, ForeignKey("filehash.id"))
+    log_line = Column(Integer)
+    log_time = Column(DateTime)
+    log_level = Column(String)
+    log_comp = Column(String)
+    log_cont = Column(String)
+
+
+class ITOM_BVD_Redis(BASE):
+    """
+    OpsB deployments bvd-redis
+    """
+    __tablename__ = "opsb_itom_bvd_redis"
+
+    # 表定义
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    file_id = Column(Integer, ForeignKey("filehash.id"))
+    log_line = Column(Integer)
+    log_time = Column(DateTime)
+    log_level = Column(String)
+    log_comp = Column(String)
+    log_cont = Column(String)
+
+
+class ITOM_BVD_WWW_Deployment(BASE):
+    """
+    OpsB deployments bvd-www-deployment
+    """
+    __tablename__ = "opsb_itom_bvd_www_deployment"
+
+    # 表定义
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    file_id = Column(Integer, ForeignKey("filehash.id"))
+    log_line = Column(Integer)
+    log_time = Column(DateTime)
+    log_level = Column(String)
+    log_comp = Column(String)
+    log_cont = Column(String)
+
+
 class ITOM_DI_Pulsar_Jobs(BASE):
     """
     OpsB Jobs itomdipulsar-minio-connector-post-upgrade-job
