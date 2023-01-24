@@ -71,6 +71,9 @@ class OpsBFiles(ReadFileTemplate):
         # kube-registry 日志
         elif re.findall("kube-registry-.*\.log", self.file, re.IGNORECASE):
             return self.readlog_opsb_type1()
+        # itom-idm 日志
+        elif re.findall("itom-idm-.*\.log", self.file, re.IGNORECASE):
+            return self.readlog_opsb_type1()
 
     def readlog_opsb_type1(self):
         """
@@ -109,6 +112,7 @@ class OpsBFiles(ReadFileTemplate):
         # portal-ingress-controller-.*.log
         # itom-frontend-ui-.*.log
         # kube-registry-.*.log
+        # itom-idm-.*.log
         :return: TaskInfo["data"] = SList --> [sqlalchemy obj1, sqlalchemy obj2, ...]
         """
         # 模块模式下, 记录读取的文件名
@@ -174,7 +178,7 @@ class OpsBFiles(ReadFileTemplate):
                     log_time = self.get_logtime(log_data[0].split(",")[0][:-8].strip())
                     # 日志等级
                     log_level = "Null"
-                    if re.findall("Adding config|Applying config|Updating config", log_data[0], re.IGNORECASE):
+                    if re.findall("Adding config|Applying config|Updating config|\S+_\S+=\S+|SHLVL=1|RANDFILE=/tmp/.rnd|container=oci", log_data[0], re.IGNORECASE):
                         log_level = "Config"
                     elif re.findall("\d+\.\d+\.\d+\.\d+\ - - \[.*?\]", log_data[0], re.IGNORECASE):
                         log_level = "INFO"
@@ -237,6 +241,11 @@ class OpsBFiles(ReadFileTemplate):
                         log_cont = log_cont.split("]", 1)[-1].strip()
                     elif re.findall("\[notice] \d+#\d+: signal process", log_cont, re.IGNORECASE):
                         log_cont = "[notice]" + log_cont.split("[notice]", 1)[-1].strip()
+                    ### 针对 itom-idm 日志的特殊处理
+                    elif re.findall("\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{9}\+\d{2}:\d{2} \S+ \S+", log_cont, re.IGNORECASE):
+                        log_cont = log_cont.split(" ", 1)[-1].strip()
+                    elif re.findall("\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}\+\d{4} \S+\s+\[.*?]", log_cont, re.IGNORECASE):
+                        log_cont = "[" + log_cont.split("[", 1)[-1].strip()
                     # 检查黑名单, 如果不在, 则将数据放入 FList 中
                     is_Black = False
                     for blk in self.blkline:
@@ -328,6 +337,8 @@ class OpsBFiles(ReadFileTemplate):
                 from rules.MicroFocus.ITOM.OpsB_SQLTable import ITOM_Core_Frontend_UI as OpsBTable
             elif re.findall("kube-registry-.*\.log", self.file, re.IGNORECASE):
                 from rules.MicroFocus.ITOM.OpsB_SQLTable import ITOM_Core_Kube_Registry as OpsBTable
+            elif re.findall("itom-idm-.*\.log", self.file, re.IGNORECASE):
+                from rules.MicroFocus.ITOM.OpsB_SQLTable import ITOM_IDM as OpsBTable
 
             file_id = self.get_file_id(targetdb=self.targetdb, file=self.file, FileHash=FileHash)
             for data in FList:

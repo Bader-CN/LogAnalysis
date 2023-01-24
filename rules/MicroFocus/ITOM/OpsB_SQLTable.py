@@ -511,6 +511,22 @@ class ITOM_Core_Kube_Registry(BASE):
     log_cont = Column(String)
 
 
+class ITOM_IDM(BASE):
+    """
+    OpsB core/opsb deployments idm
+    """
+    __tablename__ = "opsb_core_and_itom_idm"
+
+    # 表定义
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    file_id = Column(Integer, ForeignKey("filehash.id"))
+    log_line = Column(Integer)
+    log_time = Column(DateTime)
+    log_level = Column(String)
+    log_comp = Column(String)
+    log_cont = Column(String)
+
+
 class ITOM_DI_Pulsar_Job(BASE):
     """
     OpsB Jobs itomdipulsar-minio-connector-post-upgrade-job
