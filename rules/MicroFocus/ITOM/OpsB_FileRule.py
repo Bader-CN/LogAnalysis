@@ -42,6 +42,9 @@ NeedFilesRule = [
     "kube-registry-.*\.log",
     # OpsB IDM (core/itom)
     "itom-idm-.*\.log",
+    # OpsB K8S Service
+    "kubelet\.\d+.log",
+    "containerd.\d+.log",
 ]
 
 # 文件级别的反匹规则, 支持正则表达式

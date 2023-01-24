@@ -74,6 +74,9 @@ class OpsBFiles(ReadFileTemplate):
         # itom-idm 日志
         elif re.findall("itom-idm-.*\.log", self.file, re.IGNORECASE):
             return self.readlog_opsb_type1()
+        # K8S 进程日志
+        elif re.findall("kubelet\.\d+.log|containerd.\d+.log", self.file, re.IGNORECASE):
+            return self.readlog_k8s_process()
 
     def readlog_opsb_type1(self):
         """
@@ -339,6 +342,111 @@ class OpsBFiles(ReadFileTemplate):
                 from rules.MicroFocus.ITOM.OpsB_SQLTable import ITOM_Core_Kube_Registry as OpsBTable
             elif re.findall("itom-idm-.*\.log", self.file, re.IGNORECASE):
                 from rules.MicroFocus.ITOM.OpsB_SQLTable import ITOM_IDM as OpsBTable
+
+            file_id = self.get_file_id(targetdb=self.targetdb, file=self.file, FileHash=FileHash)
+            for data in FList:
+                SList.append(OpsBTable(
+                    file_id=file_id,
+                    log_line=data.get("log_line"),
+                    log_time=datetime.strptime(data.get("log_time"), "%Y-%m-%d %H:%M:%S.%f"),
+                    log_level=data.get("log_level"),
+                    log_comp=data.get("log_comp"),
+                    log_cont=data.get("log_cont")))
+
+        # 模块模式下, 将结果数据返回
+        if __name__ != "__main__":
+            self.TaskInfo["data"] = SList
+            return self.TaskInfo
+        # 测试模式下, 打印 FList 数据
+        else:
+            for data in FList:
+                print(data)
+
+    def readlog_k8s_process(self):
+        """
+        OpsB logs
+        # kubelet.*.log
+        # containerd.*.log
+        :return: TaskInfo["data"] = SList --> [sqlalchemy obj1, sqlalchemy obj2, ...]
+        """
+        # 模块模式下, 记录读取的文件名
+        if __name__ != "__main__":
+            MultSQLLogger.info("Reading File:[{}]".format(self.file))
+        # 初始化变量
+        DList = []  # 原始文档的每一行数据
+        IList = []  # 日志开头的索引
+        FList = []  # 切分完并处理完成的数据
+        SList = []  # 转换为 SQL 语句的数据
+        now_idx = 0
+
+        # 读取文件, 将文件的每一行保存在 DList 中
+        with open(self.file, mode="r", encoding=self.encoding, errors="replace") as file:
+            for line in file:
+                DList.append(line.strip())
+        # 判断日志内容的开头, 并将开头所在的索引记录在 IList 中
+        for line in DList:
+            # 设置判断的初始条件
+            log_time_str = "Null"
+            log_content_str = line.split(",", 1)[0]
+            if re.findall("\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{9}", log_content_str):
+                log_time_str = line.split(",", 1)[0][:-8]
+            # 计算日志中的时间
+            log_time = self.get_logtime(log_time_str)
+            # 判断该行是否是日志的开头
+            if log_time != "Null":
+                IList.append(DList.index(line, now_idx))
+            now_idx += 1
+        # 根据 DList 的数据和 IList 索引来切分日志条目
+        idx_list = []
+        for idx in IList:
+            idx_list.append(idx)
+            if len(idx_list) == 1:
+                pass
+            else:
+                try:
+                    # 针对切分出来的每一份数据, 获取数据的每一部分
+                    log_line = idx_list[0] + 1
+                    log_data = DList[idx_list[0]:idx_list[1]]
+                    idx_list.pop(0)
+                    # 日志时间
+                    log_time = self.get_logtime(log_data[0].split(",")[0][:-8].strip())
+                    # 日志等级
+                    log_level = log_data[0].split(",")[1].strip().upper()
+                    if log_level == "WARNING":
+                        log_level = "WARN"
+                    # 日志组件
+                    log_comp = log_data[0].split(",")[2] + "_" + log_data[0].split(",")[4]
+                    # 日志内容
+                    log_cont = ""
+                    for line in log_data:
+                        log_cont += line.split(",", 5)[-1] + "\n"
+                    # 检查黑名单, 如果不在, 则将数据放入 FList 中
+                    is_Black = False
+                    for blk in self.blkline:
+                        if blk == log_cont:
+                            is_Black = True
+                    if is_Black == False:
+                        # 将字典数据加入到 FList 中
+                        FList.append({
+                            "log_line": log_line,
+                            "log_time": log_time,
+                            "log_level": log_level,
+                            "log_comp": log_comp,
+                            "log_cont": log_cont,})
+                except Exception as e:
+                    # 模块模式
+                    if __name__ != "__main__":
+                        MultSQLLogger.error(e)
+                    # 测试模式
+                    else:
+                        print(e)
+        # 基于 FList 转换为 SQLAlchemy 类型的数据类型, 保存在 SList 中
+        if __name__ != "__main__":
+            # 针对文件做进一步分析, 来判断加载哪一个 SQL 表
+            if re.findall("kubelet.*\.log", self.file, re.IGNORECASE):
+                from rules.MicroFocus.ITOM.OpsB_SQLTable import ITOM_K8S_Kubelet as OpsBTable
+            elif re.findall("containerd.*\.log", self.file, re.IGNORECASE):
+                from rules.MicroFocus.ITOM.OpsB_SQLTable import ITOM_K8S_Containerd as OpsBTable
 
             file_id = self.get_file_id(targetdb=self.targetdb, file=self.file, FileHash=FileHash)
             for data in FList:
