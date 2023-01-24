@@ -53,6 +53,9 @@ class OpsBFiles(ReadFileTemplate):
         # itom-monitoring 相关日志
         elif re.findall("itom-monitoring-.*\.log", self.file, re.IGNORECASE):
             return self.readlog_opsb_type1()
+        # itom-opsb-content-manager 日志
+        elif re.findall("itom-opsb-content-manager-.*\.log", self.file, re.IGNORECASE):
+            return self.readlog_opsb_type1()
 
     def readlog_opsb_type1(self):
         """
@@ -85,6 +88,7 @@ class OpsBFiles(ReadFileTemplate):
         # itom-monitoring-oa-metric-collector-.*.log
         # itom-monitoring-oa-metric-collector-bg-.*.log
         # itom-monitoring-service-data-broker-.*.log
+        # itom-opsb-content-manager-.*.log
         :return: TaskInfo["data"] = SList --> [sqlalchemy obj1, sqlalchemy obj2, ...]
         """
         # 模块模式下, 记录读取的文件名
@@ -279,6 +283,8 @@ class OpsBFiles(ReadFileTemplate):
                 from rules.MicroFocus.ITOM.OpsB_SQLTable import ITOM_Monitoring_OA_Metric_Collector as OpsBTable
             elif re.findall("itom-monitoring-service-data-broker-.*\.log", self.file, re.IGNORECASE):
                 from rules.MicroFocus.ITOM.OpsB_SQLTable import ITOM_Monitoring_Service_Data_Broker as OpsBTable
+            elif re.findall("itom-opsb-content-manager-.*\.log", self.file, re.IGNORECASE):
+                from rules.MicroFocus.ITOM.OpsB_SQLTable import ITOM_OpsB_Content_Manager as OpsBTable
 
             file_id = self.get_file_id(targetdb=self.targetdb, file=self.file, FileHash=FileHash)
             for data in FList:
