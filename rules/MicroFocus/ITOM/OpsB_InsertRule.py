@@ -59,6 +59,15 @@ class OpsBFiles(ReadFileTemplate):
         # itom-ingress-controller 日志
         elif re.findall("itom-ingress-controller-.*\.log", self.file, re.IGNORECASE):
             return self.readlog_opsb_type1()
+        # frontend-ingress-controller 日志
+        elif re.findall("frontend-ingress-controller-.*\.log", self.file, re.IGNORECASE):
+            return self.readlog_opsb_type1()
+        # portal-ingress-controller 日志
+        elif re.findall("portal-ingress-controller-.*\.log", self.file, re.IGNORECASE):
+            return self.readlog_opsb_type1()
+        # itom-frontend-ui 日志
+        elif re.findall("itom-frontend-ui-.*\.log", self.file, re.IGNORECASE):
+            return self.readlog_opsb_type1()
 
     def readlog_opsb_type1(self):
         """
@@ -93,6 +102,9 @@ class OpsBFiles(ReadFileTemplate):
         # itom-monitoring-service-data-broker-.*.log
         # itom-opsb-content-manager-.*.log
         # itom-ingress-controller-.*.log
+        # frontend-ingress-controller-.*.log
+        # portal-ingress-controller-.*.log
+        # itom-frontend-ui-.*.log
         :return: TaskInfo["data"] = SList --> [sqlalchemy obj1, sqlalchemy obj2, ...]
         """
         # 模块模式下, 记录读取的文件名
@@ -160,6 +172,10 @@ class OpsBFiles(ReadFileTemplate):
                     log_level = "Null"
                     if re.findall("Adding config|Applying config|Updating config", log_data[0], re.IGNORECASE):
                         log_level = "Config"
+                    elif re.findall("\d+\.\d+\.\d+\.\d+\ - - \[.*?\]", log_data[0], re.IGNORECASE):
+                        log_level = "INFO"
+                    elif re.findall("\[notice] \d+#\d+: signal process", log_data[0], re.IGNORECASE):
+                        log_level = "INFO"
                     elif re.findall("level=.*msg=.*", log_data[0], re.IGNORECASE):
                         log_level = log_data[0].split(",", 5)[-1].split("level=")[-1].split(" msg=", 1)[0].upper().strip()
                     elif re.findall("- #.*: ", log_data[0], re.IGNORECASE):
@@ -212,6 +228,11 @@ class OpsBFiles(ReadFileTemplate):
                         log_cont = log_cont.split("- entry -", 1)[-1].strip()
                     elif re.findall("\S{3} \S{3} \d{2} \d{2}:\d{2}:\d{2} UTC \d{4} \S+:", log_cont, re.IGNORECASE):
                         log_cont = log_cont.split(re.findall("\S{3} \S{3} \d{2} \d{2}:\d{2}:\d{2} UTC \d{4} \S+:", log_cont, re.IGNORECASE)[0], 1)[-1].strip()
+                    ### 针对 ingress-controller 日志的特殊处理
+                    elif re.findall("\d+\.\d+\.\d+\.\d+\ - - \[.*?\]", log_cont, re.IGNORECASE):
+                        log_cont = log_cont.split("]", 1)[-1].strip()
+                    elif re.findall("\[notice] \d+#\d+: signal process", log_cont, re.IGNORECASE):
+                        log_cont = "[notice]" + log_cont.split("[notice]", 1)[-1].strip()
                     # 检查黑名单, 如果不在, 则将数据放入 FList 中
                     is_Black = False
                     for blk in self.blkline:
@@ -295,6 +316,12 @@ class OpsBFiles(ReadFileTemplate):
                 from rules.MicroFocus.ITOM.OpsB_SQLTable import ITOM_OpsB_Content_Manager as OpsBTable
             elif re.findall("itom-ingress-controller-.*\.log", self.file, re.IGNORECASE):
                 from rules.MicroFocus.ITOM.OpsB_SQLTable import ITOM_Ingress_Controller as OpsBTable
+            elif re.findall("frontend-ingress-controller-.*\.log", self.file, re.IGNORECASE):
+                from rules.MicroFocus.ITOM.OpsB_SQLTable import ITOM_Core_Frontend_Ingress_Controller as OpsBTable
+            elif re.findall("portal-ingress-controller-.*\.log", self.file, re.IGNORECASE):
+                from rules.MicroFocus.ITOM.OpsB_SQLTable import ITOM_Core_Portal_Ingress_Controller as OpsBTable
+            elif re.findall("itom-frontend-ui-.*\.log", self.file, re.IGNORECASE):
+                from rules.MicroFocus.ITOM.OpsB_SQLTable import ITOM_Core_Frontend_UI as OpsBTable
 
             file_id = self.get_file_id(targetdb=self.targetdb, file=self.file, FileHash=FileHash)
             for data in FList:

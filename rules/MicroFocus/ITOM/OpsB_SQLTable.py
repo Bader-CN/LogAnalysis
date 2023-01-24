@@ -447,6 +447,54 @@ class ITOM_Ingress_Controller(BASE):
     log_cont = Column(String)
 
 
+class ITOM_Core_Frontend_Ingress_Controller(BASE):
+    """
+    OpsB core deployments frontend-ingress-controller
+    """
+    __tablename__ = "opsb_core_frontend_ingress_controller"
+
+    # 表定义
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    file_id = Column(Integer, ForeignKey("filehash.id"))
+    log_line = Column(Integer)
+    log_time = Column(DateTime)
+    log_level = Column(String)
+    log_comp = Column(String)
+    log_cont = Column(String)
+
+
+class ITOM_Core_Portal_Ingress_Controller(BASE):
+    """
+    OpsB core deployments portal-ingress-controller
+    """
+    __tablename__ = "opsb_core_portal_ingress_controller"
+
+    # 表定义
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    file_id = Column(Integer, ForeignKey("filehash.id"))
+    log_line = Column(Integer)
+    log_time = Column(DateTime)
+    log_level = Column(String)
+    log_comp = Column(String)
+    log_cont = Column(String)
+
+
+class ITOM_Core_Frontend_UI(BASE):
+    """
+    OpsB core deployments itom-frontend-ui
+    """
+    __tablename__ = "opsb_core_itom_frontend_ui"
+
+    # 表定义
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    file_id = Column(Integer, ForeignKey("filehash.id"))
+    log_line = Column(Integer)
+    log_time = Column(DateTime)
+    log_level = Column(String)
+    log_comp = Column(String)
+    log_cont = Column(String)
+
+
 class ITOM_DI_Pulsar_Job(BASE):
     """
     OpsB Jobs itomdipulsar-minio-connector-post-upgrade-job
