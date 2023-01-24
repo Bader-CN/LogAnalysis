@@ -30,6 +30,7 @@ NeedFilesRule = [
     "itom-monitoring-oa-metric-collector-bg-.*\.log",
     "itom-monitoring-service-data-broker-.*\.log",
     "itom-opsb-content-manager-.*\.log",
+    "itom-ingress-controller-.*\.log",
     # OpsB Jobs
     "itomdipulsar-minio-connector-post-upgrade-job.*\.log",
     "itom-monitoring-collection-autoconfigure-job-.*\.log",

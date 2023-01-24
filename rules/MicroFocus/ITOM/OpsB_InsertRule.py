@@ -56,6 +56,9 @@ class OpsBFiles(ReadFileTemplate):
         # itom-opsb-content-manager 日志
         elif re.findall("itom-opsb-content-manager-.*\.log", self.file, re.IGNORECASE):
             return self.readlog_opsb_type1()
+        # itom-ingress-controller 日志
+        elif re.findall("itom-ingress-controller-.*\.log", self.file, re.IGNORECASE):
+            return self.readlog_opsb_type1()
 
     def readlog_opsb_type1(self):
         """
@@ -89,6 +92,7 @@ class OpsBFiles(ReadFileTemplate):
         # itom-monitoring-oa-metric-collector-bg-.*.log
         # itom-monitoring-service-data-broker-.*.log
         # itom-opsb-content-manager-.*.log
+        # itom-ingress-controller-.*.log
         :return: TaskInfo["data"] = SList --> [sqlalchemy obj1, sqlalchemy obj2, ...]
         """
         # 模块模式下, 记录读取的文件名
@@ -164,7 +168,11 @@ class OpsBFiles(ReadFileTemplate):
                         log_level = log_data[0].split(",", 5)[-1].strip().split("[", 1)[0].strip()[1:]
                     elif re.findall("\[(.*?)\] .*", log_data[0], re.IGNORECASE):
                         log_level = log_data[0].split(",", 5)[-1].split("]", 1)[-1].strip().split(" ", 1)[0].strip()
-                    # 日志等级, 如果上述条件都没有正确命中
+                    elif re.findall("[WIE]\d{4} \d{2}:\d{2}:\d{2}.\d{6}\s+", log_data[0], re.IGNORECASE):
+                        for log_key, log_val in {"I0120":"INFO", "W0120":"WARN", "E0120":"ERROR"}.items():
+                            if log_key in log_data[0]:
+                                log_level = log_val
+                    ### 日志等级, 如果上述条件都没有正确命中
                     if log_level not in ["TRACE", "DEBUG", "INFO", "WARN", "WARNING", "ERROR", "CRITICAL", "Config"]:
                         for key in ["trace", "TRACE", "debug", "DEBUG", "info", "INFO", "warn", "WARN", "warning", "WARNING", "error", "ERROR", "critical", "CRITICAL"]:
                             if key in log_data[0]:
@@ -190,10 +198,10 @@ class OpsBFiles(ReadFileTemplate):
                         log_cont = log_cont.split(re.findall("\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}", log_cont, re.IGNORECASE)[0], 1)[-1].strip()
                     elif re.findall("\D+\s+\[\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}.\d{3}\]", log_cont, re.IGNORECASE):
                         log_cont = "[" + log_cont.split("[", 1)[-1].strip()
-                    # 针对 BVD 日志的特殊处理
+                    ### 针对 BVD 日志的特殊处理
                     elif re.findall("\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}.*bvd:.*", log_cont, re.IGNORECASE):
                         log_cont = "bvd:" + log_cont.split("bvd:", 1)[-1].strip()
-                    # 针对 itom-monitoring 日志的特殊处理
+                    ### 针对 itom-monitoring 日志的特殊处理
                     elif re.findall("\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z\s+.*\s+line:", log_cont, re.IGNORECASE):
                         log_cont = "line:" + log_cont.split("line:", 1)[-1].strip()
                     elif re.findall("\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}.\d{3} \S+ init:main", log_cont, re.IGNORECASE):
@@ -285,6 +293,8 @@ class OpsBFiles(ReadFileTemplate):
                 from rules.MicroFocus.ITOM.OpsB_SQLTable import ITOM_Monitoring_Service_Data_Broker as OpsBTable
             elif re.findall("itom-opsb-content-manager-.*\.log", self.file, re.IGNORECASE):
                 from rules.MicroFocus.ITOM.OpsB_SQLTable import ITOM_OpsB_Content_Manager as OpsBTable
+            elif re.findall("itom-ingress-controller-.*\.log", self.file, re.IGNORECASE):
+                from rules.MicroFocus.ITOM.OpsB_SQLTable import ITOM_Ingress_Controller as OpsBTable
 
             file_id = self.get_file_id(targetdb=self.targetdb, file=self.file, FileHash=FileHash)
             for data in FList:
