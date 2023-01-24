@@ -23,8 +23,16 @@ NeedFilesRule = [
     "bvd-receiver-deployment-.*\.log",
     "bvd-redis-.*\.log",
     "bvd-www-deployment-.*\.log",
+    "itom-monitoring-admin-.*.log",
+    "itom-monitoring-collection-manager-.*\.log",
+    "itom-monitoring-oa-discovery-collector-.*\.log",
+    "itom-monitoring-oa-metric-collector-.*\.log",
+    "itom-monitoring-oa-metric-collector-bg-.*\.log",
+    "itom-monitoring-service-data-broker-.*\.log",
     # OpsB Jobs
     "itomdipulsar-minio-connector-post-upgrade-job.*\.log",
+    "itom-monitoring-collection-autoconfigure-job-.*\.log",
+    "itom-monitoring-job-scheduler-.*\.log",
 ]
 
 # 文件级别的反匹规则, 支持正则表达式

@@ -319,11 +319,139 @@ class ITOM_BVD_WWW_Deployment(BASE):
     log_cont = Column(String)
 
 
-class ITOM_DI_Pulsar_Jobs(BASE):
+class ITOM_Monitoring_Admin(BASE):
+    """
+    OpsB deployments itom-monitoring-admin
+    """
+    __tablename__ = "opsb_itom_monitoring_admin"
+
+    # 表定义
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    file_id = Column(Integer, ForeignKey("filehash.id"))
+    log_line = Column(Integer)
+    log_time = Column(DateTime)
+    log_level = Column(String)
+    log_comp = Column(String)
+    log_cont = Column(String)
+
+
+class ITOM_Monitoring_Collection_Manager(BASE):
+    """
+    OpsB deployments itom-monitoring-collection-manager
+    """
+    __tablename__ = "opsb_itom_monitoring_collection_manager"
+
+    # 表定义
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    file_id = Column(Integer, ForeignKey("filehash.id"))
+    log_line = Column(Integer)
+    log_time = Column(DateTime)
+    log_level = Column(String)
+    log_comp = Column(String)
+    log_cont = Column(String)
+
+
+class ITOM_Monitoring_OA_Discovery_Collector(BASE):
+    """
+    OpsB deployments itom-monitoring-oa-discovery-collector
+    """
+    __tablename__ = "opsb_itom_monitoring_oa_discovery_collector"
+
+    # 表定义
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    file_id = Column(Integer, ForeignKey("filehash.id"))
+    log_line = Column(Integer)
+    log_time = Column(DateTime)
+    log_level = Column(String)
+    log_comp = Column(String)
+    log_cont = Column(String)
+
+
+class ITOM_Monitoring_OA_Metric_Collector(BASE):
+    """
+    OpsB deployments itom-monitoring-oa-metric-collector
+    """
+    __tablename__ = "opsb_itom_monitoring_oa_metric_collector"
+
+    # 表定义
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    file_id = Column(Integer, ForeignKey("filehash.id"))
+    log_line = Column(Integer)
+    log_time = Column(DateTime)
+    log_level = Column(String)
+    log_comp = Column(String)
+    log_cont = Column(String)
+
+
+class ITOM_Monitoring_OA_Metric_Collector_BG(BASE):
+    """
+    OpsB deployments itom-monitoring-oa-metric-collector-bg
+    """
+    __tablename__ = "opsb_itom_monitoring_oa_metric_collector_bg"
+
+    # 表定义
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    file_id = Column(Integer, ForeignKey("filehash.id"))
+    log_line = Column(Integer)
+    log_time = Column(DateTime)
+    log_level = Column(String)
+    log_comp = Column(String)
+    log_cont = Column(String)
+
+
+class ITOM_Monitoring_Service_Data_Broker(BASE):
+    """
+    OpsB deployments itom-monitoring-service-data-broker
+    """
+    __tablename__ = "opsb_itom_monitoring_service_data_broker"
+
+    # 表定义
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    file_id = Column(Integer, ForeignKey("filehash.id"))
+    log_line = Column(Integer)
+    log_time = Column(DateTime)
+    log_level = Column(String)
+    log_comp = Column(String)
+    log_cont = Column(String)
+
+
+class ITOM_DI_Pulsar_Job(BASE):
     """
     OpsB Jobs itomdipulsar-minio-connector-post-upgrade-job
     """
-    __tablename__ = "opsb_itom_di_pulsar_jobs"
+    __tablename__ = "opsb_itom_di_pulsar_job"
+
+    # 表定义
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    file_id = Column(Integer, ForeignKey("filehash.id"))
+    log_line = Column(Integer)
+    log_time = Column(DateTime)
+    log_level = Column(String)
+    log_comp = Column(String)
+    log_cont = Column(String)
+
+
+class ITOM_Monitoring_Collection_AutoConfigure_Job(BASE):
+    """
+    OpsB Jobs itom-monitoring-collection-autoconfigure-job
+    """
+    __tablename__ = "opsb_itom_monitoring_collection_autoconfigure_job"
+
+    # 表定义
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    file_id = Column(Integer, ForeignKey("filehash.id"))
+    log_line = Column(Integer)
+    log_time = Column(DateTime)
+    log_level = Column(String)
+    log_comp = Column(String)
+    log_cont = Column(String)
+
+
+class ITOM_Monitoring_Job_Scheduler(BASE):
+    """
+    OpsB Jobs itom-monitoring-job-scheduler
+    """
+    __tablename__ = "opsb_itom_monitoring_job_scheduler"
 
     # 表定义
     id = Column(Integer, primary_key=True, autoincrement=True)

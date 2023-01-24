@@ -50,6 +50,9 @@ class OpsBFiles(ReadFileTemplate):
         # bvd 相关日志
         elif re.findall("bvd-.*\.log", self.file, re.IGNORECASE):
             return self.readlog_opsb_type1()
+        # itom-monitoring 相关日志
+        elif re.findall("itom-monitoring-.*\.log", self.file, re.IGNORECASE):
+            return self.readlog_opsb_type1()
 
     def readlog_opsb_type1(self):
         """
@@ -74,6 +77,14 @@ class OpsBFiles(ReadFileTemplate):
         # bvd-receiver-deployment-.*.log
         # bvd-redis-.*.log
         # bvd-www-deployment-.*.log
+        # itom-monitoring-admin-.*.log
+        # itom-monitoring-collection-autoconfigure-job-.*.log
+        # itom-monitoring-collection-manager-.*.log
+        # itom-monitoring-job-scheduler-.*.log
+        # itom-monitoring-oa-discovery-collector-.*.log
+        # itom-monitoring-oa-metric-collector-.*.log
+        # itom-monitoring-oa-metric-collector-bg-.*.log
+        # itom-monitoring-service-data-broker-.*.log
         :return: TaskInfo["data"] = SList --> [sqlalchemy obj1, sqlalchemy obj2, ...]
         """
         # 模块模式下, 记录读取的文件名
@@ -113,7 +124,7 @@ class OpsBFiles(ReadFileTemplate):
             # 在非时间的内容中, 如果该行包括 "Exception", "at ", " more", "Caused by" 这类字段, 则判断为多行, 其余为单行
             if is_Start == False:
                 is_Match = False
-                for key in ["Exception", "at ", " more", "Caused by", '"  ""', '"    ""', '"  },"']:
+                for key in ["Exception", "at ", " more", "Caused by", '"  ""', '"    ""', '"  },"', "status=eServiceOK coreID="]:
                     if key in log_content_str:
                             is_Start = False
                             is_Match = True
@@ -151,12 +162,14 @@ class OpsBFiles(ReadFileTemplate):
                         log_level = log_data[0].split(",", 5)[-1].split("]", 1)[-1].strip().split(" ", 1)[0].strip()
                     # 日志等级, 如果上述条件都没有正确命中
                     if log_level not in ["TRACE", "DEBUG", "INFO", "WARN", "WARNING", "ERROR", "CRITICAL", "Config"]:
+                        for key in ["trace", "TRACE", "debug", "DEBUG", "info", "INFO", "warn", "WARN", "warning", "WARNING", "error", "ERROR", "critical", "CRITICAL"]:
+                            if key in log_data[0]:
+                                log_level = key.upper()
+                    if log_level not in ["TRACE", "DEBUG", "INFO", "WARN", "WARNING", "ERROR", "CRITICAL", "Config"]:
                         keywords = ["Can't", "Cannot", "Warning", "Failed", "Exception"]
                         for key in keywords:
                             if key in log_data[0]:
                                 log_level = "ERROR"
-                        if log_level != "ERROR":
-                            log_level = "INFO"
                     if log_level == "WARNING":
                         log_level = "WARN"
                     # 日志组件
@@ -172,9 +185,21 @@ class OpsBFiles(ReadFileTemplate):
                     elif re.findall("\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3} \[(.*?)\]", log_cont, re.IGNORECASE):
                         log_cont = log_cont.split(re.findall("\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}", log_cont, re.IGNORECASE)[0], 1)[-1].strip()
                     elif re.findall("\D+\s+\[\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}.\d{3}\]", log_cont, re.IGNORECASE):
-                        log_cont = "[" + log_cont.split("[", 1)[-1]
+                        log_cont = "[" + log_cont.split("[", 1)[-1].strip()
+                    # 针对 BVD 日志的特殊处理
                     elif re.findall("\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}.*bvd:.*", log_cont, re.IGNORECASE):
-                        log_cont = "bvd:" + log_cont.split("bvd:", 1)[-1]
+                        log_cont = "bvd:" + log_cont.split("bvd:", 1)[-1].strip()
+                    # 针对 itom-monitoring 日志的特殊处理
+                    elif re.findall("\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z\s+.*\s+line:", log_cont, re.IGNORECASE):
+                        log_cont = "line:" + log_cont.split("line:", 1)[-1].strip()
+                    elif re.findall("\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}.\d{3} \S+ init:main", log_cont, re.IGNORECASE):
+                        log_cont = "init:main" + log_cont.split("init:main", 1)[-1].strip()
+                    elif re.findall("\[\d{2}m\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\s+.*:", log_cont, re.IGNORECASE):
+                        log_cont = log_cont.split(re.findall("\[\d{2}m\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\s+.*:", log_cont)[0], 1)[-1].strip()
+                    elif re.findall("\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}.\d{3} - entry - ", log_cont, re.IGNORECASE):
+                        log_cont = log_cont.split("- entry -", 1)[-1].strip()
+                    elif re.findall("\S{3} \S{3} \d{2} \d{2}:\d{2}:\d{2} UTC \d{4} \S+:", log_cont, re.IGNORECASE):
+                        log_cont = log_cont.split(re.findall("\S{3} \S{3} \d{2} \d{2}:\d{2}:\d{2} UTC \d{4} \S+:", log_cont, re.IGNORECASE)[0], 1)[-1].strip()
                     # 检查黑名单, 如果不在, 则将数据放入 FList 中
                     is_Black = False
                     for blk in self.blkline:
@@ -207,7 +232,7 @@ class OpsBFiles(ReadFileTemplate):
             elif re.findall("itomdipulsar-proxy.*\.log", self.file, re.IGNORECASE):
                 from rules.MicroFocus.ITOM.OpsB_SQLTable import ITOM_DI_Pulsar_Proxy as OpsBTable
             elif re.findall("itomdipulsar-minio-connector-post-upgrade-job.*\.log", self.file, re.IGNORECASE):
-                from rules.MicroFocus.ITOM.OpsB_SQLTable import ITOM_DI_Pulsar_Jobs as OpsBTable
+                from rules.MicroFocus.ITOM.OpsB_SQLTable import ITOM_DI_Pulsar_Job as OpsBTable
             elif re.findall("itom-di-administration.*\.log", self.file, re.IGNORECASE):
                 from rules.MicroFocus.ITOM.OpsB_SQLTable import ITOM_DI_Administration as OpsBTable
             elif re.findall("itom-di-data-access-dpl.*\.log", self.file, re.IGNORECASE):
@@ -238,6 +263,22 @@ class OpsBFiles(ReadFileTemplate):
                 from rules.MicroFocus.ITOM.OpsB_SQLTable import ITOM_BVD_Redis as OpsBTable
             elif re.findall("bvd-www-deployment-.*\.log", self.file, re.IGNORECASE):
                 from rules.MicroFocus.ITOM.OpsB_SQLTable import ITOM_BVD_WWW_Deployment as OpsBTable
+            elif re.findall("itom-monitoring-admin-.*\.log", self.file, re.IGNORECASE):
+                from rules.MicroFocus.ITOM.OpsB_SQLTable import ITOM_Monitoring_Admin as OpsBTable
+            elif re.findall("itom-monitoring-collection-autoconfigure-job-.*\.log", self.file, re.IGNORECASE):
+                from rules.MicroFocus.ITOM.OpsB_SQLTable import ITOM_Monitoring_Collection_AutoConfigure_Job as OpsBTable
+            elif re.findall("itom-monitoring-collection-manager-.*\.log", self.file, re.IGNORECASE):
+                from rules.MicroFocus.ITOM.OpsB_SQLTable import ITOM_Monitoring_Collection_Manager as OpsBTable
+            elif re.findall("itom-monitoring-job-scheduler-.*\.log", self.file, re.IGNORECASE):
+                from rules.MicroFocus.ITOM.OpsB_SQLTable import ITOM_Monitoring_Job_Scheduler as OpsBTable
+            elif re.findall("itom-monitoring-oa-discovery-collector-.*\.log", self.file, re.IGNORECASE):
+                from rules.MicroFocus.ITOM.OpsB_SQLTable import ITOM_Monitoring_OA_Discovery_Collector as OpsBTable
+            elif re.findall("itom-monitoring-oa-metric-collector-bg-.*\.log", self.file, re.IGNORECASE):
+                from rules.MicroFocus.ITOM.OpsB_SQLTable import ITOM_Monitoring_OA_Metric_Collector_BG as OpsBTable
+            elif re.findall("itom-monitoring-oa-metric-collector-.*\.log", self.file, re.IGNORECASE):
+                from rules.MicroFocus.ITOM.OpsB_SQLTable import ITOM_Monitoring_OA_Metric_Collector as OpsBTable
+            elif re.findall("itom-monitoring-service-data-broker-.*\.log", self.file, re.IGNORECASE):
+                from rules.MicroFocus.ITOM.OpsB_SQLTable import ITOM_Monitoring_Service_Data_Broker as OpsBTable
 
             file_id = self.get_file_id(targetdb=self.targetdb, file=self.file, FileHash=FileHash)
             for data in FList:
