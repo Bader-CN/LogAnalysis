@@ -42,7 +42,7 @@ NeedFilesRule = [
     "kube-registry-.*\.log",
     # OpsB IDM (core/itom)
     "itom-idm-.*\.log",
-    # OpsB K8S Service
+    # OpsB K8S Service.sql
     "kubelet\.\d+.log",
     "containerd.\d+.log",
 ]

@@ -197,7 +197,7 @@ class OpsBFiles(ReadFileTemplate):
                         for log_key, log_val in {"I012":"INFO", "W012":"WARN", "E012":"ERROR"}.items():
                             if log_key in log_data[0]:
                                 log_level = log_val
-                    elif re.findall("Adding config|Applying config|Updating config|\S+_\S+=\S+|SHLVL=1|RANDFILE=/tmp/.rnd|container=oci", log_data[0], re.IGNORECASE):
+                    if re.findall("Adding config|Applying config|Updating config|\S+_\S+=\S+|SHLVL=1|RANDFILE=/tmp/.rnd|container=oci", log_data[0], re.IGNORECASE):
                         log_level = "Config"
                     ### 日志等级, 如果上述条件都没有正确命中
                     if log_level not in ["TRACE", "DEBUG", "INFO", "WARN", "WARNING", "ERROR", "CRITICAL", "Config"]:
