@@ -48,4 +48,9 @@ NeedFilesRule = [
 ]
 
 # 文件级别的反匹规则, 支持正则表达式
-BlckFilesRule = []
+BlckFilesRule = [
+    # itom-idm 的 Pod 中有相关信息, 并且格式不对
+    "idm-service\.log",
+    "idm-loader\.log",
+    "startidm\.sh\.log",
+]

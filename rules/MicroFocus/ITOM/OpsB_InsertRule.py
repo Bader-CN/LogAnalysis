@@ -181,9 +181,7 @@ class OpsBFiles(ReadFileTemplate):
                     log_time = self.get_logtime(log_data[0].split(",")[0][:-8].strip())
                     # 日志等级
                     log_level = "Null"
-                    if re.findall("Adding config|Applying config|Updating config|\S+_\S+=\S+|SHLVL=1|RANDFILE=/tmp/.rnd|container=oci", log_data[0], re.IGNORECASE):
-                        log_level = "Config"
-                    elif re.findall("\d+\.\d+\.\d+\.\d+\ - - \[.*?\]", log_data[0], re.IGNORECASE):
+                    if re.findall("\d+\.\d+\.\d+\.\d+\ - - \[.*?\]", log_data[0], re.IGNORECASE):
                         log_level = "INFO"
                     elif re.findall("\[notice] \d+#\d+: signal process", log_data[0], re.IGNORECASE):
                         log_level = "INFO"
@@ -196,9 +194,11 @@ class OpsBFiles(ReadFileTemplate):
                     elif re.findall("\[(.*?)\] .*", log_data[0], re.IGNORECASE):
                         log_level = log_data[0].split(",", 5)[-1].split("]", 1)[-1].strip().split(" ", 1)[0].strip()
                     elif re.findall("[WIE]\d{4} \d{2}:\d{2}:\d{2}.\d{6}\s+", log_data[0], re.IGNORECASE):
-                        for log_key, log_val in {"I0120":"INFO", "W0120":"WARN", "E0120":"ERROR"}.items():
+                        for log_key, log_val in {"I012":"INFO", "W012":"WARN", "E012":"ERROR"}.items():
                             if log_key in log_data[0]:
                                 log_level = log_val
+                    elif re.findall("Adding config|Applying config|Updating config|\S+_\S+=\S+|SHLVL=1|RANDFILE=/tmp/.rnd|container=oci", log_data[0], re.IGNORECASE):
+                        log_level = "Config"
                     ### 日志等级, 如果上述条件都没有正确命中
                     if log_level not in ["TRACE", "DEBUG", "INFO", "WARN", "WARNING", "ERROR", "CRITICAL", "Config"]:
                         for key in ["trace", "TRACE", "debug", "DEBUG", "info", "INFO", "warn", "WARN", "warning", "WARNING", "error", "ERROR", "critical", "CRITICAL"]:
@@ -249,6 +249,11 @@ class OpsBFiles(ReadFileTemplate):
                         log_cont = log_cont.split(" ", 1)[-1].strip()
                     elif re.findall("\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}\+\d{4} \S+\s+\[.*?]", log_cont, re.IGNORECASE):
                         log_cont = "[" + log_cont.split("[", 1)[-1].strip()
+                    ### 针对 kube-registry 日志的特殊处理
+                    elif re.findall("\[\d;\d{2}m\[E].*0m", log_cont, re.IGNORECASE):
+                        log_cont = "[" + log_cont.split("[", 1)[-1].strip()
+                    elif re.findall("\d{4}/\d{2}/\d{2} \d{2}:\d{2}:\d{2} http:", log_cont, re.IGNORECASE):
+                        log_cont = "http:" + log_cont.split("http:", 1)[-1].strip()
                     # 检查黑名单, 如果不在, 则将数据放入 FList 中
                     is_Black = False
                     for blk in self.blkline:
@@ -345,13 +350,18 @@ class OpsBFiles(ReadFileTemplate):
 
             file_id = self.get_file_id(targetdb=self.targetdb, file=self.file, FileHash=FileHash)
             for data in FList:
-                SList.append(OpsBTable(
-                    file_id=file_id,
-                    log_line=data.get("log_line"),
-                    log_time=datetime.strptime(data.get("log_time"), "%Y-%m-%d %H:%M:%S.%f"),
-                    log_level=data.get("log_level"),
-                    log_comp=data.get("log_comp"),
-                    log_cont=data.get("log_cont")))
+                try:
+                    SList.append(OpsBTable(
+                        file_id=file_id,
+                        log_line=data.get("log_line"),
+                        log_time=datetime.strptime(data.get("log_time"), "%Y-%m-%d %H:%M:%S.%f"),
+                        log_level=data.get("log_level"),
+                        log_comp=data.get("log_comp"),
+                        log_cont=data.get("log_cont")))
+                except Exception as e:
+                    MultSQLLogger.error(e)
+                    MultSQLLogger.error("Faild File: " + self.file)
+                    MultSQLLogger.error("Faild Line: " + line)
 
         # 模块模式下, 将结果数据返回
         if __name__ != "__main__":
