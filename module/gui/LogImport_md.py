@@ -23,15 +23,10 @@ class LogAnalysisImport(QWidget):
     category_dict = {
         "MicroFocus": {
             "ITOM": ["Operations Agent(OA)", "Operations Bridge Manager(OBM)", "Operations Bridge Suite(OpsB)"], },
+        "RedHat": {
+            "RedHat Linux System": ["Syslog for Linux"],
+        }
     }
-
-    # category_dict = {
-    #     "MicroFocus": {
-    #         "IMG": ["Connected Backup(CBK)", "IDOL"],
-    #         "ITOM": ["Operations Agent(OA)", "Operations Bridge Manager(OBM)"], },
-    #
-    #     "Company1": {"ProductLine1": ["ProductName1", "ProductName2"], }
-    # }
 
     def __init__(self):
         try:

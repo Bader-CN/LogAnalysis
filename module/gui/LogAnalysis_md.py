@@ -233,6 +233,9 @@ class LogAnalysisMain(QMainWindow):
         elif dict.get("company") == "MicroFocus" and dict.get("productline") == "ITOM" and dict.get("product") == "Operations Bridge Suite(OpsB)":
             from rules.MicroFocus.ITOM import OpsB_FileRule as FileRule
             from rules.MicroFocus.ITOM import OpsB_SQLTable as SQLTable
+        elif dict.get("company") == "RedHat" and dict.get("productline") == "RedHat Linux System" and dict.get("product") == "Syslog for Linux":
+            from rules.RedHat.LinuxSystem import Syslog_FileRule as FileRule
+            from rules.RedHat.LinuxSystem import Syslog_SQLTable as SQLTable
 
         # 输出待导入的文件
         if dict.get("pathtype") == "File":

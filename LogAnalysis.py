@@ -67,6 +67,9 @@ def logfile_to_sql(QTask, QData):
             elif TaskInfo.get("company") == "MicroFocus" and TaskInfo.get("productline") == "ITOM" and TaskInfo.get("product") == "Operations Bridge Suite(OpsB)":
                 from rules.MicroFocus.ITOM import OpsB_InsertRule
                 OpsB_InsertRule.OpsBFiles(TaskInfo, QData)
+            elif TaskInfo.get("company") == "RedHat" and TaskInfo.get("productline") == "RedHat Linux System" and TaskInfo.get("product") == "Syslog for Linux":
+                from rules.RedHat.LinuxSystem import Syslog_InsertRule
+                Syslog_InsertRule.SyslogFiles(TaskInfo, QData)
 
 if __name__ == '__main__':
     try:
