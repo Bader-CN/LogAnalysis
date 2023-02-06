@@ -15,3 +15,7 @@
   - 当 QData 队列里传递的值是 None 时, 会导致进度条卡住的问题
 # Optimal
   - LogAnalysis 将会返回更加精确的时间
+
+2023-**-** LogAnalysis v1.2.0
+# Add
+  - 追加 Linux Syslog 相关日志的解析
