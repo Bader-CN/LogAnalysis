@@ -15,6 +15,38 @@ class FileHash(BASE):
     hash = Column(String, unique=True)
 
 
+class Syslog_Cron(BASE):
+    """
+    Syslog for /var/log/cron
+    """
+    __tablename__ = "syslog_cron"
+
+    # 表定义
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    file_id = Column(Integer, ForeignKey("filehash.id"))
+    log_line = Column(Integer)
+    log_time = Column(DateTime)
+    log_level = Column(String)
+    log_comp = Column(String)
+    log_cont = Column(String)
+
+
+class Syslog_Maillog(BASE):
+    """
+    Syslog for /var/log/maillog
+    """
+    __tablename__ = "syslog_maillog"
+
+    # 表定义
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    file_id = Column(Integer, ForeignKey("filehash.id"))
+    log_line = Column(Integer)
+    log_time = Column(DateTime)
+    log_level = Column(String)
+    log_comp = Column(String)
+    log_cont = Column(String)
+
+
 class Syslog_Messages(BASE):
     """
     Syslog for /var/log/messages

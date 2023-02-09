@@ -3,6 +3,8 @@
 # 文件级别的匹配规则, 支持正则表达式
 NeedFilesRule = [
     # /var/log
+    'cron',
+    'maillog',
     'messages',
     'secure',
 ]

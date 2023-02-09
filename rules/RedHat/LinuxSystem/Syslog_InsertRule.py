@@ -41,8 +41,8 @@ class SyslogFiles(ReadFileTemplate):
         针对 Syslog 文件进行分类, 然后在做后续处理
         :return:
         """
-        # /var/log/messages
-        if re.findall("messages|secure", self.file, re.IGNORECASE):
+        # /var/log
+        if re.findall("cron|maillog|messages|secure", self.file, re.IGNORECASE):
             return self.syslog_type1()
 
     def syslog_type1(self):
@@ -114,6 +114,8 @@ class SyslogFiles(ReadFileTemplate):
                     log_level = "INFO"
                     if re.findall("error|failed|can't|cannot|can not", log_cont, re.IGNORECASE):
                         log_level = "ERROR"
+                    elif re.findall("warn", log_cont, re.IGNORECASE):
+                        log_level = "WARN"
                     # 将字典数据加入到 FList 中
                     FList.append({
                         "log_line": log_line,
@@ -131,7 +133,11 @@ class SyslogFiles(ReadFileTemplate):
         # 基于 FList 转换为 SQLAlchemy 类型的数据类型, 保存在 SList 中
         if __name__ != "__main__":
             # 根据不同的 Syslog 文件来加载不同的 SQLAlchemy 表
-            if re.findall("messages", self.file, re.IGNORECASE):
+            if re.findall("cron", self.file, re.IGNORECASE):
+                from rules.RedHat.LinuxSystem.Syslog_SQLTable import Syslog_Cron as SyslogTable
+            elif re.findall("maillog", self.file, re.IGNORECASE):
+                from rules.RedHat.LinuxSystem.Syslog_SQLTable import Syslog_Maillog as SyslogTable
+            elif re.findall("messages", self.file, re.IGNORECASE):
                 from rules.RedHat.LinuxSystem.Syslog_SQLTable import Syslog_Messages as SyslogTable
             elif re.findall("secure", self.file, re.IGNORECASE):
                 from rules.RedHat.LinuxSystem.Syslog_SQLTable import Syslog_Secure as SyslogTable
@@ -162,5 +168,5 @@ class SyslogFiles(ReadFileTemplate):
 
 if __name__ == "__main__":
     # 读取测试文件
-    file = r"../../../test/redhat_syslog/secure"
+    file = r"../../../test/redhat_syslog/maillog"
     test = SyslogFiles({"file": file})
