@@ -42,7 +42,7 @@ class SyslogFiles(ReadFileTemplate):
         :return:
         """
         # /var/log/messages
-        if re.findall("messages", self.file, re.IGNORECASE):
+        if re.findall("messages|secure", self.file, re.IGNORECASE):
             return self.syslog_type1()
 
     def syslog_type1(self):
@@ -133,6 +133,8 @@ class SyslogFiles(ReadFileTemplate):
             # 根据不同的 Syslog 文件来加载不同的 SQLAlchemy 表
             if re.findall("messages", self.file, re.IGNORECASE):
                 from rules.RedHat.LinuxSystem.Syslog_SQLTable import Syslog_Messages as SyslogTable
+            elif re.findall("secure", self.file, re.IGNORECASE):
+                from rules.RedHat.LinuxSystem.Syslog_SQLTable import Syslog_Secure as SyslogTable
 
             file_id = self.get_file_id(targetdb=self.targetdb, file=self.file, FileHash=FileHash)
             for data in FList:
@@ -160,5 +162,5 @@ class SyslogFiles(ReadFileTemplate):
 
 if __name__ == "__main__":
     # 读取测试文件
-    file = r"../../../test/redhat_syslog/messages"
+    file = r"../../../test/redhat_syslog/secure"
     test = SyslogFiles({"file": file})
