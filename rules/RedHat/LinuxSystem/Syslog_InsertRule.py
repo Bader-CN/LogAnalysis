@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import re
+import os
+import time
 from datetime import datetime
 from module.tools.InsertTools import ReadFileTemplate
 from rules.RedHat.LinuxSystem.Syslog_SQLTable import FileHash
@@ -58,6 +60,9 @@ class SyslogFiles(ReadFileTemplate):
         FList = []  # 切分完并处理完成的数据
         SList = []  # 转换为 SQL 语句的数据
         now_idx = 0
+        ctime_y = time.localtime(os.path.getctime(self.file))[0]    # 文件创建的时间, 仅获取年份
+        mtime_y = time.localtime(os.path.getmtime(self.file))[0]    # 文件修改的时间, 仅获取年份
+        cross_y = False # 是否跨年, 默认不跨年, 即 ctime_y == mtime_y
 
         # 读取文件, 将文件的每一行保存在 DList 中
         with open(self.file, mode="r", encoding=self.encoding, errors="replace") as file:
@@ -82,6 +87,22 @@ class SyslogFiles(ReadFileTemplate):
                     log_data = DList[idx_list[0]:idx_list[1]]
                     idx_list.pop(0)
                     log_time = self.get_logtime(log_data[0].split(":", 2)[0] + ":" + log_data[0].split(":", 2)[1] + ":" + log_data[0].split(":", 2)[2].split(" ", 1)[0])
+                    # 由于 /var/log/messages 的日期格式可能没有年份, 所以要基于文件的创建/修改时间来判断年份
+                    if log_time.split("-", 1)[0] == "1900":
+                        if ctime_y == mtime_y:
+                            log_time = str(ctime_y) + "-" + log_time.split("-", 1)[-1]
+                        else:
+                            # 如果首次发现跨年
+                            if cross_y == False and log_time.split("-")[1] == "01" and log_time.split("-")[2] == "01":
+                                cross_y = True
+                                log_time = str(mtime_y) + "-" + log_time.split("-", 1)[-1]
+                            # 后续都按照修改时间来修改
+                            elif cross_y == True:
+                                log_time = str(mtime_y) + "-" + log_time.split("-", 1)[-1]
+                            # 未跨年的部分
+                            else:
+                                log_time = str(ctime_y) + "-" + log_time.split("-", 1)[-1]
+                    # 日志组件部分
                     log_comp = log_data[0].split(":", 2)[-1].split(" ", 1)[-1].split(":", 1)[0]
                     log_cont = ""
                     for line in log_data:
