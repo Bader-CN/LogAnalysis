@@ -16,6 +16,6 @@
 # Optimal
   - LogAnalysis 将会返回更加精确的时间
 
-2023-**-** LogAnalysis v1.2.0
+2023-02-09 LogAnalysis v1.2.0
 # Add
   - 追加 Linux Syslog 相关日志的解析

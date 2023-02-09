@@ -41,3 +41,6 @@ pyinstaller -w .\LogAnalysis.py --distpath "C:\LogAnalysis" --workpath "C:\LogAn
     * Operations Agent(OA)
     * Operations Bridge Manager(OBM)
     * Operations Bridge Suite(OpsB)
+* RedHat
+  * RedHat Linux System
+    * Syslog

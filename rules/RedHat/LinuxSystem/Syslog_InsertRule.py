@@ -112,10 +112,11 @@ class SyslogFiles(ReadFileTemplate):
                         log_cont = log_cont[1:].strip()
                     # 针对 Syslog 日志等级做额外处理
                     log_level = "INFO"
-                    if re.findall("error|failed|can't|cannot|can not", log_cont, re.IGNORECASE):
-                        log_level = "ERROR"
-                    elif re.findall("warn", log_cont, re.IGNORECASE):
+                    if re.findall("warn", log_cont, re.IGNORECASE):
                         log_level = "WARN"
+                    elif log_level == "INFO":
+                        if re.findall("error|failed|can't|cannot|can not|invalid", log_cont, re.IGNORECASE):
+                            log_level = "ERROR"
                     # 将字典数据加入到 FList 中
                     FList.append({
                         "log_line": log_line,
