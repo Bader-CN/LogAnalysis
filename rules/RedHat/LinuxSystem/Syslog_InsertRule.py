@@ -139,5 +139,5 @@ class SyslogFiles(ReadFileTemplate):
 
 if __name__ == "__main__":
     # 读取测试文件
-    file = r"C:\messages"
+    file = r"../../../test/redhat_syslog/messages"
     test = SyslogFiles({"file": file})
