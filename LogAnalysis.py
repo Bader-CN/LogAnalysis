@@ -33,7 +33,6 @@ if not os.path.exists("./data/template"):
     os.makedirs("./data/template")
 
 from PySide6.QtWidgets import QApplication
-from PySide6.QtGui import QTextDocument
 from module.gui.LogAnalysis_md import LogAnalysisMain
 from module.gui.LogImport_md import LogAnalysisImport
 from module.gui.LogHelp_md import LogAnalysisHelp
@@ -96,10 +95,6 @@ if __name__ == '__main__':
 
         # 当 LogAnalysis 主界面点击 Help 按钮时, 将会弹出 LogAnalysis Help 界面
         def showlogHelpUI():
-            import markdown2
-            html = markdown2.markdown_path("./help/mddoc/demo.md", encoding="utf8", extras=["fenced-code-blocks"])
-            # html = markdown2.markdown(md_txt, extras=["fenced-code-blocks"])
-            logHelp.ui.mdview.setHtml(html)
             logHelp.show()
         allSignals.open_help_docs.connect(showlogHelpUI)
 
