@@ -1,3 +1,4 @@
 pyside6==6.3.2
 psutil
+markdown2[all]
 sqlalchemy

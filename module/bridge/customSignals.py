@@ -19,5 +19,8 @@ class CustomSignals(QObject):
     # 传递进度百分比信号
     import_process = Signal(int)
 
+    # 传递打开帮助文件的信号
+    open_help_docs = Signal(str)
+
 # 实例化定制的信号类
 allSignals = CustomSignals()

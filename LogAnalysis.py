@@ -33,8 +33,10 @@ if not os.path.exists("./data/template"):
     os.makedirs("./data/template")
 
 from PySide6.QtWidgets import QApplication
+from PySide6.QtGui import QTextDocument
 from module.gui.LogAnalysis_md import LogAnalysisMain
 from module.gui.LogImport_md import LogAnalysisImport
+from module.gui.LogHelp_md import LogAnalysisHelp
 from module.gui.SelectCont_md import CellContUI
 from module.bridge.customSignals import allSignals
 from module.bridge.customQueues import QTask
@@ -79,7 +81,9 @@ if __name__ == '__main__':
         app = QApplication([])
         # 实例化 LogAnalysis 主界面并设置标题
         logMain = LogAnalysisMain()
-        logMain.setWindowTitle("LogAnalysis v1.2.0")
+        logMain.setWindowTitle("LogAnalysis v1.3.0 Beta")
+        # 实例化 LogAnalysis Help 界面
+        logHelp = LogAnalysisHelp()
         # 实例化 LogAnalysis Import 界面
         logImport = LogAnalysisImport()
         # 实例化 LogAnalysis Select Content 界面
@@ -89,6 +93,15 @@ if __name__ == '__main__':
         def showlogImportUI():
             logImport.show()
         logMain.ui.btn_import.clicked.connect(showlogImportUI)
+
+        # 当 LogAnalysis 主界面点击 Help 按钮时, 将会弹出 LogAnalysis Help 界面
+        def showlogHelpUI():
+            import markdown2
+            html = markdown2.markdown_path("./help/mddoc/demo.md", encoding="utf8", extras=["fenced-code-blocks"])
+            # html = markdown2.markdown(md_txt, extras=["fenced-code-blocks"])
+            logHelp.ui.mdview.setHtml(html)
+            logHelp.show()
+        allSignals.open_help_docs.connect(showlogHelpUI)
 
         # 当 LogAnalysis 主界面里双击查询结果的单元格时, 弹出 LogAnalysis Select Content 界面
         def showlogSltContUI(content):

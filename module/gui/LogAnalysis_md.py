@@ -692,15 +692,19 @@ class LogAnalysisMain(QMainWindow):
         打开帮助文件
         :return:
         """
-        exec='hh.exe'
-        url='./LogAnalysis.chm'
-        full_url = exec + ' ' + url
-        # 参考链接：https://stackoverflow.com/questions/3814892/how-to-open-an-specific-section-of-a-chm-file-in-python
-        print(os.path.exists(url))
-        if os.path.exists(url):
-            os.popen(full_url)
-        else:
-            QMessageBox.warning(self, "Warning", self.msg_no_help_file)
+        # exec='hh.exe'
+        # url='./LogAnalysis.chm'
+        # full_url = exec + ' ' + url
+        # # 参考链接：https://stackoverflow.com/questions/3814892/how-to-open-an-specific-section-of-a-chm-file-in-python
+        # print(os.path.exists(url))
+        # if os.path.exists(url):
+        #     os.popen(full_url)
+        # else:
+        #     QMessageBox.warning(self, "Warning", self.msg_no_help_file)
+
+        # 将这个自定义信号发射出去, 由主进程来展示
+        allSignals.open_help_docs.emit("Open Help UI")
+
 
     def update_db_list(self):
         """
