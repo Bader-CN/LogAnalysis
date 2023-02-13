@@ -478,3 +478,19 @@ class CMDB_Reconciliation_Datain_Ignored(BASE):
     log_level = Column(String)
     log_comp = Column(String)
     log_cont = Column(String)
+
+
+class CMDB_Reconciliation_Datain_Multiplematch(BASE):
+    """
+    OBM RTSM.sql cmdb.reconciliation.datain.multiplematch.log
+    """
+    __tablename__ = "obm_cmdb_reconciliation_datain_multiplematch"
+
+    # 表定义
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    file_id = Column(Integer, ForeignKey("filehash.id"))
+    log_line = Column(Integer)
+    log_time = Column(DateTime)
+    log_level = Column(String)
+    log_comp = Column(String)
+    log_cont = Column(String)

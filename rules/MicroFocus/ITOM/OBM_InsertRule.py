@@ -56,7 +56,7 @@ class OBMFiles(ReadFileTemplate):
             return self.readlog_obm_type9()
         elif re.findall("cmdb\.reconciliation\.datain\.merged.*log", self.file, re.IGNORECASE):
             return self.readlog_obm_rtsm1()
-        elif re.findall("cmdb\.reconciliation\.datain\.ignored.*log", self.file, re.IGNORECASE):
+        elif re.findall("cmdb\.reconciliation\.datain\.ignored.*log|cmdb\.reconciliation\.datain\.multiplematch.*log", self.file, re.IGNORECASE):
             return self.readlog_obm_rtsm2()
         elif re.findall("cmdb\.reconciliation\.error.*log", self.file, re.IGNORECASE):
             return self.readlog_obm_rtsm3()
@@ -989,6 +989,7 @@ class OBMFiles(ReadFileTemplate):
         """
         OBM RTSM.sql Logs
         # cmdb.reconciliation.datain.ignored.log
+        # cmdb.reconciliation.datain.multiplematch.log
         :return: TaskInfo["data"] = SList --> [sqlalchemy obj1, sqlalchemy obj2, ...]
         """
         # 模块模式下, 记录读取的文件名
@@ -1052,6 +1053,8 @@ class OBMFiles(ReadFileTemplate):
         if __name__ != "__main__":
             if re.findall("cmdb\.reconciliation\.datain\.ignored.*log", self.file, re.IGNORECASE):
                 from rules.MicroFocus.ITOM.OBM_SQLTable import CMDB_Reconciliation_Datain_Ignored as OBMTable
+            elif re.findall("cmdb\.reconciliation\.datain\.multiplematch.*log", self.file, re.IGNORECASE):
+                from rules.MicroFocus.ITOM.OBM_SQLTable import CMDB_Reconciliation_Datain_Multiplematch as OBMTable
 
             file_id = self.get_file_id(targetdb=self.targetdb, file=self.file, FileHash=FileHash)
             for data in FList:

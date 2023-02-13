@@ -21,6 +21,8 @@
   - 追加 Linux Syslog 相关日志的解析
 
 2023-02-** LogAnalysis v1.3.0
+# Add
+  - 追加 MicroFocus ITOM OBM 规则可以识别 cmdb.reconciliation.datain.multiplematch.log
 # Bug
   - 修复时间格式问题, 目前支持如下两种系统时间格式
     # 年-月-日 分:秒
