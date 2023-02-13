@@ -154,8 +154,12 @@ class LogAnalysisMain(QMainWindow):
         :param kwargs:
         :return: str
         """
-        str_time = datetime.strptime(self.ui.date_start_time.text().replace("/", "-"), '%Y-%m-%d %H:%M')
-        end_time = datetime.strptime(self.ui.date_end_time.text().replace("/", "-"), '%Y-%m-%d %H:%M')
+        try:
+            str_time = datetime.strptime(self.ui.date_start_time.text().replace("/", "-"), '%Y-%m-%d %H:%M')
+            end_time = datetime.strptime(self.ui.date_end_time.text().replace("/", "-"), '%Y-%m-%d %H:%M')
+        except:
+            str_time = datetime.strptime(self.ui.date_start_time.text().replace("/", "-"), '%m/%d/%Y %H:%M')
+            end_time = datetime.strptime(self.ui.date_end_time.text().replace("/", "-"), '%m/%d/%Y %H:%M')
         key_word = self.ui.line_search.text()
         operater = "LIKE"
         if self.ui.chk_regexp.isChecked():
