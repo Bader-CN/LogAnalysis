@@ -21,7 +21,7 @@ class FileHash(BASE):
 
 class Summary(BASE):
     """
-    OA agent.log Summary
+    ITOM agent.log Summary
     """
     __tablename__ = "oa_summary"
 
@@ -34,7 +34,7 @@ class Summary(BASE):
 
 class Config(BASE):
     """
-    OA ovconfget command
+    ITOM ovconfget command
     """
     __tablename__ = "oa_config"
 
@@ -47,7 +47,7 @@ class Config(BASE):
 
 class System(BASE):
     """
-    OA System.txt
+    ITOM System.txt
     """
     __tablename__ = "oa_system"
 
@@ -63,7 +63,7 @@ class System(BASE):
 
 class HPCSTrace(BASE):
     """
-    OA System.txt
+    ITOM System.txt
     """
     __tablename__ = "oa_hpcstrace"
 
@@ -79,7 +79,7 @@ class HPCSTrace(BASE):
 
 class Policy(BASE):
     """
-    OA Policy
+    ITOM Policy
     """
     __tablename__ = "oa_policy"
 

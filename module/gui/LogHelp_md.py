@@ -22,6 +22,8 @@ class LogAnalysisHelp(QWidget):
         # 调整左边目录树
         dir_model = QFileSystemModel()
         dir_model.setRootPath(os.path.join(QDir.currentPath(), "./help/mddoc"))
+        # # 调整右边内容框
+        # self.ui.mdview.
         # 过滤指定文件
         dir_model.setNameFilterDisables(False)
         dir_model.setNameFilters(["*.md"])

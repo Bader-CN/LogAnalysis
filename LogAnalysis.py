@@ -61,7 +61,7 @@ def logfile_to_sql(QTask, QData):
             exit(0)
         # 如果不是 Stop, 那么就开始处理数据
         else:
-            if TaskInfo.get("company") == "MicroFocus" and TaskInfo.get("productline") == "ITOM" and TaskInfo.get("product") == "Operations Agent(OA)":
+            if TaskInfo.get("company") == "MicroFocus" and TaskInfo.get("productline") == "ITOM" and TaskInfo.get("product") == "Operations Agent(ITOM)":
                 from rules.MicroFocus.ITOM import OA_InsertRule
                 OA_InsertRule.OAFiles(TaskInfo, QData)
             elif TaskInfo.get("company") == "MicroFocus" and TaskInfo.get("productline") == "ITOM" and TaskInfo.get("product") == "Operations Bridge Manager(OBM)":

@@ -228,7 +228,7 @@ class LogAnalysisMain(QMainWindow):
         :return:{"Signal": "Start"} / {"Signal": "Stop"}
         """
         # 加载文件规则
-        if dict.get("company") == "MicroFocus" and dict.get("productline") == "ITOM" and dict.get("product") == "Operations Agent(OA)":
+        if dict.get("company") == "MicroFocus" and dict.get("productline") == "ITOM" and dict.get("product") == "Operations Agent(ITOM)":
             from rules.MicroFocus.ITOM import OA_FileRule as FileRule
             from rules.MicroFocus.ITOM import OA_SQLTable as SQLTable
         elif dict.get("company") == "MicroFocus" and dict.get("productline") == "ITOM" and dict.get("product") == "Operations Bridge Manager(OBM)":

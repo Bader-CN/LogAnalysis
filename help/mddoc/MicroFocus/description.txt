@@ -1,2 +1,12 @@
 ## MicroFocus
-这是 MicroFocus 产品部分
+MicroFocus 帮助文档
+
+## 支持产品
+- ITOM
+  - Operations Agent (OA)
+  - Operations Bridge Manager (OBM)
+  - Operations Bridge Suite (OpsB)
+
+## 相关链接
+- MicroFocus ITOM Docs<br>
+<https://docs.microfocus.com>

@@ -10,7 +10,7 @@ if __name__ != "__main__":
 
 class OAFiles(ReadFileTemplate):
     """
-    MicroFocus ITOM OA 文件解析类
+    MicroFocus ITOM ITOM 文件解析类
     """
     def __init__(self, TaskInfo, QData=None):
         # 继承父类的方法和属性
@@ -38,7 +38,7 @@ class OAFiles(ReadFileTemplate):
 
     def classifiles(self):
         """
-        针对 OA 文件进行分类, 然后在做后续处理
+        针对 ITOM 文件进行分类, 然后在做后续处理
         :return:
         """
         # 针对 System.txt, 则调用 readlog_system 方法
@@ -56,7 +56,7 @@ class OAFiles(ReadFileTemplate):
 
     def readlog_system(self):
         """
-        OA System.txt 文件解析函数
+        ITOM System.txt 文件解析函数
         :return: TaskInfo["data"] = SList --> [sqlalchemy obj1, sqlalchemy obj2, ...]
         """
         with open(self.file, mode="r", encoding=self.encoding, errors="replace") as file:
@@ -121,7 +121,7 @@ class OAFiles(ReadFileTemplate):
 
     def readlog_hpcstrace(self):
         """
-        OA hpcstrace 文件解析函数
+        ITOM hpcstrace 文件解析函数
         :return: TaskInfo["data"] = SList --> [sqlalchemy obj1, sqlalchemy obj2, ...]
         """
         with open(self.file, mode="r", encoding=self.encoding, errors="replace") as file:
@@ -186,7 +186,7 @@ class OAFiles(ReadFileTemplate):
 
     def readlog_agentlog(self):
         """
-        OA agent.log_<日期> 文件
+        ITOM agent.log_<日期> 文件
         :return: TaskInfo["data"] = SList --> [sqlalchemy obj1, sqlalchemy obj2, ...]
         """
         # 初始化变量
@@ -301,7 +301,7 @@ class OAFiles(ReadFileTemplate):
 
     def readcfg_policy(self):
         """
-        OA Policy 相关文件解析函数
+        ITOM Policy 相关文件解析函数
         :return: TaskInfo["data"] = SList --> [sqlalchemy obj1, sqlalchemy obj2, ...]
         """
         # https://python3-cookbook.readthedocs.io/zh_CN/latest/c06/p06_parse_modify_rewrite_xml.html
