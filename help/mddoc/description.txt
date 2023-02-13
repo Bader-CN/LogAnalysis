@@ -1,0 +1,12 @@
+## Help Documents
+LogAnalysis 的帮助文档, 以 MarkDown 格式来进行编写
+
+## 项目链接
+- GitHub<br>
+<https://github.com/Bader-CN/LogAnalysis>
+
+## 第三方库
+- pyside6
+- psutil
+- markdown2
+- sqlalchemy

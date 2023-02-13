@@ -15,15 +15,16 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QHBoxLayout, QHeaderView, QSizePolicy,
-    QSplitter, QTabWidget, QTextBrowser, QTreeView,
-    QVBoxLayout, QWidget)
+from PySide6.QtWebEngineWidgets import QWebEngineView
+from PySide6.QtWidgets import (QApplication, QGridLayout, QHBoxLayout, QHeaderView,
+    QPushButton, QSizePolicy, QSpacerItem, QSplitter,
+    QTabWidget, QTreeView, QVBoxLayout, QWidget)
 
 class Ui_Form(object):
     def setupUi(self, Form):
         if not Form.objectName():
             Form.setObjectName(u"Form")
-        Form.resize(853, 743)
+        Form.resize(1023, 743)
         self.horizontalLayout = QHBoxLayout(Form)
         self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.splitter = QSplitter(Form)
@@ -49,14 +50,28 @@ class Ui_Form(object):
         self.splitter.addWidget(self.tabLeft)
         self.verticalLayoutWidget = QWidget(self.splitter)
         self.verticalLayoutWidget.setObjectName(u"verticalLayoutWidget")
-        self.verticalLayout = QVBoxLayout(self.verticalLayoutWidget)
-        self.verticalLayout.setObjectName(u"verticalLayout")
-        self.verticalLayout.setContentsMargins(0, 0, 0, 0)
-        self.mdview = QTextBrowser(self.verticalLayoutWidget)
-        self.mdview.setObjectName(u"mdview")
-        self.mdview.setMinimumSize(QSize(400, 0))
+        self.gridLayout = QGridLayout(self.verticalLayoutWidget)
+        self.gridLayout.setObjectName(u"gridLayout")
+        self.gridLayout.setContentsMargins(0, 0, 0, 0)
+        self.btn_back = QPushButton(self.verticalLayoutWidget)
+        self.btn_back.setObjectName(u"btn_back")
 
-        self.verticalLayout.addWidget(self.mdview)
+        self.gridLayout.addWidget(self.btn_back, 0, 0, 1, 1)
+
+        self.mdview = QWebEngineView(self.verticalLayoutWidget)
+        self.mdview.setObjectName(u"mdview")
+        self.mdview.setUrl(QUrl(u"about:blank"))
+
+        self.gridLayout.addWidget(self.mdview, 1, 0, 1, 3)
+
+        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+
+        self.gridLayout.addItem(self.horizontalSpacer, 0, 2, 1, 1)
+
+        self.btn_home = QPushButton(self.verticalLayoutWidget)
+        self.btn_home.setObjectName(u"btn_home")
+
+        self.gridLayout.addWidget(self.btn_home, 0, 1, 1, 1)
 
         self.splitter.addWidget(self.verticalLayoutWidget)
 
@@ -74,5 +89,7 @@ class Ui_Form(object):
     def retranslateUi(self, Form):
         Form.setWindowTitle(QCoreApplication.translate("Form", u"Form", None))
         self.tabLeft.setTabText(self.tabLeft.indexOf(self.tab_dir), QCoreApplication.translate("Form", u"Directory", None))
+        self.btn_back.setText(QCoreApplication.translate("Form", u"Back", None))
+        self.btn_home.setText(QCoreApplication.translate("Form", u"Home", None))
     # retranslateUi
 

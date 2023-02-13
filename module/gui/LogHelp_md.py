@@ -22,8 +22,8 @@ class LogAnalysisHelp(QWidget):
         # 调整左边目录树
         dir_model = QFileSystemModel()
         dir_model.setRootPath(os.path.join(QDir.currentPath(), "./help/mddoc"))
-        # # 调整右边内容框
-        # self.ui.mdview.
+        # 调整右边内容框
+        self.slot_btn_home()
         # 过滤指定文件
         dir_model.setNameFilterDisables(False)
         dir_model.setNameFilters(["*.md"])
@@ -36,6 +36,8 @@ class LogAnalysisHelp(QWidget):
         self.ui.dir_view.setHeaderHidden(True)
         # 连接槽函数
         self.ui.dir_view.doubleClicked.connect(self.slot_select_dir_view)
+        self.ui.btn_back.clicked.connect(self.slot_btn_back)
+        self.ui.btn_home.clicked.connect(self.slot_btn_home)
 
     def slot_select_dir_view(self, model_index):
         """
@@ -50,11 +52,30 @@ class LogAnalysisHelp(QWidget):
         if os.path.isdir(path):
             # 如果点击的路径是文件夹, 则寻找当前文件夹下的 description.txt 来进行渲染
             filepath = os.path.join(path, "description.txt")
+            print(filepath)
         else:
             # 如果是文件, 则直接渲染该文件
             filepath = path
 
         # 加载文件和模板进行渲染
+        md_txt = markdown2.markdown_path(filepath, encoding="utf-8", extras=["fenced-code-blocks"])
+        md_txt = md_txt.replace('class="codehilite"', 'class="highlight"')
+        with open("./help/html/km_template.html") as f:
+            html = f.read()
+        html = html.replace("{{km_content}}", md_txt).replace("{{css_filepath}}", ReadConfig.get_help_css())
+        self.ui.mdview.setHtml(html)
+
+    def slot_btn_back(self):
+        """
+        槽函数: 返回上一个 History URL
+        """
+        self.ui.mdview.back()
+
+    def slot_btn_home(self):
+        """
+        槽函数: 返回帮助文档首页
+        """
+        filepath = "./help/mddoc/description.txt"
         md_txt = markdown2.markdown_path(filepath, encoding="utf-8", extras=["fenced-code-blocks"])
         md_txt = md_txt.replace('class="codehilite"', 'class="highlight"')
         with open("./help/html/km_template.html") as f:
