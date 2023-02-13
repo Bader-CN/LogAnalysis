@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+import os
 import psutil
 import logging
 from configparser import ConfigParser
@@ -111,3 +111,14 @@ class ReadConfig():
             return method
         else:
             return "md5"
+
+    @staticmethod
+    def get_help_css(*args, **kwargs):
+        """
+        返回 App_Help_CSS 的字符串
+        :param args:
+        :param kwargs:
+        :return: str
+        """
+        help_css_path = cfg.get("App_Display", "App_Help_CSS")
+        return help_css_path

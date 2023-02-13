@@ -5,9 +5,11 @@ import os
 if not os.path.exists("config.cfg"):
     with open("config.cfg", mode="w", encoding="utf-8") as f:
         f.write((
-            "[App_Display]"
+            "[App_Display]\n"
             "# value: 'Auto' or 'zh_CN' or 'en_US'\n"
-            "App_Language = Auto\n\n"
+            "App_Language = Auto\n"
+            "# MarkDown format CSS file Path\n"
+            "App_Help_CSS = ./help/css/default.css\n\n"
 
             "[App_Optimiz]\n"
             "# Maximum number of processes that read files\n"

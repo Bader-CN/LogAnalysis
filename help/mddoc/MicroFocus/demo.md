@@ -4,7 +4,8 @@
 基于 Qt PySide6 的通用日志分析工具
 
 ## 下载地址
-https://github.com/Bader-CN/LogAnalysis/releases
+https://github.com/Bader-CN/LogAnalysis/releases  
+[超链接显示名](https://www.baidu.com "超链接title")
 
 ## 开发环境
 1. 安装 Python 3.8+
