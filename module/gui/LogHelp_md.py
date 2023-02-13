@@ -52,7 +52,6 @@ class LogAnalysisHelp(QWidget):
         if os.path.isdir(path):
             # 如果点击的路径是文件夹, 则寻找当前文件夹下的 description.txt 来进行渲染
             filepath = os.path.join(path, "description.txt")
-            print(filepath)
         else:
             # 如果是文件, 则直接渲染该文件
             filepath = path
