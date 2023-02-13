@@ -1,0 +1,8 @@
+## MicroFocus ITOM OpsB
+MicroFocus ITOM OpsB 帮助文档
+
+## 相关链接
+- MicroFocus ITOM Operations Bridge Containerized Docs<br>
+<https://docs.microfocus.com/doc/Containerized_Operations_Bridge/2022.11/Home>
+- MicroFocus ITOM OMT Docs<br>
+<https://docs.microfocus.com/doc/OMT/2022.11/Home>
