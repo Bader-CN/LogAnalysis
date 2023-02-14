@@ -25,8 +25,17 @@ class SQLHighLighter(QSyntaxHighlighter):
             # SQL 子句
             'WHERE ', 'where ', 'ORDER BY ', 'order by ', 'GROUP BY ', 'group by ',
             # SQL 操作符/运算符
-            ' AND ',' and ', ' OR ', ' or ', ' LIKE ', ' like ', ' NOT LIKE ',' not like ', ' GLOB ', ' glob ', ' NOT GLOB ' ,' not glob ', ' REGEXP ', ' regexp ',
-            ' JOIN ', ' join ', ' UNION' ,' union', ' UNION ALL',' union all', 'DISTINCT ','distinct ',
+            ' AND ', ' and ', ' OR ', ' or ',
+            ' LIKE ', ' like ', ' NOT LIKE ', ' not like ',
+            ' GLOB ', ' glob ', ' NOT GLOB ', ' not glob ',
+            ' REGEXP ', ' regexp ',
+            ' JOIN ', ' join ',
+            'INNER JOIN ', 'inner join ',
+            'LEFT JOIN ', 'left join ',
+            'RIGHT JOIN ', 'right join ',
+            'FULL JOIN ', 'full join ',
+            ' UNION', ' union', ' UNION ALL', ' union all',
+            'DISTINCT ', 'distinct ',
             # SQL 常用函数
             # 参考链接：https://www.runoob.com/sqlite/sqlite-functions.html
             'SUM\(.*?\)', 'sum\(.*?\)',

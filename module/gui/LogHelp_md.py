@@ -35,6 +35,8 @@ class LogAnalysisHelp(QWidget):
         self.ui.dir_view.setColumnHidden(3, True)
         self.ui.dir_view.setHeaderHidden(True)
         # 连接槽函数
+        dir_model.directoryLoaded.connect(self.ui.dir_view.expandAll)
+        # -> 需要先等待 QFileSystemModel 加载完毕后, 才能执行 QTreeView.expandAll 方法, 否则会无效
         self.ui.dir_view.doubleClicked.connect(self.slot_select_dir_view)
         self.ui.btn_back.clicked.connect(self.slot_btn_back)
         self.ui.btn_home.clicked.connect(self.slot_btn_home)
