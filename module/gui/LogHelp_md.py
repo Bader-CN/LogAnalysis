@@ -61,7 +61,9 @@ class LogAnalysisHelp(QWidget):
         md_txt = md_txt.replace('class="codehilite"', 'class="highlight"')
         with open("./help/html/km_template.html") as f:
             html = f.read()
-        html = html.replace("{{km_content}}", md_txt).replace("{{css_filepath}}", ReadConfig.get_help_css())
+        with open(ReadConfig.get_help_css(), encoding="utf-8") as f:
+            css = f.read()
+        html = html.replace("{{km_content}}", md_txt).replace("{{css_content}}", css)
         self.ui.mdview.setHtml(html)
 
     def slot_btn_back(self):
@@ -79,5 +81,7 @@ class LogAnalysisHelp(QWidget):
         md_txt = md_txt.replace('class="codehilite"', 'class="highlight"')
         with open("./help/html/km_template.html") as f:
             html = f.read()
-        html = html.replace("{{km_content}}", md_txt).replace("{{css_filepath}}", ReadConfig.get_help_css())
+        with open(ReadConfig.get_help_css(), encoding="utf-8") as f:
+            css = f.read()
+        html = html.replace("{{km_content}}", md_txt).replace("{{css_content}}", css)
         self.ui.mdview.setHtml(html)
