@@ -33,7 +33,7 @@ class Ui_Form(object):
         self.tabLeft = QTabWidget(self.splitter)
         self.tabLeft.setObjectName(u"tabLeft")
         self.tabLeft.setMinimumSize(QSize(200, 0))
-        self.tabLeft.setMaximumSize(QSize(300, 16777215))
+        self.tabLeft.setMaximumSize(QSize(400, 16777215))
         self.tab_dir = QWidget()
         self.tab_dir.setObjectName(u"tab_dir")
         self.verticalLayout_3 = QVBoxLayout(self.tab_dir)
