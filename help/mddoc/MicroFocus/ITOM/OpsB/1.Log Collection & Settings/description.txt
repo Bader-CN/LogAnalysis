@@ -1,0 +1,2 @@
+## MicroFocus ITOM OpsB
+MicroFocus ITOM OpsB 日志的收集和设定

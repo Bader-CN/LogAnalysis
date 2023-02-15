@@ -1,0 +1,4 @@
+## MicroFocus ITOM OpsB Optic Data Lake
+MicroFocus ITOM OpsB Optic Data Lake 相关内容
+
+- Optic Data Lake 在老版本里被叫做 COSO Data Lake
