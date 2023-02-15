@@ -4,7 +4,7 @@ import os
 # 检查相关目录及文件是否存在, 如果不存在, 则创建相关目录和文件
 if not os.path.exists("config.cfg"):
     with open("config.cfg", mode="w", encoding="utf-8") as f:
-        f.write((
+        f.write(
             "[App_Display]\n"
             "# value: 'Auto' or 'zh_CN' or 'en_US'\n"
             "App_Language = Auto\n"
@@ -25,7 +25,7 @@ if not os.path.exists("config.cfg"):
             "App_Console_Level = WARNING\n"
             "App_Main_Level = WARNING\n"
             "App_MultSQL_Level = WARNING\n"
-        ))
+        )
 
 if not os.path.exists("./log"):
     os.mkdir("./log")
@@ -82,7 +82,7 @@ if __name__ == '__main__':
         app = QApplication([])
         # 实例化 LogAnalysis 主界面并设置标题
         logMain = LogAnalysisMain()
-        logMain.setWindowTitle("LogAnalysis v1.3.0 Beta")
+        logMain.setWindowTitle("LogAnalysis v1.3.0")
         # 实例化 LogAnalysis Help 界面
         logHelp = LogAnalysisHelp()
         # 实例化 LogAnalysis Import 界面
