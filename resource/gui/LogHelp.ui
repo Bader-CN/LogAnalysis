@@ -36,6 +36,11 @@
        <number>0</number>
       </property>
       <widget class="QWidget" name="tab_dir">
+       <property name="font">
+        <font>
+         <family>Lucida Sans Unicode</family>
+        </font>
+       </property>
        <attribute name="title">
         <string>Directory</string>
        </attribute>
@@ -53,6 +58,12 @@
             <width>400</width>
             <height>16777215</height>
            </size>
+          </property>
+          <property name="font">
+           <font>
+            <family>Microsoft YaHei</family>
+            <pointsize>9</pointsize>
+           </font>
           </property>
           <attribute name="headerVisible">
            <bool>true</bool>
