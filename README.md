@@ -21,11 +21,11 @@ https://github.com/Bader-CN/LogAnalysis/releases
 # PowerShell
 pyinstaller -w .\LogAnalysis.py --distpath "C:\LogAnalysis" --workpath "C:\LogAnalysis\build" `
 --add-data ".\data\template;.\data\template" `
---add-data ".\LogAnalysis.chm;."
+--add-data ".\help;." 
 # CMD
 pyinstaller -w .\LogAnalysis.py --distpath "C:\LogAnalysis" --workpath "C:\LogAnalysis\build" ^
 --add-data ".\data\template;.\data\template" ^
---add-data ".\LogAnalysis.chm;."
+--add-data ".\help;."
 ```
 
 ## 支持产品
