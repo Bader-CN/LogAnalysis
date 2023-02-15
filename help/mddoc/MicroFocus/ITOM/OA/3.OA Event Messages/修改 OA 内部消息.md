@@ -16,4 +16,4 @@ OA 12.x
 3. 部署一个消息接口类型的 Policy (Message Interface) 
 
 ## Additional Information
-<https://docs.microfocus.com/itom/Operations_Agent:12.14/ConfigurationVariablesMonitoringComponent>
+<https://docs.microfocus.com/itom/Operations_Agent:12.23/ConfigurationVariablesMonitoringComponent>

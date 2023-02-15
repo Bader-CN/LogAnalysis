@@ -18,4 +18,4 @@ OA 12.x
     ovc -start oacore
     ```
 ## Additional Information
-<https://docs.microfocus.com/itom/Operations_Agent:12.14/MiscellaneousTS>
+<https://docs.microfocus.com/itom/Operations_Agent:12.23/MiscellaneousTS>
