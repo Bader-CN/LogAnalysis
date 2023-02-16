@@ -29,3 +29,8 @@
     # 月/日/年 分:秒
 # Optimal
   - 优化 LogAnalysis Help 模块
+
+2023-02-16 LogAnalysis v1.3.1
+# Bug
+  - 修复在繁体中文的系统上, 双击 TreeView 无法生成 SQL 语句的问题
+  - 修复 Help 文档已发现的错误

@@ -45,6 +45,8 @@ class LogAnalysisMain(QMainWindow):
             self.ui.setupUi(self)
 
             # 调整软件界面
+            self.ui.date_start_time.setDisplayFormat("yyyy/M/d H:mm")
+            self.ui.date_end_time.setDisplayFormat("yyyy/M/d H:mm")
             self.set_start_end_time()
             self.set_language_by_main()
             self.ui.progressBar.hide()
@@ -157,69 +159,68 @@ class LogAnalysisMain(QMainWindow):
         try:
             str_time = datetime.strptime(self.ui.date_start_time.text().replace("/", "-"), '%Y-%m-%d %H:%M')
             end_time = datetime.strptime(self.ui.date_end_time.text().replace("/", "-"), '%Y-%m-%d %H:%M')
-        except:
-            str_time = datetime.strptime(self.ui.date_start_time.text().replace("/", "-"), '%m/%d/%Y %H:%M')
-            end_time = datetime.strptime(self.ui.date_end_time.text().replace("/", "-"), '%m/%d/%Y %H:%M')
-        key_word = self.ui.line_search.text()
-        operater = "LIKE"
-        if self.ui.chk_regexp.isChecked():
-            operater = "REGEXP"
-            key_word = "'{}'".format(self.ui.line_search.text())
-        else:
-            key_word = "'%{}%'".format(self.ui.line_search.text())
-
-        # 如果类型来自于 database
-        if type == "database":
-            # 表名字: filehash / oa_policy / oa_summary / oa_config / obm_summary
-            if tabname == "filehash" or tabname == "oa_policy" or tabname == "oa_summary" or tabname == "oa_config" or tabname == "obm_summary":
-                return "SELECT * FROM {};".format(tabname)
-            # 表名字: Others
+            key_word = self.ui.line_search.text()
+            operater = "LIKE"
+            if self.ui.chk_regexp.isChecked():
+                operater = "REGEXP"
+                key_word = "'{}'".format(self.ui.line_search.text())
             else:
-                return "SELECT * FROM {}\nWHERE log_time >= '{}' AND log_time <= '{}'\nORDER BY log_time DESC;".format(tabname, str_time, end_time)
+                key_word = "'%{}%'".format(self.ui.line_search.text())
 
-        # 如果类型来自于 template
-        elif type == "template":
-            self.ui.tabSQLQuery.currentWidget().findChild(QTextEdit).setText(kwargs.get("sqltext"))
+            # 如果类型来自于 database
+            if type == "database":
+                # 表名字: filehash / oa_policy / oa_summary / oa_config / obm_summary
+                if tabname == "filehash" or tabname == "oa_policy" or tabname == "oa_summary" or tabname == "oa_config" or tabname == "obm_summary":
+                    return "SELECT * FROM {};".format(tabname)
+                # 表名字: Others
+                else:
+                    return "SELECT * FROM {}\nWHERE log_time >= '{}' AND log_time <= '{}'\nORDER BY log_time DESC;".format(tabname, str_time, end_time)
 
-        # 如果是其它类型, 说明是被 QLineEdit 触发
-        else:
-            now_query = self.ui.tabSQLQuery.currentWidget().findChild(QTextEdit)
-            sqlsource = now_query.toPlainText()
+            # 如果类型来自于 template
+            elif type == "template":
+                self.ui.tabSQLQuery.currentWidget().findChild(QTextEdit).setText(kwargs.get("sqltext"))
 
-            # 表名字: filehsh 并且无 input_keyword
-            if self.current_tb == "filehash" and input_keyword == "":
-                now_query.setText("SELECT * FROM {};".format(self.current_tb))
-            # 表名字: filehsh 并且有 input_keyword
-            elif self.current_tb == "filehash" and input_keyword != "":
-                now_query.setText("SELECT * FROM {}\nWHERE filepath {} {};".format(self.current_tb, operater, key_word))
-
-            # 表名字: oa_policy 并且无 input_keyword
-            elif self.current_tb == "oa_policy" and input_keyword == "":
-                now_query.setText("SELECT * FROM {};".format(self.current_tb))
-            # 表名字: oa_policy 并且有 input_keyword
-            elif self.current_tb == "oa_policy" and input_keyword != "":
-                now_query.setText("SELECT * FROM {}\nWHERE ply_name {} {};".format(self.current_tb, operater, key_word))
-
-            # 表名字: oa_summary/oa_config/obm_summary 并且无 input_keyword
-            elif (self.current_tb == "oa_summary" or self.current_tb == "oa_config" or self.current_tb == "obm_summary") and input_keyword == "":
-                now_query.setText("SELECT * FROM {};".format(self.current_tb))
-            # 表名字: oa_summary/oa_config/obm_summary 并且有 input_keyword
-            elif (self.current_tb == "oa_summary" or self.current_tb == "oa_config" or self.current_tb == "obm_summary") and input_keyword != "":
-                now_query.setText("SELECT * FROM {}\nWHERE key {} {} OR value {} {};".format(self.current_tb, operater, key_word, operater, key_word))
-
-            # 表名字: obm_jvm_statistics 并且无 input_keyword
-            elif self.current_tb == "obm_jvm_statistics" and input_keyword == "":
-                now_query.setText("SELECT * FROM {}\nWHERE log_time >= '{}' AND log_time <= '{}'\nORDER BY log_time DESC;".format(self.current_tb, str_time, end_time))
-            # 表名字: oa_jvm_statistics 并且有 input_keyword
-            elif self.current_tb == "obm_jvm_statistics" and input_keyword != "":
-                now_query.setText("SELECT * FROM {}\nWHERE log_time >= '{}' AND log_time <= '{}'\nORDER BY log_time DESC;".format(self.current_tb, str_time, end_time))
-
-            # 表名字: Other 并且有 input_keyword
-            elif input_keyword != "":
-                now_query.setText("SELECT * FROM {}\nWHERE log_time >= '{}' AND log_time <= '{}' AND log_cont {} {}\nORDER BY log_time DESC;".format(self.current_tb, str_time, end_time, operater,key_word))
-            # 表名字: Other 并且无 input_keyword
+            # 如果是其它类型, 说明是被 QLineEdit 触发
             else:
-                now_query.setText("SELECT * FROM {}\nWHERE log_time >= '{}' AND log_time <= '{}'\nORDER BY log_time DESC;".format(self.current_tb, str_time, end_time))
+                now_query = self.ui.tabSQLQuery.currentWidget().findChild(QTextEdit)
+                sqlsource = now_query.toPlainText()
+
+                # 表名字: filehsh 并且无 input_keyword
+                if self.current_tb == "filehash" and input_keyword == "":
+                    now_query.setText("SELECT * FROM {};".format(self.current_tb))
+                # 表名字: filehsh 并且有 input_keyword
+                elif self.current_tb == "filehash" and input_keyword != "":
+                    now_query.setText("SELECT * FROM {}\nWHERE filepath {} {};".format(self.current_tb, operater, key_word))
+
+                # 表名字: oa_policy 并且无 input_keyword
+                elif self.current_tb == "oa_policy" and input_keyword == "":
+                    now_query.setText("SELECT * FROM {};".format(self.current_tb))
+                # 表名字: oa_policy 并且有 input_keyword
+                elif self.current_tb == "oa_policy" and input_keyword != "":
+                    now_query.setText("SELECT * FROM {}\nWHERE ply_name {} {};".format(self.current_tb, operater, key_word))
+
+                # 表名字: oa_summary/oa_config/obm_summary 并且无 input_keyword
+                elif (self.current_tb == "oa_summary" or self.current_tb == "oa_config" or self.current_tb == "obm_summary") and input_keyword == "":
+                    now_query.setText("SELECT * FROM {};".format(self.current_tb))
+                # 表名字: oa_summary/oa_config/obm_summary 并且有 input_keyword
+                elif (self.current_tb == "oa_summary" or self.current_tb == "oa_config" or self.current_tb == "obm_summary") and input_keyword != "":
+                    now_query.setText("SELECT * FROM {}\nWHERE key {} {} OR value {} {};".format(self.current_tb, operater, key_word, operater, key_word))
+
+                # 表名字: obm_jvm_statistics 并且无 input_keyword
+                elif self.current_tb == "obm_jvm_statistics" and input_keyword == "":
+                    now_query.setText("SELECT * FROM {}\nWHERE log_time >= '{}' AND log_time <= '{}'\nORDER BY log_time DESC;".format(self.current_tb, str_time, end_time))
+                # 表名字: oa_jvm_statistics 并且有 input_keyword
+                elif self.current_tb == "obm_jvm_statistics" and input_keyword != "":
+                    now_query.setText("SELECT * FROM {}\nWHERE log_time >= '{}' AND log_time <= '{}'\nORDER BY log_time DESC;".format(self.current_tb, str_time, end_time))
+
+                # 表名字: Other 并且有 input_keyword
+                elif input_keyword != "":
+                    now_query.setText("SELECT * FROM {}\nWHERE log_time >= '{}' AND log_time <= '{}' AND log_cont {} {}\nORDER BY log_time DESC;".format(self.current_tb, str_time, end_time, operater,key_word))
+                # 表名字: Other 并且无 input_keyword
+                else:
+                    now_query.setText("SELECT * FROM {}\nWHERE log_time >= '{}' AND log_time <= '{}'\nORDER BY log_time DESC;".format(self.current_tb, str_time, end_time))
+        except Exception as e:
+            AppMainLogger.error(e)
 
     def check_taskdict(self, dict):
         """
