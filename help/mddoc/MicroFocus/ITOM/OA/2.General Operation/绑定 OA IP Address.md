@@ -12,6 +12,12 @@ ovconfchg -ns eaagt -set OPC_IP_ADDRESS <IP_Address>
 ovconfchg -ns bbc.cb -set SERVER_BIND_ADDR <IP_Address>
 ovconfchg -ns bbc.http -set SERVER_BIND_ADDR <IP_Address>
 ovconfchg -ns bbc.http -set CLIENT_BIND_ADDR <IP_Address>
+
+# 绑定完成后, 请重启 OA 进程
+ovc -kill
+ovc -start
+# 使用 opcagt -cleanstart 也可以
+opcagt -cleanstart
 ```
 
 ## Additional Information
