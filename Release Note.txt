@@ -34,3 +34,7 @@
 # Bug
   - 修复在繁体中文的系统上, 双击 TreeView 无法生成 SQL 语句的问题
   - 修复 Help 文档已发现的错误
+
+2023-0*-** LogAnalysis v1.3.2
+# Add
+  - 更新 ITOM 文档
