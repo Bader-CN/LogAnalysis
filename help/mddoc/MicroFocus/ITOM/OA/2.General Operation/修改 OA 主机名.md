@@ -13,4 +13,4 @@ ovconfchg –ns eaagt –set OPC_NAMESRV_LOCAL_NAME <HostName/FQDN>
 ```
 
 ## Additional Information
-<https://docs.microfocus.com/itom/Operations_Agent:12.23/NodeResolutionOverview>
+- [NodeResolutionOverview](https://docs.microfocus.com/itom/Operations_Agent:12.23/NodeResolutionOverview)

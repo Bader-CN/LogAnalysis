@@ -24,4 +24,4 @@ OBM 2020.x
   最大事件计数 
 
 ## Additional Information
-<https://docs.microfocus.com/doc/Operations_Bridge_Manager/2022.11/ListInfrastructureSettings>
+- [ListInfrastructureSettings](https://docs.microfocus.com/doc/Operations_Bridge_Manager/2022.11/ListInfrastructureSettings)

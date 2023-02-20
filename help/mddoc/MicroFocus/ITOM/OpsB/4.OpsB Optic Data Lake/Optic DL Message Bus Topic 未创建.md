@@ -28,5 +28,5 @@ Apache Pulsar 的数据是基于 Topic 来存储的<br>
    ```
 
 ## Additional Information
-<https://docs.microfocus.com/doc/Containerized_Operations_Bridge/2022.05/CheckTopicData><br>
-<https://pulsar.apache.org/docs/2.10.x/reference-cli-tools/#pulsar-client>
+- [How to check if OPTIC DL Message Bus topics and data is created](https://docs.microfocus.com/doc/Containerized_Operations_Bridge/2022.05/CheckTopicData)
+- [Pulsar command-line tools](https://pulsar.apache.org/docs/2.10.x/reference-cli-tools/#pulsar-client)

@@ -46,5 +46,5 @@ OS error string is (SEM:No space left on device) (OpC20-435)
     ```
 
 ## Additional Information
-<https://softwaresupport.softwaregrp.com/doc/KM496109><br>
-<https://blog.51cto.com/comtv/415055>
+- [KM496109](https://softwaresupport.softwaregrp.com/doc/KM496109)
+- [ipcs ipcrm信号量](https://blog.51cto.com/comtv/415055)

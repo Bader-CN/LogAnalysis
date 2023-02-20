@@ -33,4 +33,4 @@ Optic Data Lake 中 Vertica 中表的时间停止更新了
     ```
 
 ## Additional Information
-<https://docs.microfocus.com/doc/Containerized_Operations_Bridge/2021.11/Aggregateissueafterupgrade>
+- [Aggregate not happening after upgrade](https://docs.microfocus.com/doc/Containerized_Operations_Bridge/2021.11/Aggregateissueafterupgrade)

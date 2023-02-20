@@ -14,4 +14,4 @@ OBM 2020.x
     ```
 
 ## Additional Information
-<https://softwaresupport.softwaregrp.com/doc/KM01294975>
+- [KM01294975](https://softwaresupport.softwaregrp.com/doc/KM01294975)

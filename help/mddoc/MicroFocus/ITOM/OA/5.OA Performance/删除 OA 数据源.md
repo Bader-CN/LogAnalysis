@@ -11,4 +11,4 @@ OA 12.x
  oadbutil.pl -d <datasource name> -c <class name>
 ```
 ## Additional Information
-<https://docs.microfocus.com/itom/Operations_Agent:12.23/MiscellaneousTS>
+- [MiscellaneousTS](https://docs.microfocus.com/itom/Operations_Agent:12.23/MiscellaneousTS)

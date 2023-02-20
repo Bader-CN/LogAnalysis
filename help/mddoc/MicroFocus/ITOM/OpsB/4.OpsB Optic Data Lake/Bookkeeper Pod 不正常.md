@@ -39,4 +39,4 @@ itomdipulsar-bookkeeper 相关 Pod 状态不正常
    - 检查 Bookies panel 是否至少有 2 个 BookKeeper pods 处于可写入的状态
 
 ## Additional Information
-<https://docs.microfocus.com/doc/Containerized_Operations_Bridge/2021.05/BookkeeperReadOnly>
+- [The itomdipulsar-bookkeeper pods are not accessible](https://docs.microfocus.com/doc/Containerized_Operations_Bridge/2021.05/BookkeeperReadOnly)
