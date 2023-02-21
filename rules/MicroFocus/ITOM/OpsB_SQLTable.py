@@ -49,3 +49,93 @@ class ITOM_DI_Data_Access_DPL(BASE):
     log_level = Column(String)
     log_comp = Column(String)
     log_cont = Column(String)
+
+
+class ITOM_DI_Metadata_Server(BASE):
+    """
+    OpsB ITOM_DI_Metadata_Server
+    # metadata-server-app.log
+    """
+    __tablename__ = "opsb_itom_di_metadata_server"
+
+    # 表定义
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    file_id = Column(Integer, ForeignKey("filehash.id"))
+    log_line = Column(Integer)
+    log_time = Column(DateTime)
+    log_level = Column(String)
+    log_comp = Column(String)
+    log_cont = Column(String)
+
+
+class ITOM_DI_Postload_TaskController(BASE):
+    """
+    OpsB ITOM_DI_Postload_TaskController
+    # taskcontroller.log
+    """
+    __tablename__ = "opsb_itom_di_postload_taskcontroller"
+
+    # 表定义
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    file_id = Column(Integer, ForeignKey("filehash.id"))
+    log_line = Column(Integer)
+    log_time = Column(DateTime)
+    log_level = Column(String)
+    log_comp = Column(String)
+    log_cont = Column(String)
+
+
+class ITOM_DI_Postload_TaskExecutor(BASE):
+    """
+    OpsB ITOM_DI_Postload_TaskExecutor
+        # aggregate.log
+        # csv-direct-load.log
+        # forecast.log
+        # perl-task.log
+        # taskexecutor.log
+    """
+    __tablename__ = "opsb_itom_di_postload_taskexecutor"
+
+    # 表定义
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    file_id = Column(Integer, ForeignKey("filehash.id"))
+    log_line = Column(Integer)
+    log_time = Column(DateTime)
+    log_level = Column(String)
+    log_comp = Column(String)
+    log_cont = Column(String)
+
+
+class ITOM_DI_Receiver_DPL(BASE):
+    """
+    OpsB ITOM_DI_receiver_dpl
+    # receiver-itom-di-receiver-dpl.*.log
+    # receiver-out.log
+    """
+    __tablename__ = "opsb_itom_di_receiver_dpl"
+
+    # 表定义
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    file_id = Column(Integer, ForeignKey("filehash.id"))
+    log_line = Column(Integer)
+    log_time = Column(DateTime)
+    log_level = Column(String)
+    log_comp = Column(String)
+    log_cont = Column(String)
+
+
+class ITOM_DI_Scheduler_UDX(BASE):
+    """
+    OpsB ITOM_DI_Scheduler_UDX
+    # scheduler.log
+    """
+    __tablename__ = "opsb_itom_di_scheduler_udx"
+
+    # 表定义
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    file_id = Column(Integer, ForeignKey("filehash.id"))
+    log_line = Column(Integer)
+    log_time = Column(DateTime)
+    log_level = Column(String)
+    log_comp = Column(String)
+    log_cont = Column(String)
