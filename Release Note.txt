@@ -35,6 +35,8 @@
   - 修复在繁体中文的系统上, 双击 TreeView 无法生成 SQL 语句的问题
   - 修复 Help 文档已发现的错误
 
-2023-0*-** LogAnalysis v1.3.2
+2023-02-22 LogAnalysis v1.3.2
 # Add
   - 更新 ITOM 文档
+# Optimal
+  - 根据 MicroFocus 提供的日志收集工具, 重写了 MicroFocus ITOM OpsB 相关日志的解析
