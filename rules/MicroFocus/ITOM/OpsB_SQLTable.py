@@ -139,3 +139,21 @@ class ITOM_DI_Scheduler_UDX(BASE):
     log_level = Column(String)
     log_comp = Column(String)
     log_cont = Column(String)
+
+
+class ITOM_IDM(BASE):
+    """
+    OpsB ITOM_IDM
+    # idm-loader.log
+    # idm-service.log
+    """
+    __tablename__ = "opsb_itom_idm"
+
+    # 表定义
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    file_id = Column(Integer, ForeignKey("filehash.id"))
+    log_line = Column(Integer)
+    log_time = Column(DateTime)
+    log_level = Column(String)
+    log_comp = Column(String)
+    log_cont = Column(String)

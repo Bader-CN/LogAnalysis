@@ -22,6 +22,9 @@ NeedFilesRule = [
     "receiver-out\.log",
     # itom_di_scheduler_udx
     "scheduler\.log",
+    # itom_idm
+    "idm-loader\.log",
+    "idm-service\.log",
 ]
 
 # 文件级别的反匹规则, 支持正则表达式
