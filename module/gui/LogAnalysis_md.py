@@ -26,6 +26,7 @@ class LogAnalysisMain(QMainWindow):
     # 类变量
     msg_no_file = "No file needs to be insert"
     msg_no_help_file = "No help file"
+    msg_no_sql_query = "Non-query SQL statements are not supported"
     msg_export_no_select = "Plese select the data you want to export"
     msg_export_no_query = "Please query first and then export function can work"
     msg_export_not_full = "Selected data must be a matrix"
@@ -129,6 +130,7 @@ class LogAnalysisMain(QMainWindow):
         self.ui.tabLeft.setTabText(1, Language_zh_CN.get("Template"))
         self.msg_no_file = Language_zh_CN.get("msg_no_file")
         self.msg_no_help_file = Language_zh_CN.get("msg_no_help_file")
+        self.msg_no_sql_query = Language_zh_CN.get("msg_no_sql_query")
         self.msg_export_no_select = Language_zh_CN.get("msg_export_no_select")
         self.msg_export_no_query = Language_zh_CN.get("msg_export_no_query")
         self.msg_export_not_full = Language_zh_CN.get("msg_export_not_full")
@@ -522,69 +524,72 @@ class LogAnalysisMain(QMainWindow):
         # sqlEdit 返回的是当前激活的 QTextEdit 对象
         sqlEdit = self.ui.tabSQLQuery.currentWidget().findChild(QTextEdit)
         sqlText = sqlEdit.toPlainText().split(";")[0] + ";"
+        # 排除非查询SQL语句
+        if re.findall("create|insert|update|delete|drop|alter|add", sqlText, re.IGNORECASE):
+            QMessageBox.warning(self, "SQL Error", self.msg_no_sql_query)
+        else:
+            # 如果获取的内容长度非0, 并且当前 db 不是 None, 则继续执行查询
+            if len(sqlText) != 0 and self.current_db is not None:
+                querydb = QSqlDatabase.addDatabase('QSQLITE')
+                # 启用正则表达式
+                # https://doc.qt.io/qtforpython/overviews/sql-driver.html#enable-regexp-operator
+                # https://doc.qt.io/qt-6/qsqldatabase.html#setConnectOptions
+                querydb.setConnectOptions("QSQLITE_ENABLE_REGEXP")
+                querydb.setDatabaseName(self.current_db)
+                querydb.open()
 
-        # 如果获取的内容长度非0, 并且当前 db 不是 None, 则继续执行查询
-        if len(sqlText) != 0 and self.current_db != None:
-            querydb = QSqlDatabase.addDatabase('QSQLITE')
-            # 启用正则表达式
-            # https://doc.qt.io/qtforpython/overviews/sql-driver.html#enable-regexp-operator
-            # https://doc.qt.io/qt-6/qsqldatabase.html#setConnectOptions
-            querydb.setConnectOptions("QSQLITE_ENABLE_REGEXP")
-            querydb.setDatabaseName(self.current_db)
-            querydb.open()
+                # 创建 model
+                model = QSqlQueryModel()
+                model.setQuery(sqlText, db=querydb)
+                # 判断返回的数据是否多余 256 行, 如果多余 256 行, 则允许获取更多的数据 (fetchmode 意思是判断是否有更多的数据)
+                # 参考链接 https://xbuba.com/questions/42286016
+                while model.canFetchMore():
+                    model.fetchMore()
+                # 校验语句是否出现错误
+                if model.lastError().isValid():
+                    AppMainLogger.warning((model.lastError().text()))
+                    QMessageBox.warning(self, "SQL Error", model.lastError().text())
+                else:
+                    AppMainLogger.info("SQL Query is: {}".format(sqlText))
 
-            # 创建 model
-            model = QSqlQueryModel()
-            model.setQuery(sqlText, db=querydb)
-            # 判断返回的数据是否多余 256 行, 如果多余 256 行, 则允许获取更多的数据 (fetchmode 意思是判断是否有更多的数据)
-            # 参考链接 https://xbuba.com/questions/42286016
-            while model.canFetchMore():
-                model.fetchMore()
-            # 校验语句是否出现错误
-            if model.lastError().isValid():
-                AppMainLogger.warning((model.lastError().text()))
-                QMessageBox.warning(self, "SQL Error", model.lastError().text())
-            else:
-                AppMainLogger.info("SQL Query is: {}".format(sqlText))
+                # 生成 QWidget 和 QtableView 对象: self.tab_view
+                tablabel = sqltitle.replace('Query','Result')
+                self.tab_page_result = QWidget()
+                self.tab_page_result.setObjectName(tablabel)
+                self.tab_layout_result = QVBoxLayout(self.tab_page_result)
+                self.tab_view = QTableView(self.tab_page_result)
+                self.tab_view.setObjectName(tablabel)
+                self.tab_layout_result.addWidget(self.tab_view)
 
-            # 生成 QWidget 和 QtableView 对象: self.tab_view
-            tablabel = sqltitle.replace('Query','Result')
-            self.tab_page_result = QWidget()
-            self.tab_page_result.setObjectName(tablabel)
-            self.tab_layout_result = QVBoxLayout(self.tab_page_result)
-            self.tab_view = QTableView(self.tab_page_result)
-            self.tab_view.setObjectName(tablabel)
-            self.tab_layout_result.addWidget(self.tab_view)
+                # 将生成的 QWidget 追加到 QTabWidget 中
+                self.ui.tabSQLResult.addTab(self.tab_page_result, tablabel)
+                self.ui.tabSQLResult.setObjectName(tablabel)
+                self.ui.tabSQLResult.setCurrentIndex(self.ui.tabSQLResult.count() - 1)
 
-            # 将生成的 QWidget 追加到 QTabWidget 中
-            self.ui.tabSQLResult.addTab(self.tab_page_result, tablabel)
-            self.ui.tabSQLResult.setObjectName(tablabel)
-            self.ui.tabSQLResult.setCurrentIndex(self.ui.tabSQLResult.count() - 1)
+                # 展示表格并优化显示
+                ## QSplitter 内部有子窗口的布局时, setStretchFactor 会失效, 此时可以使用 setSizes 方法
+                self.ui.splitter_by_hor.setSizes([300, 700])
+                self.tab_view.setModel(model)
+                ## 水平方向标签拓展剩下的窗口部分
+                self.tab_view.horizontalHeader().setStretchLastSection(True)
+                # self.tab_view.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+                ## 设置单元格默认的行高
+                self.tab_view.verticalHeader().setDefaultSectionSize(8)
+                ## 设置单元格显示的字体
+                self.tab_view.setFont(QFont('Consolas', 8, QFont.Normal))
+                ## 自动调整每列的宽度
+                self.tab_view.resizeColumnsToContents()
+                ## 自动换行
+                self.tab_view.setWordWrap(True)
+                ## 隐藏行号
+                self.tab_view.verticalHeader().hide()
+                ## 连接槽函数, 在双击单元格时触发
+                self.tab_view.doubleClicked.connect(self.slot_show_cell)
+                ## 显示界面
+                self.tab_view.show()
 
-            # 展示表格并优化显示
-            ## QSplitter 内部有子窗口的布局时, setStretchFactor 会失效, 此时可以使用 setSizes 方法
-            self.ui.splitter_by_hor.setSizes([300, 700])
-            self.tab_view.setModel(model)
-            ## 水平方向标签拓展剩下的窗口部分
-            self.tab_view.horizontalHeader().setStretchLastSection(True)
-            # self.tab_view.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
-            ## 设置单元格默认的行高
-            self.tab_view.verticalHeader().setDefaultSectionSize(8)
-            ## 设置单元格显示的字体
-            self.tab_view.setFont(QFont('Consolas', 8, QFont.Normal))
-            ## 自动调整每列的宽度
-            self.tab_view.resizeColumnsToContents()
-            ## 自动换行
-            self.tab_view.setWordWrap(True)
-            ## 隐藏行号
-            self.tab_view.verticalHeader().hide()
-            ## 连接槽函数, 在双击单元格时触发
-            self.tab_view.doubleClicked.connect(self.slot_show_cell)
-            ## 显示界面
-            self.tab_view.show()
-
-            # 关闭数据库连接
-            querydb.close()
+                # 关闭数据库连接
+                querydb.close()
 
     def slot_export_to_csv(self):
         """
