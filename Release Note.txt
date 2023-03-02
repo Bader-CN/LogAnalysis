@@ -40,3 +40,7 @@
   - 更新 ITOM 文档
 # Optimal
   - 根据 MicroFocus 提供的日志收集工具, 重写了 MicroFocus ITOM OpsB 相关日志的解析
+
+2023-**-** LogAnalysis v1.3.3
+# Add
+  - 增加 SQL 模板
