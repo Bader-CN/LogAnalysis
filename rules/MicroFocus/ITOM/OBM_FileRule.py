@@ -28,6 +28,7 @@ NeedFilesRule = [
     "wrapper\.log",
     "jvm_statistics\.log",
     "OvSvcDiscServer\.log",
+    "wde\.all\.log",
     # OBM Config file
     "opr-checker-xml\.txt",
     # OBM RTSM.sql log

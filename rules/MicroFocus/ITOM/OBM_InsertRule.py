@@ -50,7 +50,7 @@ class OBMFiles(ReadFileTemplate):
             return self.readlog_obm_type6()
         elif re.findall("pmi\.log|bvd\.log", self.file, re.IGNORECASE):
             return self.readlog_obm_type7()
-        elif re.findall("downtime\.log", self.file, re.IGNORECASE):
+        elif re.findall("downtime\.log|wde\.all\.log", self.file, re.IGNORECASE):
             return self.readlog_obm_type8()
         elif re.findall("opr-clis\.log|bus\.log", self.file, re.IGNORECASE):
             return self.readlog_obm_type9()
@@ -723,6 +723,7 @@ class OBMFiles(ReadFileTemplate):
         """
         OBM logs
         # downtime.log
+        # wde.all.log
         :return: TaskInfo["data"] = SList --> [sqlalchemy obj1, sqlalchemy obj2, ...]
         """
         # 模块模式下, 记录读取的文件名
@@ -787,6 +788,8 @@ class OBMFiles(ReadFileTemplate):
             #
             if re.findall("downtime\.log", self.file, re.IGNORECASE):
                 from rules.MicroFocus.ITOM.OBM_SQLTable import DownTime as OBMTable
+            elif re.findall("wde\.all\.log", self.file, re.IGNORECASE):
+                from rules.MicroFocus.ITOM.OBM_SQLTable import WDE_All as OBMTable
 
             file_id = self.get_file_id(targetdb=self.targetdb, file=self.file, FileHash=FileHash)
             for data in FList:
@@ -1629,5 +1632,5 @@ class OBMFiles(ReadFileTemplate):
 
 if __name__ == "__main__":
     # 读取测试文件
-    file = r"D:\ucmdb\runtime\log\cmdb.reconciliation.error.log"
+    file = r"C:\Projects\GitHub\LogAnalysis\test\obm_log\wde.all.log"
     test = OBMFiles({"file": file})
