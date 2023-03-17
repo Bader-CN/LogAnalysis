@@ -264,7 +264,10 @@ class OAFiles(ReadFileTemplate):
 
             elif "Cmd executed : /opt/OV/bin/ovc -status -level 8" == line:
                 idx_oa_status_str = DList.index(line)
-                idx_oa_status_end = DList.index("Checksum and what string details of the agent and lcore binaries", idx_oa_status_str)
+                try:
+                    idx_oa_status_end = DList.index("Checksum and what string details of the agent and lcore binaries", idx_oa_status_str)
+                except:
+                    idx_oa_status_end = DList.index("****************************************", idx_oa_status_str + 2)
                 for status in DList[idx_oa_status_str : idx_oa_status_end]:
                     if oa_status == "":
                         oa_status = status
@@ -365,5 +368,5 @@ class OAFiles(ReadFileTemplate):
 
 if __name__ == "__main__":
     # 读取测试文件
-    file = r"C:\oa_data\hpcstrace.log"
+    file = r"C:\Projects\GitHub\LogAnalysis\test\oa_log\agent.log_2023-03-08_03.19"
     test = OAFiles({"file": file})
