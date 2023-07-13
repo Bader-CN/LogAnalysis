@@ -202,14 +202,14 @@ class LogAnalysisImport(QWidget):
             # default filter 是 AllEntries | NoDotAndDotDot | AllDirs
             self.path_model.setFilter(QDir.AllDirs | QDir.NoDotAndDotDot)
             self.ui.tree_filedir.setModel(self.path_model)
-            AppMainLogger.debug("Change QTableView's model Filter type to [QDir.AllDirs | QDir.NoDotAndDotDot]")
+            AppMainLogger.debug("Change QTableView's Common Filter type to [QDir.AllDirs | QDir.NoDotAndDotDot]")
         else:
             # 新建一个模型, 重新进行设定 (http://www.qtcn.org/bbs/read.php?tid-32891.html)
             self.path_model = QFileSystemModel()
             self.path_model.setRootPath(QDir.rootPath())
             self.path_model.setFilter(QDir.AllEntries | QDir.AllDirs | QDir.NoDotAndDotDot)
             self.ui.tree_filedir.setModel(self.path_model)
-            AppMainLogger.debug("Change QTableView's model Filter type to [QDir.AllEntries | QDir.AllDirs | QDir.NoDotAndDotDot]")
+            AppMainLogger.debug("Change QTableView's Common Filter type to [QDir.AllEntries | QDir.AllDirs | QDir.NoDotAndDotDot]")
 
     def slot_combox_company(self):
         """

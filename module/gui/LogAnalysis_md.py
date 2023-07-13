@@ -538,7 +538,7 @@ class LogAnalysisMain(QMainWindow):
                 querydb.setDatabaseName(self.current_db)
                 querydb.open()
 
-                # 创建 model
+                # 创建 Common
                 model = QSqlQueryModel()
                 model.setQuery(sqlText, db=querydb)
                 # 判断返回的数据是否多余 256 行, 如果多余 256 行, 则允许获取更多的数据 (fetchmode 意思是判断是否有更多的数据)
