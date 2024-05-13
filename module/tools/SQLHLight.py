@@ -7,6 +7,7 @@
 from PySide6.QtGui import QSyntaxHighlighter, QTextCharFormat, QFont
 from PySide6.QtCore import Qt, QRegularExpression
 
+
 class SQLHighLighter(QSyntaxHighlighter):
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -38,17 +39,17 @@ class SQLHighLighter(QSyntaxHighlighter):
             'DISTINCT ', 'distinct ',
             # SQL 常用函数
             # 参考链接：https://www.runoob.com/sqlite/sqlite-functions.html
-            'SUM\(.*?\)', 'sum\(.*?\)',
-            'TOTAL\(.*?\)', 'total\(.*?\)',
-            'COUNT\(.*?\)', 'count\(.*?\)',
-            'MAX\(.*?\)', 'max\(.*?\)',
-            'MIN\(.*?\)', 'min\(.*?\)',
-            'AVG\(.*?\)', 'avg\(.*?\)',
-            'ABS\(.*?\)', 'abs\(.*?\)',
-            'RANDOM\(.*?\)', 'random\(.*?\)',
-            'UPPER\(.*?\)' ,'upper\(.*?\)',
-            'LOWER\(.*?\)' ,'lower\(.*?\)',
-            'LENGTH\(.*?\)', 'length\(.*?\)',
+            'SUM(.*?)', 'sum(.*?)',
+            'TOTAL(.*?)', 'total(.*?)',
+            'COUNT(.*?)', 'count(.*?)',
+            'MAX(.*?)', 'max(.*?)',
+            'MIN(.*?)', 'min(.*?)',
+            'AVG(.*?)', 'avg(.*?)',
+            'ABS(.*?)', 'abs(.*?)',
+            'RANDOM(.*?)', 'random(.*?)',
+            'UPPER(.*?)', 'upper(.*?)',
+            'LOWER(.*?)', 'lower(.*?)',
+            'LENGTH(.*?)', 'length(.*?)',
         ]
         # 根据前两个来生成高亮规则
         self.highlightRules = [(QRegularExpression(pattern), sql_keyword_format) for pattern in sql_keywords]
@@ -57,9 +58,9 @@ class SQLHighLighter(QSyntaxHighlighter):
 
     def highlightBlock(self, text):
         # keyword 高亮, 参考链接: https://doc.qt.io/qtforpython/PySide6/QtGui/QSyntaxHighlighter.html
-            for pattern, _format in self.highlightRules:
-                expression = QRegularExpression(pattern)
-                index = expression.globalMatch(text)
-                while index.hasNext():
-                    match = index.next()
-                    self.setFormat(match.capturedStart(), match.capturedLength(), _format)
+        for pattern, _format in self.highlightRules:
+            expression = QRegularExpression(pattern)
+            index = expression.globalMatch(text)
+            while index.hasNext():
+                match = index.next()
+                self.setFormat(match.capturedStart(), match.capturedLength(), _format)
